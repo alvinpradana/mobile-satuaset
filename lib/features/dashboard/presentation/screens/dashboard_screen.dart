@@ -4,7 +4,7 @@ import '../../../../shared/widgets/custom_bottom_nav.dart';
 import '../widgets/dashboard_header.dart';
 import '../widgets/net_worth_summary.dart';
 import '../widgets/financial_insight_banner.dart';
-import '../widgets/performance_investment_carousel.dart';
+import '../widgets/asset_allocation_carousel.dart';
 import '../widgets/financial_goals_list.dart';
 import '../widgets/recent_activity_list.dart';
 
@@ -30,7 +30,7 @@ class DashboardScreen extends StatelessWidget {
                   SizedBox(height: 24),
                   FinancialInsightBanner(),
                   SizedBox(height: 32),
-                  PerformanceInvestmentCarousel(),
+                  AssetAllocationCarousel(),
                   SizedBox(height: 40),
                   FinancialGoalsList(),
                   SizedBox(height: 40),
