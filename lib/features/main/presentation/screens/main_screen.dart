@@ -29,10 +29,7 @@ class _MainScreenState extends State<MainScreen> {
       body: Stack(
         children: [
           // Render the current screen
-          IndexedStack(
-            index: _currentIndex,
-            children: _screens,
-          ),
+          _screens[_currentIndex],
           
           // Bottom Navigation overlapping the screen
           Positioned(
