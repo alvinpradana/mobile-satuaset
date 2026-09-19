@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 class AppColors {
   static const Color background = Color(0xFF111111);
   static const Color surface = Color(0xFF1A1A1A);
+  static const Color surfaceHover = Color(0xFF2A2A2A);
+  static const Color border = Color(0xFF2C2C2E);
   
   static const Color primaryAccent = Color(0xFFA3E635); // Lime Green
   static const Color positive = Color(0xFF00E676);      // Green

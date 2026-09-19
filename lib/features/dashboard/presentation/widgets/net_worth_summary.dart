@@ -3,12 +3,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fl_chart/fl_chart.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../shared/providers/privacy_provider.dart';
+import '../../../../shared/widgets/privacy_toggle_button.dart';
 
 class NetWorthSummary extends ConsumerWidget {
   const NetWorthSummary({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isObscured = ref.watch(privacyProvider);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -33,8 +37,7 @@ class NetWorthSummary extends ConsumerWidget {
                           ),
                         ),
                         SizedBox(width: 8),
-                        Icon(
-                          CupertinoIcons.eye_slash,
+                        PrivacyToggleButton(
                           color: AppColors.textSecondary,
                           size: 14,
                         ),
@@ -43,10 +46,10 @@ class NetWorthSummary extends ConsumerWidget {
                     const SizedBox(height: 12),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.end,
-                      children: const [
+                      children: [
                         Text(
-                          'Rp 2.450.000.000',
-                          style: TextStyle(
+                          isObscured ? 'Rp •••••••••' : 'Rp 2.450.000.000',
+                          style: const TextStyle(
                             color: AppColors.textPrimary,
                             fontSize: 32, // slightly smaller to fit the Rp prefix nicely
                             fontWeight: FontWeight.bold,
@@ -54,8 +57,8 @@ class NetWorthSummary extends ConsumerWidget {
                             letterSpacing: -1,
                           ),
                         ),
-                        SizedBox(width: 8),
-                        Padding(
+                        const SizedBox(width: 8),
+                        const Padding(
                           padding: EdgeInsets.only(bottom: 4.0),
                           child: Text(
                             'IDR',
@@ -66,8 +69,8 @@ class NetWorthSummary extends ConsumerWidget {
                             ),
                           ),
                         ),
-                        SizedBox(width: 4),
-                        Padding(
+                        const SizedBox(width: 4),
+                        const Padding(
                           padding: EdgeInsets.only(bottom: 6.0),
                           child: Icon(
                             CupertinoIcons.chevron_down,

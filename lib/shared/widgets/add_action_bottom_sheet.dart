@@ -47,7 +47,7 @@ class AddActionBottomSheet extends StatelessWidget {
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 24.0),
                 child: Text(
-                  'Add Record',
+                  'Record Activity',
                   style: TextStyle(
                     color: AppColors.textPrimary,
                     fontSize: 20,
@@ -63,7 +63,7 @@ class AddActionBottomSheet extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Money Section
+                    // Cashflow Section
                       MenuSectionGroup(
                         title: 'Cashflow',
                         children: [
@@ -97,32 +97,68 @@ class AddActionBottomSheet extends StatelessWidget {
                       
                       const SizedBox(height: 16),
                       
-                      // Wealth Section
+                      // Investments Section
                       MenuSectionGroup(
-                        title: 'Wealth',
+                        title: 'Investments',
                         children: [
                           MenuListItem(
-                            icon: UIcons.regularRounded.chart_pie_alt,
-                            label: 'Investment',
+                            icon: UIcons.regularRounded.arrow_down,
+                            label: 'Buy',
                             onTap: () {
                               Navigator.pop(context);
-                              // TODO: Navigate to Investment Form
+                              // TODO: Navigate to Buy Form
                             },
                           ),
+                          MenuListItem(
+                            icon: UIcons.regularRounded.arrow_up,
+                            label: 'Sell',
+                            onTap: () {
+                              Navigator.pop(context);
+                              // TODO: Navigate to Sell Form
+                            },
+                            showDivider: false,
+                          ),
+                        ],
+                      ),
+                      
+                      const SizedBox(height: 16),
+                      
+                      // Assets Section
+                      MenuSectionGroup(
+                        title: 'Assets',
+                        children: [
                           MenuListItem(
                             icon: UIcons.regularRounded.home,
-                            label: 'Asset',
+                            label: 'Purchase',
                             onTap: () {
                               Navigator.pop(context);
-                              // TODO: Navigate to Asset Form
+                              // TODO: Navigate to Purchase Form
                             },
                           ),
                           MenuListItem(
-                            icon: UIcons.regularRounded.file_invoice,
-                            label: 'Liability',
+                            icon: UIcons.regularRounded.money_bill_wave,
+                            label: 'Sale',
                             onTap: () {
                               Navigator.pop(context);
-                              // TODO: Navigate to Liability Form
+                              // TODO: Navigate to Sale Form
+                            },
+                            showDivider: false,
+                          ),
+                        ],
+                      ),
+                      
+                      const SizedBox(height: 16),
+                      
+                      // Other Section
+                      MenuSectionGroup(
+                        title: 'Other',
+                        children: [
+                          MenuListItem(
+                            icon: UIcons.regularRounded.edit,
+                            label: 'Adjustment',
+                            onTap: () {
+                              Navigator.pop(context);
+                              // TODO: Navigate to Adjustment Form
                             },
                             showDivider: false,
                           ),

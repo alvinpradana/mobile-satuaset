@@ -3,7 +3,9 @@ import 'package:flutter/cupertino.dart';
 import '../../../../core/theme/app_colors.dart';
 
 class DashboardHeader extends StatelessWidget {
-  const DashboardHeader({super.key});
+  final bool showWelcomeText;
+
+  const DashboardHeader({super.key, this.showWelcomeText = true});
 
   @override
   Widget build(BuildContext context) {
@@ -76,15 +78,17 @@ class DashboardHeader extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 32),
-          const Text(
-            'Welcome, Alvin!',
-            style: TextStyle(
-              color: AppColors.textPrimary,
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
+          if (showWelcomeText) ...[
+            const SizedBox(height: 32),
+            const Text(
+              'Welcome, Alvin!',
+              style: TextStyle(
+                color: AppColors.textPrimary,
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
+          ],
         ],
       ),
     );

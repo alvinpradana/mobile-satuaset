@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../shared/widgets/custom_bottom_nav.dart';
 import '../../../dashboard/presentation/screens/dashboard_screen.dart';
+import '../../../wealth/presentation/screens/wealth_screen.dart';
 import '../../../more/presentation/screens/more_screen.dart';
 
 class MainScreen extends StatefulWidget {
@@ -17,7 +18,7 @@ class _MainScreenState extends State<MainScreen> {
   final List<Widget> _screens = [
     const DashboardScreen(),
     const Center(child: Text('Activity Screen', style: TextStyle(color: Colors.white))),
-    const Center(child: Text('Wealth Screen', style: TextStyle(color: Colors.white))),
+    const WealthScreen(),
     const MoreScreen(),
   ];
 
