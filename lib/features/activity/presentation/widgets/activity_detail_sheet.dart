@@ -66,7 +66,7 @@ class ActivityDetailSheet extends ConsumerWidget {
             child: Icon(
               _getIconForType(activity.type),
               color: AppColors.textPrimary,
-              size: 28,
+              size: 24,
             ),
           ),
           const SizedBox(height: 16),
@@ -101,7 +101,6 @@ class ActivityDetailSheet extends ConsumerWidget {
             decoration: BoxDecoration(
               color: AppColors.surface,
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: AppColors.divider),
             ),
             child: Column(
               children: [
@@ -235,21 +234,21 @@ class ActivityDetailSheet extends ConsumerWidget {
   IconData _getIconForType(ActivityType type) {
     switch (type) {
       case ActivityType.income:
-        return Icons.arrow_downward;
+        return UIcons.solidRounded.arrow_down;
       case ActivityType.expense:
-        return Icons.arrow_upward;
+        return UIcons.solidRounded.arrow_up;
       case ActivityType.transfer:
-        return Icons.sync_alt;
+        return UIcons.solidRounded.exchange;
       case ActivityType.investmentBuy:
-        return Icons.show_chart;
+        return UIcons.solidRounded.stats;
       case ActivityType.assetPurchase:
-        return Icons.directions_car;
+        return UIcons.solidRounded.car;
       case ActivityType.liabilityPayment:
-        return Icons.receipt_long;
+        return UIcons.solidRounded.receipt;
       case ActivityType.goalContribution:
-        return Icons.track_changes;
+        return UIcons.solidRounded.target;
       default:
-        return Icons.account_balance_wallet;
+        return UIcons.solidRounded.wallet;
     }
   }
 }

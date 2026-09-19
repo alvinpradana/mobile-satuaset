@@ -26,7 +26,7 @@ class QuickActionButton extends StatelessWidget {
               shape: BoxShape.circle,
               color: AppColors.primaryAccent,
             ),
-            child: Icon(icon, color: AppColors.background, size: 24),
+            child: Icon(icon, color: AppColors.background, size: 20),
           ),
           const SizedBox(height: 12),
           Text(

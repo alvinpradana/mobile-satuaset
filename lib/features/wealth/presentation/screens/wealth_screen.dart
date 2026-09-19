@@ -67,34 +67,33 @@ class WealthScreen extends ConsumerWidget {
               decoration: BoxDecoration(
                 color: AppColors.surface,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: AppColors.border),
               ),
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Column(
                 children: [
                   WealthDomainRow(
                     domain: wealthSummary.domains.firstWhere((d) => d.id == 'investments'),
-                    icon: UIcons.regularRounded.chart_pie_alt,
+                    icon: UIcons.solidRounded.chart_pie_alt,
                     onTap: () {},
                   ),
                   WealthDomainRow(
                     domain: wealthSummary.domains.firstWhere((d) => d.id == 'accounts'),
-                    icon: UIcons.regularRounded.wallet,
+                    icon: UIcons.solidRounded.wallet,
                     onTap: () {},
                   ),
                   WealthDomainRow(
                     domain: wealthSummary.domains.firstWhere((d) => d.id == 'physical_assets'),
-                    icon: UIcons.regularRounded.home,
+                    icon: UIcons.solidRounded.home,
                     onTap: () {},
                   ),
                   WealthDomainRow(
                     domain: wealthSummary.domains.firstWhere((d) => d.id == 'liabilities'),
-                    icon: UIcons.regularRounded.file_invoice,
+                    icon: UIcons.solidRounded.file_invoice,
                     onTap: () {},
                   ),
                   WealthDomainRow(
                     domain: wealthSummary.domains.firstWhere((d) => d.id == 'goals'),
-                    icon: UIcons.regularRounded.target,
+                    icon: UIcons.solidRounded.target,
                     showDivider: false,
                     onTap: () {},
                   ),

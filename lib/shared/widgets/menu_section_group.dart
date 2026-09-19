@@ -33,10 +33,6 @@ class MenuSectionGroup extends StatelessWidget {
           decoration: BoxDecoration(
             color: AppColors.surface,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: AppColors.divider,
-              width: 1,
-            ),
           ),
           child: Column(
             children: children,

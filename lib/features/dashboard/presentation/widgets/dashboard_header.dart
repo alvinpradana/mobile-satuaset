@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import '../../../../core/theme/app_colors.dart';
+import 'package:uicons/uicons.dart';
 
 class DashboardHeader extends StatelessWidget {
   final bool showWelcomeText;
@@ -44,10 +45,27 @@ class DashboardHeader extends StatelessWidget {
                       shape: BoxShape.circle,
                       color: AppColors.surface,
                     ),
-                    child: const Icon(
-                      CupertinoIcons.bell,
-                      color: AppColors.textSecondary,
-                      size: 20,
+                    child: Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        Icon(
+                          UIcons.solidRounded.bell,
+                          color: AppColors.textSecondary,
+                          size: 14,
+                        ),
+                        Positioned(
+                          right: -2,
+                          top: -2,
+                          child: Container(
+                            width: 6,
+                            height: 6,
+                            decoration: const BoxDecoration(
+                              color: AppColors.negative,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   const SizedBox(width: 12),

@@ -35,12 +35,12 @@ class MoreScreen extends StatelessWidget {
                 title: 'Tools',
                 children: [
                   MenuListItem(
-                    icon: UIcons.regularRounded.chart_pie_alt,
+                    icon: UIcons.solidRounded.chart_pie_alt,
                     label: 'Reports',
                     onTap: () {},
                   ),
                   MenuListItem(
-                    icon: UIcons.regularRounded.eye,
+                    icon: UIcons.solidRounded.eye,
                     label: 'Watchlist',
                     onTap: () {},
                     showDivider: false,
@@ -53,12 +53,12 @@ class MoreScreen extends StatelessWidget {
                 title: 'Account',
                 children: [
                   MenuListItem(
-                    icon: UIcons.regularRounded.user,
+                    icon: UIcons.solidRounded.user,
                     label: 'Profile',
                     onTap: () {},
                   ),
                   MenuListItem(
-                    icon: UIcons.regularRounded.bell,
+                    icon: UIcons.solidRounded.bell,
                     label: 'Notifications',
                     onTap: () {},
                     showDivider: false,
@@ -71,17 +71,17 @@ class MoreScreen extends StatelessWidget {
                 title: 'Settings',
                 children: [
                   MenuListItem(
-                    icon: UIcons.regularRounded.settings_sliders,
+                    icon: UIcons.solidRounded.settings_sliders,
                     label: 'Preferences',
                     onTap: () {},
                   ),
                   MenuListItem(
-                    icon: UIcons.regularRounded.shield,
+                    icon: UIcons.solidRounded.shield,
                     label: 'Security',
                     onTap: () {},
                   ),
                   MenuListItem(
-                    icon: UIcons.regularRounded.lock,
+                    icon: UIcons.solidRounded.lock,
                     label: 'Privacy',
                     onTap: () {},
                     showDivider: false,
@@ -94,12 +94,12 @@ class MoreScreen extends StatelessWidget {
                 title: 'Support',
                 children: [
                   MenuListItem(
-                    icon: UIcons.regularRounded.interrogation,
+                    icon: UIcons.solidRounded.interrogation,
                     label: 'Help',
                     onTap: () {},
                   ),
                   MenuListItem(
-                    icon: UIcons.regularRounded.info,
+                    icon: UIcons.solidRounded.info,
                     label: 'About',
                     onTap: () {},
                     showDivider: false,

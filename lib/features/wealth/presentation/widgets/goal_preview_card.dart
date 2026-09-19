@@ -13,7 +13,6 @@ class GoalPreviewCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -29,9 +28,9 @@ class GoalPreviewCard extends StatelessWidget {
                 ),
               ),
               Icon(
-                UIcons.regularRounded.target,
+                UIcons.solidRounded.target,
                 color: AppColors.primaryAccent.withOpacity(0.8),
-                size: 16,
+                size: 14,
               ),
             ],
           ),
@@ -47,7 +46,7 @@ class GoalPreviewCard extends StatelessWidget {
           const SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
+            children: [
               Text(
                 'Rp 650.000.000',
                 style: TextStyle(

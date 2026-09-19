@@ -109,7 +109,7 @@ class WealthHero extends ConsumerWidget {
               borderData: FlBorderData(show: false),
               lineBarsData: [
                 LineChartBarData(
-                  spots: const [
+                  spots: [
                     FlSpot(0, 3),
                     FlSpot(1, 3.2),
                     FlSpot(2, 3.5),

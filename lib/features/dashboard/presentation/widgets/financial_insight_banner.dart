@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import '../../../../core/theme/app_colors.dart';
+import 'package:uicons/uicons.dart';
 
 class FinancialInsightBanner extends StatelessWidget {
   const FinancialInsightBanner({super.key});
@@ -14,15 +15,11 @@ class FinancialInsightBanner extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppColors.primaryAccent.withOpacity(0.08),
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: AppColors.primaryAccent.withOpacity(0.3),
-            width: 1,
-          ),
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Icon(
+            Icon(
               CupertinoIcons.sparkles,
               color: AppColors.primaryAccent,
               size: 20,

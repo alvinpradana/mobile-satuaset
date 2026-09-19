@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../domain/models/activity_item.dart';
 import '../../../../core/theme/app_colors.dart';
+import 'package:uicons/uicons.dart';
 
 class ActivityRow extends StatelessWidget {
   final ActivityItem activity;
@@ -70,12 +71,6 @@ class ActivityRow extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(width: 8),
-            const Icon(
-              Icons.chevron_right,
-              color: AppColors.textSecondary,
-              size: 16,
-            ),
           ],
         ),
       ),
@@ -87,28 +82,28 @@ class ActivityRow extends StatelessWidget {
     Color iconColor;
 
     if (activity.isPositive) {
-      iconData = Icons.arrow_downward;
+      iconData = UIcons.solidRounded.arrow_down;
       iconColor = AppColors.positive;
     } else if (activity.isNegative) {
-      iconData = Icons.arrow_upward;
+      iconData = UIcons.solidRounded.arrow_up;
       iconColor = AppColors.negative;
     } else {
-      iconData = Icons.sync_alt; // Transfer/Neutral
+      iconData = UIcons.solidRounded.exchange; // Transfer/Neutral
       iconColor = AppColors.textSecondary;
     }
 
     // Specific overrides
     if (activity.type == ActivityType.investmentBuy || activity.type == ActivityType.investmentSell) {
-      iconData = Icons.show_chart;
+      iconData = UIcons.solidRounded.stats;
       iconColor = AppColors.primaryAccent;
     } else if (activity.type == ActivityType.assetPurchase || activity.type == ActivityType.assetSale) {
-      iconData = Icons.directions_car; // Generic asset icon
+      iconData = UIcons.solidRounded.car; // Generic asset icon
       iconColor = AppColors.textPrimary;
     } else if (activity.type == ActivityType.liabilityPayment) {
-      iconData = Icons.receipt_long;
+      iconData = UIcons.solidRounded.receipt;
       iconColor = AppColors.negative;
     } else if (activity.type == ActivityType.goalContribution) {
-      iconData = Icons.track_changes;
+      iconData = UIcons.solidRounded.target;
       iconColor = AppColors.primaryAccent;
     }
 
@@ -118,10 +113,9 @@ class ActivityRow extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         shape: BoxShape.circle,
-        border: Border.all(color: AppColors.divider),
       ),
       alignment: Alignment.center,
-      child: Icon(iconData, color: iconColor, size: 20),
+      child: Icon(iconData, color: iconColor, size: 18),
     );
   }
 

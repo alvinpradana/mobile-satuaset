@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import '../../../../core/theme/app_colors.dart';
+import 'package:uicons/uicons.dart';
 
 class LiabilitiesReminderCard extends StatelessWidget {
   const LiabilitiesReminderCard({super.key});
@@ -12,7 +13,6 @@ class LiabilitiesReminderCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.border),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -24,10 +24,10 @@ class LiabilitiesReminderCard extends StatelessWidget {
               color: AppColors.surfaceHover,
               shape: BoxShape.circle,
             ),
-            child: const Icon(
-              CupertinoIcons.bell,
+            child: Icon(
+              UIcons.solidRounded.bell,
               color: AppColors.negative,
-              size: 20,
+              size: 18,
             ),
           ),
           const SizedBox(width: 16),
@@ -54,7 +54,7 @@ class LiabilitiesReminderCard extends StatelessWidget {
                 const SizedBox(height: 12),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
+                  children: [
                     Text(
                       'Rp 5.200.000',
                       style: TextStyle(

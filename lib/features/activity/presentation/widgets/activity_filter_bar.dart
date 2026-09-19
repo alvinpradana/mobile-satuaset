@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
+import 'package:uicons/uicons.dart';
 
 class ActivityFilterBar extends StatelessWidget {
   final String selectedFilter;
@@ -37,10 +38,6 @@ class ActivityFilterBar extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: isSelected ? AppColors.primaryAccent.withOpacity(0.1) : AppColors.surface,
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(
-                      color: isSelected ? AppColors.primaryAccent : AppColors.divider,
-                      width: 1,
-                    ),
                   ),
                   child: Text(
                     filter,
@@ -70,14 +67,14 @@ class ActivityFilterBar extends StatelessWidget {
                     AppColors.background.withOpacity(0.0),
                     AppColors.background,
                   ],
-                  stops: const [0.0, 0.7],
+                  stops: [0.0, 0.7],
                 ),
               ),
               alignment: Alignment.centerRight,
-              child: const Icon(
-                Icons.chevron_right,
+              child: Icon(
+                UIcons.regularRounded.angle_right,
                 color: AppColors.textSecondary,
-                size: 16,
+                size: 14,
               ),
             ),
           ),

@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../domain/models/recent_activity.dart';
 import 'package:intl/intl.dart';
+import 'package:uicons/uicons.dart';
 
 class RecentActivityList extends StatelessWidget {
   const RecentActivityList({super.key});
@@ -41,7 +42,7 @@ class RecentActivityList extends StatelessWidget {
                   // TODO: Navigate to Activity History
                 },
                 child: Row(
-                  children: const [
+                  children: [
                     Text(
                       'See All',
                       style: TextStyle(
@@ -52,9 +53,9 @@ class RecentActivityList extends StatelessWidget {
                     ),
                     SizedBox(width: 2),
                     Icon(
-                      CupertinoIcons.chevron_right,
+                      UIcons.regularRounded.angle_right,
                       color: AppColors.textSecondary,
-                      size: 10,
+                      size: 8,
                     ),
                   ],
                 ),
@@ -70,10 +71,6 @@ class RecentActivityList extends StatelessWidget {
             decoration: BoxDecoration(
               color: AppColors.surface,
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: AppColors.divider,
-                width: 1,
-              ),
             ),
             child: ListView.separated(
               physics: const NeverScrollableScrollPhysics(),
@@ -88,9 +85,9 @@ class RecentActivityList extends StatelessWidget {
                 
                 IconData getIcon() {
                   switch (activity.type) {
-                    case ActivityType.income: return CupertinoIcons.arrow_down_left;
-                    case ActivityType.expense: return CupertinoIcons.arrow_up_right;
-                    case ActivityType.transfer: return CupertinoIcons.arrow_right_arrow_left;
+                    case ActivityType.income: return UIcons.solidRounded.arrow_down;
+                    case ActivityType.expense: return UIcons.solidRounded.arrow_up;
+                    case ActivityType.transfer: return UIcons.solidRounded.exchange;
                   }
                 }
                 

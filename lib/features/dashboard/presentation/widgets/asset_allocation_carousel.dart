@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import '../../../../core/theme/app_colors.dart';
+import 'package:uicons/uicons.dart';
 
 class AssetAllocationCarousel extends StatefulWidget {
   const AssetAllocationCarousel({super.key});
@@ -98,7 +99,7 @@ class _AssetAllocationCarouselState extends State<AssetAllocationCarousel> {
                   // TODO: Navigate to Asset Allocation Details
                 },
                 child: Row(
-                  children: const [
+                  children: [
                     Text(
                       'See All',
                       style: TextStyle(
@@ -109,9 +110,9 @@ class _AssetAllocationCarouselState extends State<AssetAllocationCarousel> {
                     ),
                     SizedBox(width: 2),
                     Icon(
-                      CupertinoIcons.chevron_right,
+                      UIcons.regularRounded.angle_right,
                       color: AppColors.textSecondary,
-                      size: 10,
+                      size: 8,
                     ),
                   ],
                 ),
@@ -139,10 +140,6 @@ class _AssetAllocationCarouselState extends State<AssetAllocationCarousel> {
                   decoration: BoxDecoration(
                     color: AppColors.surface,
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(
-                      color: AppColors.divider,
-                      width: 1,
-                    ),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

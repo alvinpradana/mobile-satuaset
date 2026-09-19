@@ -12,6 +12,7 @@ import '../widgets/activity_row.dart';
 import '../widgets/activity_detail_sheet.dart';
 import '../widgets/cashflow_overview.dart';
 import '../../domain/models/activity_item.dart';
+import 'package:uicons/uicons.dart';
 
 class ActivityScreen extends ConsumerStatefulWidget {
   const ActivityScreen({super.key});
@@ -184,10 +185,10 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
                                 ),
                               ),
                               const SizedBox(width: 4),
-                              const Icon(
-                                Icons.keyboard_arrow_down,
+                              Icon(
+                                UIcons.regularRounded.angle_down,
                                 color: AppColors.textSecondary,
-                                size: 20,
+                                size: 10,
                               ),
                             ],
                           ),
@@ -201,11 +202,10 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
                             decoration: BoxDecoration(
                               color: AppColors.surface,
                               borderRadius: BorderRadius.circular(16),
-                              border: Border.all(color: AppColors.divider, width: 1),
                             ),
                             child: Row(
-                              children: const [
-                                Icon(Icons.tune, color: AppColors.textPrimary, size: 14),
+                              children: [
+                                Icon(UIcons.solidRounded.settings_sliders, color: AppColors.textPrimary, size: 12),
                                 SizedBox(width: 6),
                                 Text(
                                   'Filter',
@@ -215,8 +215,6 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
-                                SizedBox(width: 4),
-                                Icon(Icons.chevron_right, color: AppColors.textSecondary, size: 14),
                               ],
                             ),
                           ),
@@ -337,11 +335,10 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
                       decoration: BoxDecoration(
                         color: Colors.white.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(24),
-                        border: Border.all(color: Colors.white.withOpacity(0.05)),
                       ),
                       child: Row(
                         children: [
-                          const Icon(CupertinoIcons.search, color: AppColors.textSecondary, size: 20),
+                          Icon(UIcons.solidRounded.search, color: AppColors.textSecondary, size: 18),
                           const SizedBox(width: 12),
                           Expanded(
                             child: TextField(
@@ -365,7 +362,7 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
                                 _searchController.clear();
                                 ref.read(activityNotifierProvider.notifier).setSearchQuery('');
                               },
-                              child: const Icon(Icons.close, color: AppColors.textSecondary, size: 16),
+                              child: Icon(UIcons.solidRounded.cross, color: AppColors.textSecondary, size: 14),
                             ),
                         ],
                       ),
@@ -538,7 +535,7 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
             children: [
               Text(value, style: const TextStyle(color: AppColors.textSecondary, fontSize: 14)),
               const SizedBox(width: 8),
-              const Icon(Icons.chevron_right, color: AppColors.textSecondary, size: 16),
+              Icon(UIcons.regularRounded.angle_right, color: AppColors.textSecondary, size: 14),
             ],
           )
         ],

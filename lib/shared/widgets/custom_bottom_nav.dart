@@ -25,48 +25,55 @@ class CustomBottomNav extends StatelessWidget {
         alignment: Alignment.center,
         children: [
           // Glassmorphism background
-          ClipRRect(
-            borderRadius: BorderRadius.circular(36),
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: AppColors.surface.withOpacity(0.4),
-                  borderRadius: BorderRadius.circular(36),
-                  border: Border.all(
-                    color: AppColors.divider.withOpacity(0.5),
-                    width: 1,
-                  ),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(36),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.3),
+                  blurRadius: 24,
+                  offset: const Offset(0, 8),
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    _NavItem(
-                      icon: UIcons.solidRounded.home, 
-                      label: 'Home', 
-                      isActive: currentIndex == 0,
-                      onTap: () => onTabSelected?.call(0),
-                    ),
-                    _NavItem(
-                      icon: UIcons.solidRounded.clock, 
-                      label: 'Activity', 
-                      isActive: currentIndex == 1,
-                      onTap: () => onTabSelected?.call(1),
-                    ),
-                    const SizedBox(width: 56), // Space for FAB
-                    _NavItem(
-                      icon: UIcons.solidRounded.layers, 
-                      label: 'Wealth', 
-                      isActive: currentIndex == 2,
-                      onTap: () => onTabSelected?.call(2),
-                    ),
-                    _NavItem(
-                      icon: UIcons.solidRounded.menu_dots, 
-                      label: 'More', 
-                      isActive: currentIndex == 3,
-                      onTap: () => onTabSelected?.call(3),
-                    ),
-                  ],
+              ],
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(36),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: AppColors.surface.withOpacity(0.85), // Increased opacity for visibility
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      _NavItem(
+                        icon: UIcons.solidRounded.home, 
+                        label: 'Home', 
+                        isActive: currentIndex == 0,
+                        onTap: () => onTabSelected?.call(0),
+                      ),
+                      _NavItem(
+                        icon: UIcons.solidRounded.clock, 
+                        label: 'Activity', 
+                        isActive: currentIndex == 1,
+                        onTap: () => onTabSelected?.call(1),
+                      ),
+                      const SizedBox(width: 56), // Space for FAB
+                      _NavItem(
+                        icon: UIcons.solidRounded.layers, 
+                        label: 'Wealth', 
+                        isActive: currentIndex == 2,
+                        onTap: () => onTabSelected?.call(2),
+                      ),
+                      _NavItem(
+                        icon: UIcons.solidRounded.menu_dots, 
+                        label: 'More', 
+                        isActive: currentIndex == 3,
+                        onTap: () => onTabSelected?.call(3),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -98,10 +105,10 @@ class CustomBottomNav extends StatelessWidget {
                     )
                   ],
                 ),
-                child: const Icon(
-                  Icons.add,
+                child: Icon(
+                  UIcons.solidRounded.plus,
                   color: AppColors.background,
-                  size: 28,
+                  size: 24,
                 ),
               ),
             ),
@@ -137,7 +144,7 @@ class _NavItem extends StatelessWidget {
           Icon(
             icon, 
             color: color, 
-            size: 20,
+            size: 18,
             weight: 300, // Makes the stroke thinner (default is 400)
           ),
           const SizedBox(height: 4),

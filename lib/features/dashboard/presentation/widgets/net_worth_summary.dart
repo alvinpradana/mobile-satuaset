@@ -5,6 +5,7 @@ import 'package:fl_chart/fl_chart.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../shared/providers/privacy_provider.dart';
 import '../../../../shared/widgets/privacy_toggle_button.dart';
+import 'package:uicons/uicons.dart';
 
 class NetWorthSummary extends ConsumerWidget {
   const NetWorthSummary({super.key});
@@ -27,7 +28,7 @@ class NetWorthSummary extends ConsumerWidget {
                   children: [
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
-                      children: const [
+                      children: [
                         Text(
                           'Net Worth',
                           style: TextStyle(
@@ -70,12 +71,12 @@ class NetWorthSummary extends ConsumerWidget {
                           ),
                         ),
                         const SizedBox(width: 4),
-                        const Padding(
-                          padding: EdgeInsets.only(bottom: 6.0),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 6.0),
                           child: Icon(
-                            CupertinoIcons.chevron_down,
+                            UIcons.regularRounded.angle_down,
                             color: AppColors.textPrimary,
-                            size: 12,
+                            size: 10,
                           ),
                         ),
                       ],
@@ -83,7 +84,7 @@ class NetWorthSummary extends ConsumerWidget {
                     const SizedBox(height: 12),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
-                      children: const [
+                      children: [
                         Text(
                           '+2.4%',
                           style: TextStyle(
@@ -140,10 +141,10 @@ class NetWorthSummary extends ConsumerWidget {
                           color: AppColors.background,
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(
-                          CupertinoIcons.arrow_down_left,
+                        child: Icon(
+                          UIcons.solidRounded.arrow_down,
                           color: AppColors.positive,
-                          size: 16,
+                          size: 14,
                         ),
                       ),
                       const SizedBox(height: 12),
@@ -185,10 +186,10 @@ class NetWorthSummary extends ConsumerWidget {
                           color: AppColors.background,
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(
-                          CupertinoIcons.arrow_up_right,
+                        child: Icon(
+                          UIcons.solidRounded.arrow_up,
                           color: AppColors.negative,
-                          size: 16,
+                          size: 14,
                         ),
                       ),
                       const SizedBox(height: 12),

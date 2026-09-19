@@ -68,7 +68,7 @@ class AddActionBottomSheet extends StatelessWidget {
                         title: 'Cashflow',
                         children: [
                           MenuListItem(
-                            icon: UIcons.regularRounded.shopping_cart,
+                            icon: UIcons.solidRounded.shopping_cart,
                             label: 'Expense',
                             onTap: () {
                               Navigator.pop(context);
@@ -76,7 +76,7 @@ class AddActionBottomSheet extends StatelessWidget {
                             },
                           ),
                           MenuListItem(
-                            icon: UIcons.regularRounded.wallet,
+                            icon: UIcons.solidRounded.wallet,
                             label: 'Income',
                             onTap: () {
                               Navigator.pop(context);
@@ -84,7 +84,7 @@ class AddActionBottomSheet extends StatelessWidget {
                             },
                           ),
                           MenuListItem(
-                            icon: UIcons.regularRounded.exchange,
+                            icon: UIcons.solidRounded.exchange,
                             label: 'Transfer',
                             onTap: () {
                               Navigator.pop(context);
@@ -102,7 +102,7 @@ class AddActionBottomSheet extends StatelessWidget {
                         title: 'Investments',
                         children: [
                           MenuListItem(
-                            icon: UIcons.regularRounded.arrow_down,
+                            icon: UIcons.solidRounded.arrow_down,
                             label: 'Buy',
                             onTap: () {
                               Navigator.pop(context);
@@ -110,7 +110,7 @@ class AddActionBottomSheet extends StatelessWidget {
                             },
                           ),
                           MenuListItem(
-                            icon: UIcons.regularRounded.arrow_up,
+                            icon: UIcons.solidRounded.arrow_up,
                             label: 'Sell',
                             onTap: () {
                               Navigator.pop(context);
@@ -128,7 +128,7 @@ class AddActionBottomSheet extends StatelessWidget {
                         title: 'Assets',
                         children: [
                           MenuListItem(
-                            icon: UIcons.regularRounded.home,
+                            icon: UIcons.solidRounded.home,
                             label: 'Purchase',
                             onTap: () {
                               Navigator.pop(context);
@@ -136,7 +136,7 @@ class AddActionBottomSheet extends StatelessWidget {
                             },
                           ),
                           MenuListItem(
-                            icon: UIcons.regularRounded.money_bill_wave,
+                            icon: UIcons.solidRounded.money_bill_wave,
                             label: 'Sale',
                             onTap: () {
                               Navigator.pop(context);
@@ -154,7 +154,7 @@ class AddActionBottomSheet extends StatelessWidget {
                         title: 'Other',
                         children: [
                           MenuListItem(
-                            icon: UIcons.regularRounded.edit,
+                            icon: UIcons.solidRounded.edit,
                             label: 'Adjustment',
                             onTap: () {
                               Navigator.pop(context);

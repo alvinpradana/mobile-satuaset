@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../domain/models/wealth_summary_model.dart';
 import '../../../../shared/providers/privacy_provider.dart';
+import 'package:uicons/uicons.dart';
 
 class WealthDomainRow extends ConsumerWidget {
   final WealthDomain domain;
@@ -51,7 +52,7 @@ class WealthDomainRow extends ConsumerWidget {
                   child: Icon(
                     icon,
                     color: AppColors.primaryAccent,
-                    size: 20,
+                    size: 18,
                   ),
                 ),
                 const SizedBox(width: 16),
@@ -96,10 +97,10 @@ class WealthDomainRow extends ConsumerWidget {
                               fontSize: 13,
                             ),
                           ),
-                          const Icon(
-                            CupertinoIcons.chevron_right,
+                          Icon(
+                            UIcons.regularRounded.angle_right,
                             color: AppColors.textSecondary,
-                            size: 12,
+                            size: 10,
                           ),
                         ],
                       ),

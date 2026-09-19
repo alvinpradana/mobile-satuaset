@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import '../../../../core/theme/app_colors.dart';
+import 'package:uicons/uicons.dart';
 
 class MenuListItem extends StatelessWidget {
   final IconData icon;
@@ -32,7 +33,7 @@ class MenuListItem extends StatelessWidget {
                   Icon(
                     icon,
                     color: AppColors.textPrimary,
-                    size: 20,
+                    size: 18,
                   ),
                   const SizedBox(width: 16),
                   Expanded(
@@ -45,10 +46,10 @@ class MenuListItem extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const Icon(
-                    CupertinoIcons.chevron_right,
+                  Icon(
+                    UIcons.regularRounded.angle_right,
                     color: AppColors.textSecondary,
-                    size: 16,
+                    size: 14,
                   ),
                 ],
               ),

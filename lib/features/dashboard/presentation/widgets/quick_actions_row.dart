@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../../shared/widgets/quick_action_button.dart';
+import 'package:uicons/uicons.dart';
 
 class QuickActionsRow extends StatelessWidget {
   const QuickActionsRow({super.key});
@@ -13,25 +14,25 @@ class QuickActionsRow extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           QuickActionButton(
-            icon: Icons.add,
+            icon: UIcons.solidRounded.plus,
             label: 'Pengeluaran',
             onTap: () {},
           ),
           const SizedBox(width: 28),
           QuickActionButton(
-            icon: Icons.arrow_upward,
+            icon: UIcons.solidRounded.arrow_up,
             label: 'Pemasukan',
             onTap: () {},
           ),
           const SizedBox(width: 28),
           QuickActionButton(
-            icon: Icons.qr_code_scanner,
+            icon: UIcons.solidRounded.expand,
             label: 'Transfer',
             onTap: () {},
           ),
           const SizedBox(width: 28),
           QuickActionButton(
-            icon: Icons.credit_card,
+            icon: UIcons.solidRounded.credit_card,
             label: 'Akun',
             onTap: () {},
           ),

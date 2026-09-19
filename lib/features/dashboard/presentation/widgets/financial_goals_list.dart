@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../domain/models/financial_goal.dart';
+import 'package:uicons/uicons.dart';
 
 class FinancialGoalsList extends StatelessWidget {
   const FinancialGoalsList({super.key});
@@ -36,7 +37,7 @@ class FinancialGoalsList extends StatelessWidget {
                   // TODO: Navigate to Financial Goals Details
                 },
                 child: Row(
-                  children: const [
+                  children: [
                     Text(
                       'See All',
                       style: TextStyle(
@@ -47,9 +48,9 @@ class FinancialGoalsList extends StatelessWidget {
                     ),
                     SizedBox(width: 2),
                     Icon(
-                      CupertinoIcons.chevron_right,
+                      UIcons.regularRounded.angle_right,
                       color: AppColors.textSecondary,
-                      size: 10,
+                      size: 8,
                     ),
                   ],
                 ),
@@ -65,10 +66,6 @@ class FinancialGoalsList extends StatelessWidget {
             decoration: BoxDecoration(
               color: AppColors.surface,
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: AppColors.divider,
-                width: 1,
-              ),
             ),
             child: ListView.separated(
               physics: const NeverScrollableScrollPhysics(),

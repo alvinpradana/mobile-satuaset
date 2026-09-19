@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/cupertino.dart';
 import '../providers/privacy_provider.dart';
+import 'package:uicons/uicons.dart';
 
 class PrivacyToggleButton extends ConsumerWidget {
   final Color color;
@@ -22,7 +23,7 @@ class PrivacyToggleButton extends ConsumerWidget {
         ref.read(privacyProvider.notifier).toggle();
       },
       child: Icon(
-        isObscured ? CupertinoIcons.eye_slash : CupertinoIcons.eye,
+        isObscured ? UIcons.solidRounded.eye_crossed : UIcons.solidRounded.eye,
         color: color,
         size: size,
       ),
