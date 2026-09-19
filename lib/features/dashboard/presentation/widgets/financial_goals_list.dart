@@ -13,7 +13,6 @@ class FinancialGoalsList extends StatelessWidget {
     final goals = [
       FinancialGoal(title: 'Beli Rumah', percentage: 54, currentAmount: 650000000, targetAmount: 1200000000),
       FinancialGoal(title: 'Dana Darurat', percentage: 80, currentAmount: 480000000, targetAmount: 600000000),
-      FinancialGoal(title: 'Liburan Eropa', percentage: 34, currentAmount: 12000000, targetAmount: 35000000),
     ];
 
     return Column(

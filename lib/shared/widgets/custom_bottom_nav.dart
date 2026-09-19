@@ -5,7 +5,14 @@ import '../../../core/theme/app_colors.dart';
 import 'package:uicons/uicons.dart';
 
 class CustomBottomNav extends StatelessWidget {
-  const CustomBottomNav({super.key});
+  final int currentIndex;
+  final Function(int)? onTabSelected;
+
+  const CustomBottomNav({
+    super.key,
+    this.currentIndex = 0,
+    this.onTabSelected,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -33,11 +40,31 @@ class CustomBottomNav extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    _NavItem(icon: UIcons.solidRounded.home, label: 'Home', isActive: true),
-                    _NavItem(icon: UIcons.solidRounded.clock, label: 'Activity', isActive: false),
+                    _NavItem(
+                      icon: UIcons.solidRounded.home, 
+                      label: 'Home', 
+                      isActive: currentIndex == 0,
+                      onTap: () => onTabSelected?.call(0),
+                    ),
+                    _NavItem(
+                      icon: UIcons.solidRounded.clock, 
+                      label: 'Activity', 
+                      isActive: currentIndex == 1,
+                      onTap: () => onTabSelected?.call(1),
+                    ),
                     const SizedBox(width: 56), // Space for FAB
-                    _NavItem(icon: UIcons.solidRounded.layers, label: 'Wealth', isActive: false),
-                    _NavItem(icon: UIcons.solidRounded.menu_dots, label: 'More', isActive: false),
+                    _NavItem(
+                      icon: UIcons.solidRounded.layers, 
+                      label: 'Wealth', 
+                      isActive: currentIndex == 2,
+                      onTap: () => onTabSelected?.call(2),
+                    ),
+                    _NavItem(
+                      icon: UIcons.solidRounded.menu_dots, 
+                      label: 'More', 
+                      isActive: currentIndex == 3,
+                      onTap: () => onTabSelected?.call(3),
+                    ),
                   ],
                 ),
               ),
@@ -81,35 +108,41 @@ class _NavItem extends StatelessWidget {
   final IconData icon;
   final String label;
   final bool isActive;
+  final VoidCallback? onTap;
 
   const _NavItem({
     required this.icon,
     required this.label,
     required this.isActive,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     final color = isActive ? AppColors.primaryAccent : AppColors.textSecondary;
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(
-          icon, 
-          color: color, 
-          size: 20,
-          weight: 300, // Makes the stroke thinner (default is 400)
-        ),
-        const SizedBox(height: 4),
-        Text(
-          label,
-          style: TextStyle(
-            color: color,
-            fontSize: 11,
-            fontWeight: isActive ? FontWeight.w800 : FontWeight.w600,
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            icon, 
+            color: color, 
+            size: 20,
+            weight: 300, // Makes the stroke thinner (default is 400)
           ),
-        ),
-      ],
+          const SizedBox(height: 4),
+          Text(
+            label,
+            style: TextStyle(
+              color: color,
+              fontSize: 11,
+              fontWeight: isActive ? FontWeight.w800 : FontWeight.w600,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
