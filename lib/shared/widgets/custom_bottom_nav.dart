@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
 
 import 'package:uicons/uicons.dart';
+import 'add_action_bottom_sheet.dart';
 
 class CustomBottomNav extends StatelessWidget {
   final int currentIndex;
@@ -75,7 +76,14 @@ class CustomBottomNav extends StatelessWidget {
           Positioned(
             top: -16,
             child: GestureDetector(
-              onTap: () {},
+              onTap: () {
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  backgroundColor: Colors.transparent,
+                  builder: (context) => const AddActionBottomSheet(),
+                );
+              },
               child: Container(
                 width: 60,
                 height: 60,

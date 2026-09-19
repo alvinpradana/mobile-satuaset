@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:uicons/uicons.dart';
 import '../../../../core/theme/app_colors.dart';
-import '../widgets/menu_section_group.dart';
-import '../widgets/menu_list_item.dart';
+import '../../../../shared/widgets/menu_section_group.dart';
+import '../../../../shared/widgets/menu_list_item.dart';
 
 class MoreScreen extends StatelessWidget {
   const MoreScreen({super.key});
