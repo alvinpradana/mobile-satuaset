@@ -25,7 +25,7 @@ class NetWorthSummary extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: const [
                         Text(
-                          'Est total value',
+                          'Net Worth',
                           style: TextStyle(
                             color: AppColors.textSecondary,
                             fontSize: 12,
@@ -45,10 +45,10 @@ class NetWorthSummary extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: const [
                         Text(
-                          '24.500.000',
+                          'Rp 2.450.000.000',
                           style: TextStyle(
                             color: AppColors.textPrimary,
-                            fontSize: 36,
+                            fontSize: 32, // slightly smaller to fit the Rp prefix nicely
                             fontWeight: FontWeight.bold,
                             height: 1.0,
                             letterSpacing: -1,
@@ -70,7 +70,7 @@ class NetWorthSummary extends ConsumerWidget {
                         Padding(
                           padding: EdgeInsets.only(bottom: 6.0),
                           child: Icon(
-                            CupertinoIcons.chevron_down, // Dropdown arrow
+                            CupertinoIcons.chevron_down,
                             color: AppColors.textPrimary,
                             size: 12,
                           ),
@@ -82,20 +82,20 @@ class NetWorthSummary extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: const [
                         Text(
-                          '1Y PnL',
+                          '+2.4%',
+                          style: TextStyle(
+                            color: AppColors.positive,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(width: 4),
+                        Text(
+                          'vs last month',
                           style: TextStyle(
                             color: AppColors.textSecondary,
                             fontSize: 12,
                             fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        SizedBox(width: 8),
-                        Text(
-                          '-Rp 194.381.625 (-8.75%)',
-                          style: TextStyle(
-                            color: AppColors.negative,
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ],

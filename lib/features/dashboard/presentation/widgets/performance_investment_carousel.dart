@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import '../../../../core/theme/app_colors.dart';
 
-class AssetAllocationCarousel extends StatefulWidget {
-  const AssetAllocationCarousel({super.key});
+class PerformanceInvestmentCarousel extends StatefulWidget {
+  const PerformanceInvestmentCarousel({super.key});
 
   @override
-  State<AssetAllocationCarousel> createState() => _AssetAllocationCarouselState();
+  State<PerformanceInvestmentCarousel> createState() => _PerformanceInvestmentCarouselState();
 }
 
-class _AssetAllocationCarouselState extends State<AssetAllocationCarousel> {
+class _PerformanceInvestmentCarouselState extends State<PerformanceInvestmentCarousel> {
   final PageController _pageController = PageController();
   Timer? _timer;
   int _currentPage = 0;
@@ -86,7 +86,7 @@ class _AssetAllocationCarouselState extends State<AssetAllocationCarousel> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text(
-                'Asset Allocation',
+                'Performance Investment',
                 style: TextStyle(
                   color: AppColors.textPrimary,
                   fontSize: 16,

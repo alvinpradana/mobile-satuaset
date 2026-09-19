@@ -78,7 +78,7 @@ class DashboardHeader extends StatelessWidget {
           ),
           const SizedBox(height: 32),
           const Text(
-            'Welcome, Alvin! 👋',
+            'Welcome, Alvin!',
             style: TextStyle(
               color: AppColors.textPrimary,
               fontSize: 24,

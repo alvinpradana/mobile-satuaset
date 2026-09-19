@@ -1,8 +1,8 @@
 import 'dart:ui';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../../../core/theme/app_colors.dart';
+
+import 'package:uicons/uicons.dart';
 
 class CustomBottomNav extends StatelessWidget {
   const CustomBottomNav({super.key});
@@ -33,11 +33,11 @@ class CustomBottomNav extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    _NavItem(icon: CupertinoIcons.home, label: 'Home', isActive: true),
-                    _NavItem(icon: CupertinoIcons.waveform_path, label: 'Activity', isActive: false),
+                    _NavItem(icon: UIcons.solidRounded.home, label: 'Home', isActive: true),
+                    _NavItem(icon: UIcons.solidRounded.clock, label: 'Activity', isActive: false),
                     const SizedBox(width: 56), // Space for FAB
-                    _NavItem(icon: CupertinoIcons.money_dollar, label: 'Wealth', isActive: false),
-                    _NavItem(icon: CupertinoIcons.ellipsis, label: 'More', isActive: false),
+                    _NavItem(icon: UIcons.solidRounded.layers, label: 'Wealth', isActive: false),
+                    _NavItem(icon: UIcons.solidRounded.menu_dots, label: 'More', isActive: false),
                   ],
                 ),
               ),
@@ -97,7 +97,7 @@ class _NavItem extends StatelessWidget {
         Icon(
           icon, 
           color: color, 
-          size: 24,
+          size: 20,
           weight: 300, // Makes the stroke thinner (default is 400)
         ),
         const SizedBox(height: 4),
