@@ -13,6 +13,7 @@ import '../widgets/goal_preview_card.dart';
 import '../widgets/liabilities_reminder_card.dart';
 import 'wealth_domain_detail_screen.dart';
 import 'investment_detail_screen.dart';
+import 'accounts_detail_screen.dart';
 
 class WealthScreen extends ConsumerWidget {
   const WealthScreen({super.key});
@@ -90,12 +91,9 @@ class WealthScreen extends ConsumerWidget {
                     domain: wealthSummary.domains.firstWhere((d) => d.id == 'accounts'),
                     icon: UIcons.solidRounded.wallet,
                     onTap: () {
-                      Navigator.push(
-                        context,
+                      Navigator.of(context, rootNavigator: true).push(
                         CupertinoPageRoute(
-                          builder: (context) => WealthDomainDetailScreen(
-                            domain: wealthSummary.domains.firstWhere((d) => d.id == 'accounts'),
-                          ),
+                          builder: (context) => const AccountsDetailScreen(),
                         ),
                       );
                     },
