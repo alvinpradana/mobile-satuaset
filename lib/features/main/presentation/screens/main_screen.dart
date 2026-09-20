@@ -3,7 +3,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../shared/widgets/custom_bottom_nav.dart';
 import '../../../activity/presentation/screens/activity_screen.dart';
 import '../../../dashboard/presentation/screens/dashboard_screen.dart';
-import '../../../wealth/presentation/screens/wealth_screen.dart';
+import '../../../wealth/presentation/screens/wealth_tab_navigator.dart';
 import '../../../more/presentation/screens/more_screen.dart';
 
 class MainScreen extends StatefulWidget {
@@ -19,7 +19,7 @@ class _MainScreenState extends State<MainScreen> {
   final List<Widget> _screens = [
     const DashboardScreen(),
     const ActivityScreen(),
-    const WealthScreen(),
+    const WealthTabNavigator(),
     const MoreScreen(),
   ];
 

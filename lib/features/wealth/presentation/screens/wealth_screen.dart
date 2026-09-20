@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uicons/uicons.dart';
@@ -10,6 +11,8 @@ import '../widgets/wealth_allocation_bar.dart';
 import '../widgets/wealth_domain_row.dart';
 import '../widgets/goal_preview_card.dart';
 import '../widgets/liabilities_reminder_card.dart';
+import 'wealth_domain_detail_screen.dart';
+import 'investment_detail_screen.dart';
 
 class WealthScreen extends ConsumerWidget {
   const WealthScreen({super.key});
@@ -74,28 +77,71 @@ class WealthScreen extends ConsumerWidget {
                   WealthDomainRow(
                     domain: wealthSummary.domains.firstWhere((d) => d.id == 'investments'),
                     icon: UIcons.solidRounded.chart_pie_alt,
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                          builder: (context) => const InvestmentDetailScreen(),
+                        ),
+                      );
+                    },
                   ),
                   WealthDomainRow(
                     domain: wealthSummary.domains.firstWhere((d) => d.id == 'accounts'),
                     icon: UIcons.solidRounded.wallet,
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                          builder: (context) => WealthDomainDetailScreen(
+                            domain: wealthSummary.domains.firstWhere((d) => d.id == 'accounts'),
+                          ),
+                        ),
+                      );
+                    },
                   ),
                   WealthDomainRow(
                     domain: wealthSummary.domains.firstWhere((d) => d.id == 'physical_assets'),
                     icon: UIcons.solidRounded.home,
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                          builder: (context) => WealthDomainDetailScreen(
+                            domain: wealthSummary.domains.firstWhere((d) => d.id == 'physical_assets'),
+                          ),
+                        ),
+                      );
+                    },
                   ),
                   WealthDomainRow(
                     domain: wealthSummary.domains.firstWhere((d) => d.id == 'liabilities'),
                     icon: UIcons.solidRounded.file_invoice,
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                          builder: (context) => WealthDomainDetailScreen(
+                            domain: wealthSummary.domains.firstWhere((d) => d.id == 'liabilities'),
+                          ),
+                        ),
+                      );
+                    },
                   ),
                   WealthDomainRow(
                     domain: wealthSummary.domains.firstWhere((d) => d.id == 'goals'),
                     icon: UIcons.solidRounded.target,
                     showDivider: false,
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                          builder: (context) => WealthDomainDetailScreen(
+                            domain: wealthSummary.domains.firstWhere((d) => d.id == 'goals'),
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),
