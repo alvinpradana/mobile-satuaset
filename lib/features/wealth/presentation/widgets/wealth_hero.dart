@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:uicons/uicons.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../shared/providers/privacy_provider.dart';
 import '../../../../shared/widgets/privacy_toggle_button.dart';
@@ -63,29 +64,40 @@ class WealthHero extends ConsumerWidget {
         ),
         const SizedBox(height: 12),
         Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const Text(
               '+Rp 58.800.000', // Mock nominal gain
               style: TextStyle(
                 color: AppColors.positive,
-                fontSize: 12,
+                fontSize: 14,
                 fontWeight: FontWeight.bold,
               ),
             ),
             const SizedBox(width: 8),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
               decoration: BoxDecoration(
                 color: AppColors.positive.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(4),
               ),
-              child: Text(
-                '+$changePercentage%',
-                style: const TextStyle(
-                  color: AppColors.positive,
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                ),
+              child: Row(
+                children: [
+                  Icon(
+                    UIcons.regularRounded.arrow_trend_up,
+                    size: 10,
+                    color: AppColors.positive,
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    '${changePercentage.abs().toStringAsFixed(1)}%',
+                    style: const TextStyle(
+                      color: AppColors.positive,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
               ),
             ),
             const SizedBox(width: 8),

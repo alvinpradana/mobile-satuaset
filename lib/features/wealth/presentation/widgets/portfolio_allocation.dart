@@ -7,99 +7,108 @@ class PortfolioAllocation extends StatelessWidget {
 
   const PortfolioAllocation({super.key, required this.allocations});
 
+  // Dynamic colors for the segmented bar, matching ValueBreakdownBar
+  static const List<Color> _segmentColors = [
+    AppColors.primaryAccent,
+    Color(0xFF00E676), // Positive
+    Color(0xFF69F0AE),
+    Color(0xFF81C784),
+    Color(0xFFAED581),
+    Color(0xFFDCE775),
+    Color(0xFFFFF176),
+  ];
+
   @override
   Widget build(BuildContext context) {
+    if (allocations.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    // Sort allocations descending so the largest segment gets the primary color
+    final sortedAllocations = List<WealthAllocation>.from(allocations)
+      ..sort((a, b) => b.percentage.compareTo(a.percentage));
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
-          'Allocation',
+          'PORTFOLIO ALLOCATION',
           style: TextStyle(
-            color: AppColors.textPrimary,
-            fontSize: 18,
+            color: AppColors.textSecondary,
+            fontSize: 12,
             fontWeight: FontWeight.w600,
+            letterSpacing: 1.0,
           ),
         ),
         const SizedBox(height: 16),
-        ...allocations.map((allocation) => AllocationBar(allocation: allocation)),
+        
+        // Segmented Bar
+        ClipRRect(
+          borderRadius: BorderRadius.circular(6),
+          child: SizedBox(
+            height: 12,
+            child: Row(
+              children: sortedAllocations.asMap().entries.map((entry) {
+                final index = entry.key;
+                final allocation = entry.value;
+                final color = _segmentColors[index % _segmentColors.length];
+                
+                final flex = (allocation.percentage * 100).round();
+                if (flex == 0) return const SizedBox.shrink();
+
+                return Expanded(
+                  flex: flex,
+                  child: Container(color: color),
+                );
+              }).toList(),
+            ),
+          ),
+        ),
+        const SizedBox(height: 16),
+        
+        // Legend
+        Wrap(
+          spacing: 16,
+          runSpacing: 12,
+          children: sortedAllocations.asMap().entries.map((entry) {
+            final index = entry.key;
+            final allocation = entry.value;
+            final color = _segmentColors[index % _segmentColors.length];
+            
+            return Row(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  width: 8,
+                  height: 8,
+                  decoration: BoxDecoration(
+                    color: color,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+                const SizedBox(width: 6),
+                Text(
+                  allocation.label,
+                  style: const TextStyle(
+                    color: AppColors.textPrimary,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(width: 4),
+                Text(
+                  '${allocation.percentage.toStringAsFixed(0)}%',
+                  style: const TextStyle(
+                    color: AppColors.textSecondary,
+                    fontSize: 13,
+                  ),
+                ),
+              ],
+            );
+          }).toList(),
+        ),
       ],
     );
-  }
-}
-
-class AllocationBar extends StatelessWidget {
-  final WealthAllocation allocation;
-
-  const AllocationBar({super.key, required this.allocation});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                allocation.label,
-                style: const TextStyle(
-                  color: AppColors.textPrimary,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              Text(
-                '${allocation.percentage.toStringAsFixed(0)}%',
-                style: const TextStyle(
-                  color: AppColors.textSecondary,
-                  fontSize: 14,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 6),
-          LayoutBuilder(
-            builder: (context, constraints) {
-              return Stack(
-                children: [
-                  Container(
-                    height: 8,
-                    decoration: BoxDecoration(
-                      color: AppColors.surface,
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                  ),
-                  Container(
-                    height: 8,
-                    width: constraints.maxWidth * (allocation.percentage / 100),
-                    decoration: BoxDecoration(
-                      color: _getColorForLabel(allocation.label),
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                  ),
-                ],
-              );
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
-  Color _getColorForLabel(String label) {
-    switch (label.toLowerCase()) {
-      case 'stocks':
-        return AppColors.primaryAccent;
-      case 'crypto':
-        return Colors.orangeAccent;
-      case 'bonds':
-        return Colors.lightBlueAccent;
-      case 'cash':
-        return AppColors.positive;
-      default:
-        return AppColors.textSecondary;
-    }
   }
 }

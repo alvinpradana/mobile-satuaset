@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:uicons/uicons.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../domain/models/wealth_item.dart';
 
@@ -89,12 +90,32 @@ class WealthItemRow extends StatelessWidget {
                 ),
                 if (item.percentageChange != null) ...[
                   const SizedBox(height: 4),
-                  Text(
-                    '${item.percentageChange! > 0 ? '+' : ''}${item.percentageChange}%',
-                    style: TextStyle(
-                      color: item.percentageChange! > 0 ? AppColors.positive : AppColors.negative,
-                      fontSize: 13,
-                      fontWeight: FontWeight.w500,
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: (item.percentageChange! > 0 ? AppColors.positive : AppColors.negative).withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          item.percentageChange! > 0 
+                              ? UIcons.regularRounded.arrow_trend_up 
+                              : UIcons.regularRounded.arrow_trend_down,
+                          size: 8,
+                          color: item.percentageChange! > 0 ? AppColors.positive : AppColors.negative,
+                        ),
+                        const SizedBox(width: 2),
+                        Text(
+                          '${item.percentageChange!.abs().toStringAsFixed(1)}%',
+                          style: TextStyle(
+                            color: item.percentageChange! > 0 ? AppColors.positive : AppColors.negative,
+                            fontSize: 11,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],

@@ -112,38 +112,50 @@ class InvestmentDetailScreen extends ConsumerWidget {
                   ),
                   const SizedBox(height: 8),
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
                         '$returnSign${currencyFormatter.format(investmentSummary.unrealizedPnL)}',
                         style: TextStyle(
                           color: returnColor,
                           fontSize: 14,
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                       const SizedBox(width: 8),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                         decoration: BoxDecoration(
-                          color: returnColor.withOpacity(0.15),
-                          borderRadius: BorderRadius.circular(12),
+                          color: returnColor.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(4),
                         ),
-                        child: Text(
-                          '$returnSign${investmentSummary.returnPercentage}%',
-                          style: TextStyle(
-                            color: returnColor,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                          ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              !isNegativeReturn 
+                                  ? UIcons.regularRounded.arrow_trend_up 
+                                  : UIcons.regularRounded.arrow_trend_down,
+                              size: 10,
+                              color: returnColor,
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              '${investmentSummary.returnPercentage.abs().toStringAsFixed(1)}%',
+                              style: TextStyle(
+                                color: returnColor,
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       const SizedBox(width: 8),
                       const Text(
-                        'This Year',
+                        'this year',
                         style: TextStyle(
-                          color: AppColors.textPrimary, // White text
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
+                          color: AppColors.textSecondary,
+                          fontSize: 12,
                         ),
                       ),
                     ],
