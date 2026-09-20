@@ -24,18 +24,38 @@ class ActivityScreen extends ConsumerStatefulWidget {
 class _ActivityScreenState extends ConsumerState<ActivityScreen> {
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _searchController = TextEditingController();
+  final FocusNode _searchFocusNode = FocusNode();
   int _currentTab = 0; // 0 for Activity, 1 for Cashflow
 
   @override
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
+    _searchFocusNode.addListener(_onSearchFocusChange);
+  }
+
+  void _onSearchFocusChange() {
+    if (_searchFocusNode.hasFocus) {
+      Future.delayed(const Duration(milliseconds: 100), () {
+        if (_scrollController.hasClients) {
+          // Scroll down to hide top headers and show the transaction list
+          final double targetOffset = 380.0;
+          final double maxScroll = _scrollController.position.maxScrollExtent;
+          _scrollController.animateTo(
+            targetOffset > maxScroll ? maxScroll : targetOffset,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeOutCubic,
+          );
+        }
+      });
+    }
   }
 
   @override
   void dispose() {
     _scrollController.dispose();
     _searchController.dispose();
+    _searchFocusNode.dispose();
     super.dispose();
   }
 
@@ -50,8 +70,10 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
     final state = ref.watch(activityNotifierProvider);
     final summaryAsync = ref.watch(activitySummaryProvider);
 
-    return Scaffold(
-      backgroundColor: AppColors.background,
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        backgroundColor: AppColors.background,
       body: Stack(
         children: [
           RefreshIndicator(
@@ -320,7 +342,7 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
             Positioned(
             left: 0,
             right: 0,
-            bottom: 120, // Increased to avoid bottom nav overlap
+            bottom: MediaQuery.of(context).viewInsets.bottom > 0 ? 24 : 120,
             child: Align(
               alignment: Alignment.center,
               child: SizedBox(
@@ -338,14 +360,15 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
                       ),
                       child: Row(
                         children: [
-                          Icon(UIcons.solidRounded.search, color: AppColors.textSecondary, size: 18),
+                          Icon(UIcons.regularRounded.search, color: AppColors.textSecondary, size: 18),
                           const SizedBox(width: 12),
                           Expanded(
                             child: TextField(
                               controller: _searchController,
+                              focusNode: _searchFocusNode,
                               style: const TextStyle(color: AppColors.textPrimary, fontSize: 14),
                               decoration: const InputDecoration(
-                                hintText: 'Search for anything...',
+                                hintText: 'Search your transaction',
                                 hintStyle: TextStyle(color: AppColors.textSecondary, fontSize: 14),
                                 border: InputBorder.none,
                                 isDense: true,
@@ -374,6 +397,7 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
           ),
         ],
       ),
+    ),
     );
   }
 
