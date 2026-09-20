@@ -11,6 +11,7 @@ import '../widgets/wealth_allocation_bar.dart';
 import '../widgets/wealth_domain_row.dart';
 import '../widgets/goal_preview_card.dart';
 import '../widgets/liabilities_reminder_card.dart';
+import 'physical_assets_screen.dart';
 import 'wealth_domain_detail_screen.dart';
 import 'investment_detail_screen.dart';
 import 'accounts_detail_screen.dart';
@@ -102,12 +103,9 @@ class WealthScreen extends ConsumerWidget {
                     domain: wealthSummary.domains.firstWhere((d) => d.id == 'physical_assets'),
                     icon: UIcons.solidRounded.home,
                     onTap: () {
-                      Navigator.push(
-                        context,
+                      Navigator.of(context, rootNavigator: true).push(
                         CupertinoPageRoute(
-                          builder: (context) => WealthDomainDetailScreen(
-                            domain: wealthSummary.domains.firstWhere((d) => d.id == 'physical_assets'),
-                          ),
+                          builder: (context) => const PhysicalAssetsScreen(),
                         ),
                       );
                     },
