@@ -53,16 +53,12 @@ class _AccountsDetailScreenState extends ConsumerState<AccountsDetailScreen> {
             pinned: true,
             leading: Padding(
               padding: const EdgeInsets.only(left: 24.0, top: 8.0, bottom: 8.0),
-              child: InkWell(
+              child: GestureDetector(
                 onTap: () => Navigator.pop(context),
-                borderRadius: BorderRadius.circular(20),
-                child: Container(
+                behavior: HitTestBehavior.opaque,
+                child: SizedBox(
                   width: 40,
                   height: 40,
-                  decoration: const BoxDecoration(
-                    color: AppColors.surface,
-                    shape: BoxShape.circle,
-                  ),
                   child: Center(
                     child: Icon(UIcons.regularRounded.angle_left, color: AppColors.textPrimary, size: 20),
                   ),
@@ -238,18 +234,17 @@ class _AccountsDetailScreenState extends ConsumerState<AccountsDetailScreen> {
           )
         ],
       ),
-      bottomNavigationBar: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(24, 0, 24, 40), // Increased bottom padding
-          child: ElevatedButton(
-            onPressed: () {
-              showModalBottomSheet(
-                context: context,
-                isScrollControlled: true,
-                backgroundColor: Colors.transparent,
-                builder: (context) => const AddAccountBottomSheet(),
-              );
-            },
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.fromLTRB(24, 16, 24, 24), // Matches CustomBottomNav margin
+        child: ElevatedButton(
+          onPressed: () {
+            showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              backgroundColor: Colors.transparent,
+              builder: (context) => const AddAccountBottomSheet(),
+            );
+          },
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primaryAccent,
               foregroundColor: Colors.black,
@@ -268,7 +263,6 @@ class _AccountsDetailScreenState extends ConsumerState<AccountsDetailScreen> {
             ),
           ),
         ),
-      ),
     );
   }
 }

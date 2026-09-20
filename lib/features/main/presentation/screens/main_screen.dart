@@ -32,6 +32,30 @@ class _MainScreenState extends State<MainScreen> {
           // Render the current screen
           _screens[_currentIndex],
           
+          // Gradient shadow to smoothly fade out the content behind the bottom nav
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            height: 160,
+            child: IgnorePointer(
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      AppColors.background.withOpacity(0.0),
+                      AppColors.background.withOpacity(0.8),
+                      AppColors.background,
+                    ],
+                    stops: const [0.0, 0.6, 1.0],
+                  ),
+                ),
+              ),
+            ),
+          ),
+          
           // Bottom Navigation overlapping the screen
           Positioned(
             bottom: 0,
