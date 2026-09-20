@@ -4,6 +4,7 @@ import 'core/theme/app_theme.dart';
 import 'features/main/presentation/screens/main_screen.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(
     const ProviderScope(
       child: SatuAsetApp(),
