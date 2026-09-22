@@ -4,6 +4,8 @@ import 'package:fl_chart/fl_chart.dart';
 import '../../domain/models/wealth_summary_model.dart';
 import '../../domain/models/wealth_item.dart';
 import '../../domain/models/investment_summary.dart';
+import '../../domain/models/saving_goal_model.dart';
+import 'package:flutter/material.dart';
 
 final wealthSummaryProvider = Provider<WealthSummary>((ref) {
   // Use realistic Indonesian mock values that reconcile
@@ -292,3 +294,54 @@ final wealthItemsProvider = Provider.family<List<WealthItem>, String>((ref, doma
 
   return allItems.where((item) => item.domainId == domainId).toList();
 });
+
+final savingGoalsProvider = Provider<List<SavingGoal>>((ref) {
+  return [
+    SavingGoal(
+      id: 'g1',
+      name: 'Dana Darurat (6 Bulan)',
+      category: 'EMERGENCY',
+      targetAmount: 100000000.0,
+      currentAmount: 75000000.0,
+      targetDate: DateTime(2026, 12, 31),
+      iconData: UIcons.solidRounded.shield_check,
+      color: const Color(0xFF00E5FF),
+      accountName: 'Bank BCA - Dana Darurat',
+    ),
+    SavingGoal(
+      id: 'g2',
+      name: 'DP Rumah Pertama',
+      category: 'HOUSING',
+      targetAmount: 150000000.0,
+      currentAmount: 60000000.0,
+      targetDate: DateTime(2027, 8, 30),
+      iconData: UIcons.solidRounded.home,
+      color: const Color(0xFF10B981),
+      accountName: 'Bank Mandiri - Deposito',
+    ),
+    SavingGoal(
+      id: 'g3',
+      name: 'Liburan ke Jepang',
+      category: 'TRAVEL',
+      targetAmount: 35000000.0,
+      currentAmount: 10000000.0,
+      targetDate: DateTime(2027, 3, 15),
+      iconData: UIcons.solidRounded.plane_alt,
+      color: const Color(0xFFF59E0B),
+      accountName: 'Jenius - Save It',
+    ),
+    SavingGoal(
+      id: 'g4',
+      name: 'Upgrade Laptop M3 Max',
+      category: 'GADGET',
+      targetAmount: 40000000.0,
+      currentAmount: 40000000.0,
+      targetDate: DateTime(2026, 6, 30),
+      iconData: UIcons.solidRounded.computer,
+      color: const Color(0xFF8B5CF6),
+      accountName: 'GoPay',
+      status: SavingGoalStatus.completed,
+    ),
+  ];
+});
+
