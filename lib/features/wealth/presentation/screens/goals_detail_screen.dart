@@ -419,14 +419,14 @@ class _SavingGoalCard extends StatelessWidget {
                 width: 44,
                 height: 44,
                 decoration: BoxDecoration(
-                  color: goal.color.withOpacity(0.15),
+                  color: isCompleted ? AppColors.positive.withOpacity(0.12) : AppColors.surfaceHover,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Center(
                   child: Icon(
                     goal.iconData,
-                    color: goal.color,
-                    size: 22,
+                    color: isCompleted ? AppColors.positive : AppColors.textPrimary,
+                    size: 20,
                   ),
                 ),
               ),
@@ -527,7 +527,7 @@ class _SavingGoalCard extends StatelessWidget {
               Text(
                 '${(goal.progressPercentage * 100).toStringAsFixed(0)}%',
                 style: TextStyle(
-                  color: goal.color,
+                  color: isCompleted ? AppColors.positive : AppColors.primaryAccent,
                   fontSize: 14,
                   fontWeight: FontWeight.w800,
                 ),
@@ -543,7 +543,9 @@ class _SavingGoalCard extends StatelessWidget {
               value: goal.progressPercentage,
               minHeight: 8,
               backgroundColor: AppColors.surfaceHover,
-              valueColor: AlwaysStoppedAnimation<Color>(goal.color),
+              valueColor: AlwaysStoppedAnimation<Color>(
+                isCompleted ? AppColors.positive : AppColors.primaryAccent,
+              ),
             ),
           ),
           const SizedBox(height: 14),
