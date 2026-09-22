@@ -60,18 +60,20 @@ class PhysicalAssetRow extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // Icon
+            // Icon (matching Accounts item icon style)
             Container(
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: AppColors.surfaceHover.withOpacity(0.5),
+                color: AppColors.surfaceHover,
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Icon(
-                _getCategoryIcon(asset.category),
-                color: AppColors.textPrimary,
-                size: 20,
+              child: Center(
+                child: Icon(
+                  _getCategoryIcon(asset.category),
+                  color: AppColors.textPrimary,
+                  size: 20,
+                ),
               ),
             ),
             const SizedBox(width: 16),

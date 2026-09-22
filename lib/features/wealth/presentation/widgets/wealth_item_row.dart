@@ -32,15 +32,19 @@ class WealthItemRow extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 12.0),
         child: Row(
           children: [
-            // Icon / Avatar
-            SizedBox(
-              width: 32,
-              height: 32,
+            // Icon / Avatar (matching Accounts item icon style)
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: AppColors.surfaceHover,
+                borderRadius: BorderRadius.circular(12),
+              ),
               child: Center(
                 child: Icon(
                   item.iconData,
-                  color: AppColors.textPrimary, // Changed to textPrimary for more elegance, less 'glowing'
-                  size: 24,
+                  color: AppColors.textPrimary,
+                  size: 20,
                 ),
               ),
             ),
