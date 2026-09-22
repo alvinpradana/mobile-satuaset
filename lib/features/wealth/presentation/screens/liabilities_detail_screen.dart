@@ -6,6 +6,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../domain/models/wealth_item.dart';
 import '../providers/wealth_provider.dart';
 import '../widgets/wealth_item_row.dart';
+import '../widgets/add_liability_bottom_sheet.dart';
 
 class LiabilitiesDetailScreen extends ConsumerStatefulWidget {
   const LiabilitiesDetailScreen({super.key});
@@ -336,6 +337,36 @@ class _LiabilitiesDetailScreenState extends ConsumerState<LiabilitiesDetailScree
             ),
           ),
         ],
+      ),
+      bottomNavigationBar: Container(
+        color: AppColors.background,
+        padding: const EdgeInsets.fromLTRB(24, 16, 24, 24),
+        child: ElevatedButton(
+          onPressed: () {
+            showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              backgroundColor: Colors.transparent,
+              builder: (context) => const AddLiabilityBottomSheet(),
+            );
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppColors.primaryAccent,
+            foregroundColor: Colors.black,
+            minimumSize: const Size.fromHeight(56),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(28),
+            ),
+            elevation: 0,
+          ),
+          child: const Text(
+            'Add new liability',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
       ),
     );
   }
