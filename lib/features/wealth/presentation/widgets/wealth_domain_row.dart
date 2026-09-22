@@ -41,71 +41,70 @@ class WealthDomainRow extends ConsumerWidget {
             padding: const EdgeInsets.symmetric(vertical: 12.0),
             child: Row(
               children: [
-                // Icon Box
+                // Icon Box (matching Accounts, Investments & Physical Assets)
                 Container(
                   width: 40,
                   height: 40,
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     color: AppColors.surfaceHover,
-                    shape: BoxShape.circle,
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                  child: Icon(
-                    icon,
-                    color: AppColors.primaryAccent,
-                    size: 18,
+                  child: Center(
+                    child: Icon(
+                      icon,
+                      color: AppColors.textPrimary,
+                      size: 20,
+                    ),
                   ),
                 ),
                 const SizedBox(width: 16),
-                // Content Column
+                
+                // Middle Column: Title & Subtitle
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Top Row: Title & Nominal Value
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            domain.title,
-                            style: const TextStyle(
-                              color: AppColors.textPrimary,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          if (domain.value > 0)
-                            Text(
-                              isObscured ? 'Rp ••••••••' : 'Rp $formattedValue',
-                              style: const TextStyle(
-                                color: AppColors.textPrimary,
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                        ],
+                      Text(
+                        domain.title,
+                        style: const TextStyle(
+                          color: AppColors.textPrimary,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                       const SizedBox(height: 4),
-                      // Bottom Row: Subtitle & Chevron
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            domain.subtitle,
-                            style: const TextStyle(
-                              color: AppColors.textSecondary,
-                              fontSize: 13,
-                            ),
-                          ),
-                          Icon(
-                            UIcons.regularRounded.angle_right,
-                            color: AppColors.textSecondary,
-                            size: 10,
-                          ),
-                        ],
+                      Text(
+                        domain.subtitle,
+                        style: const TextStyle(
+                          color: AppColors.textSecondary,
+                          fontSize: 13,
+                        ),
                       ),
                     ],
                   ),
+                ),
+                
+                // Right Column: Nominal Value & Chevron
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (domain.value > 0)
+                      Text(
+                        isObscured ? 'Rp ••••••••' : 'Rp $formattedValue',
+                        style: const TextStyle(
+                          color: AppColors.textPrimary,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: -0.3,
+                        ),
+                      ),
+                    const SizedBox(width: 8),
+                    Icon(
+                      UIcons.regularRounded.angle_right,
+                      color: AppColors.textSecondary,
+                      size: 14,
+                    ),
+                  ],
                 ),
               ],
             ),

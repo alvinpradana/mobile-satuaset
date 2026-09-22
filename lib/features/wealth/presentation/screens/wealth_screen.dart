@@ -54,16 +54,7 @@ class WealthScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 32),
 
-            // Wealth Breakdown
-            const Text(
-              'Where your wealth is',
-              style: TextStyle(
-                color: AppColors.textPrimary,
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 16),
+            // Wealth Breakdown Module
             WealthAllocationBar(allocations: wealthSummary.allocations),
             const SizedBox(height: 32),
 
@@ -72,6 +63,7 @@ class WealthScreen extends ConsumerWidget {
               decoration: BoxDecoration(
                 color: AppColors.surface,
                 borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: AppColors.border),
               ),
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Column(
