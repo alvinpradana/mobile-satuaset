@@ -220,33 +220,39 @@ class _PhysicalAssetsScreenState extends ConsumerState<PhysicalAssetsScreen> {
                             ),
                           ),
                         ),
-                        if (_isSoldAssetsExpanded)
-                          ...assets.where((a) => a.status == PhysicalAssetStatus.sold).toList().asMap().entries.map((entry) {
-                            final index = entry.key;
-                            final asset = entry.value;
-                            final soldList = assets.where((a) => a.status == PhysicalAssetStatus.sold).toList();
-                            return Column(
-                              children: [
-                                Opacity(
-                                  opacity: 0.5,
-                                  child: PhysicalAssetRow(
-                                    asset: asset,
-                                    onTap: () {
-                                      // Navigate to sold asset detail
-                                    },
-                                  ),
-                                ),
-                                if (index < soldList.length - 1)
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 56.0),
-                                    child: Divider(
-                                      color: AppColors.surfaceHover.withOpacity(0.5),
-                                      height: 1,
+                        AnimatedCrossFade(
+                          firstChild: const SizedBox(width: double.infinity),
+                          secondChild: Column(
+                            children: assets.where((a) => a.status == PhysicalAssetStatus.sold).toList().asMap().entries.map((entry) {
+                              final index = entry.key;
+                              final asset = entry.value;
+                              final soldList = assets.where((a) => a.status == PhysicalAssetStatus.sold).toList();
+                              return Column(
+                                children: [
+                                  Opacity(
+                                    opacity: 0.5,
+                                    child: PhysicalAssetRow(
+                                      asset: asset,
+                                      onTap: () {
+                                        // Navigate to sold asset detail
+                                      },
                                     ),
                                   ),
-                              ],
-                            );
-                          }).toList(),
+                                  if (index < soldList.length - 1)
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 56.0),
+                                      child: Divider(
+                                        color: AppColors.surfaceHover.withOpacity(0.5),
+                                        height: 1,
+                                      ),
+                                    ),
+                                ],
+                              );
+                            }).toList(),
+                          ),
+                          crossFadeState: _isSoldAssetsExpanded ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+                          duration: const Duration(milliseconds: 250),
+                        ),
                       ],
                     ),
                     

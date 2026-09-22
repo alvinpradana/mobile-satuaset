@@ -217,31 +217,38 @@ class _AccountsDetailScreenState extends ConsumerState<AccountsDetailScreen> {
                     ),
                   ),
                   
-                  if (_isArchivedExpanded)
-                    if (archivedItems.isNotEmpty)
-                      ...[
-                        const Divider(color: AppColors.border, height: 24, thickness: 1),
-                        ...archivedItems.map((item) {
-                          return AccountRow(
-                            account: item,
-                            onTap: () {
-                              Navigator.of(context, rootNavigator: true).push(
-                                MaterialPageRoute(
-                                  builder: (context) => AccountManagementScreen(account: item),
-                                ),
-                              );
-                            },
-                          );
-                        }).toList(),
-                      ]
-                    else
-                      const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 16.0),
-                        child: Text(
-                          'No archived accounts',
-                          style: TextStyle(color: AppColors.textSecondary, fontSize: 14),
-                        ),
-                      ),
+                  AnimatedCrossFade(
+                    firstChild: const SizedBox(width: double.infinity),
+                    secondChild: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (archivedItems.isNotEmpty) ...[
+                          const Divider(color: AppColors.border, height: 24, thickness: 1),
+                          ...archivedItems.map((item) {
+                            return AccountRow(
+                              account: item,
+                              onTap: () {
+                                Navigator.of(context, rootNavigator: true).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => AccountManagementScreen(account: item),
+                                  ),
+                                );
+                              },
+                            );
+                          }).toList(),
+                        ] else
+                          const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 16.0),
+                            child: Text(
+                              'No archived accounts',
+                              style: TextStyle(color: AppColors.textSecondary, fontSize: 14),
+                            ),
+                          ),
+                      ],
+                    ),
+                    crossFadeState: _isArchivedExpanded ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+                    duration: const Duration(milliseconds: 250),
+                  ),
                 ],
               ),
             ),
