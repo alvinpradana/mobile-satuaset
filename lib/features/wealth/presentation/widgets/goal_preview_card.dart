@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:uicons/uicons.dart';
 import '../../../../core/theme/app_colors.dart';
 
@@ -13,6 +12,7 @@ class GoalPreviewCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -20,87 +20,96 @@ class GoalPreviewCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                'Your priority goal',
-                style: TextStyle(
-                  color: AppColors.textSecondary,
-                  fontSize: 12,
-                ),
+              Row(
+                children: [
+                  Icon(
+                    UIcons.solidRounded.target,
+                    color: AppColors.primaryAccent,
+                    size: 14,
+                  ),
+                  const SizedBox(width: 6),
+                  const Text(
+                    'Priority Goal',
+                    style: TextStyle(
+                      color: AppColors.textSecondary,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
               ),
-              Icon(
-                UIcons.solidRounded.target,
-                color: AppColors.primaryAccent.withOpacity(0.8),
-                size: 14,
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                decoration: BoxDecoration(
+                  color: AppColors.primaryAccent.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: const Text(
+                  '54%',
+                  style: TextStyle(
+                    color: AppColors.primaryAccent,
+                    fontSize: 11,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 10),
           const Text(
             'Beli Rumah',
             style: TextStyle(
               color: AppColors.textPrimary,
               fontSize: 16,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w700,
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
+              const Text(
                 'Rp 650.000.000',
                 style: TextStyle(
                   color: AppColors.textPrimary,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: -0.3,
                 ),
               ),
-              Text(
-                'Rp 1.200.000.000',
+              const Text(
+                'target Rp 1.200.000.000',
                 style: TextStyle(
                   color: AppColors.textSecondary,
-                  fontSize: 13,
+                  fontSize: 12,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 8),
-          Row(
-            children: [
-              Expanded(
-                child: Container(
-                  height: 6,
-                  decoration: BoxDecoration(
-                    color: AppColors.surfaceHover,
-                    borderRadius: BorderRadius.circular(3),
-                  ),
-                  clipBehavior: Clip.hardEdge,
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex: 54,
-                        child: Container(
-                          color: AppColors.positive,
-                        ),
-                      ),
-                      Expanded(
-                        flex: 46,
-                        child: Container(),
-                      ),
-                    ],
+          const SizedBox(height: 10),
+          // Progress Bar
+          Container(
+            height: 8,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: AppColors.surfaceHover,
+              borderRadius: BorderRadius.circular(4),
+            ),
+            clipBehavior: Clip.hardEdge,
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 54,
+                  child: Container(
+                    color: AppColors.primaryAccent,
                   ),
                 ),
-              ),
-              const SizedBox(width: 12),
-              const Text(
-                '54%',
-                style: TextStyle(
-                  color: AppColors.positive,
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
+                Expanded(
+                  flex: 46,
+                  child: Container(),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),
