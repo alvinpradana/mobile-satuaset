@@ -18,14 +18,15 @@ class PhysicalAssetRow extends StatelessWidget {
     switch (category.toLowerCase()) {
       case 'property':
       case 'real estate':
-        return UIcons.regularRounded.home;
+        return UIcons.solidRounded.home;
       case 'vehicle':
       case 'vehicles':
-        return UIcons.regularRounded.car;
+        return UIcons.solidRounded.car;
       case 'gold':
-        return UIcons.regularRounded.diamond; // Using diamond for gold/jewelry if coins isn't outlined
+      case 'jewelry':
+        return UIcons.solidRounded.diamond;
       default:
-        return UIcons.regularRounded.box;
+        return UIcons.solidRounded.box;
     }
   }
 
