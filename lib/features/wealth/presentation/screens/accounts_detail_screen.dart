@@ -203,12 +203,14 @@ class _AccountsDetailScreenState extends ConsumerState<AccountsDetailScreen> {
                               fontWeight: FontWeight.w600,
                             ),
                           ),
-                          Icon(
-                            _isArchivedExpanded 
-                                ? UIcons.regularRounded.angle_down 
-                                : UIcons.regularRounded.angle_right,
-                            color: AppColors.textSecondary,
-                            size: 16,
+                          AnimatedRotation(
+                            turns: _isArchivedExpanded ? 0.25 : 0.0,
+                            duration: const Duration(milliseconds: 200),
+                            child: Icon(
+                              UIcons.regularRounded.angle_right,
+                              color: AppColors.textSecondary,
+                              size: 16,
+                            ),
                           ),
                         ],
                       ),

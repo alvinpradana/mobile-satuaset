@@ -208,10 +208,10 @@ class _PhysicalAssetsScreenState extends ConsumerState<PhysicalAssetsScreen> {
                                   ),
                                 ),
                                 AnimatedRotation(
-                                  turns: _isSoldAssetsExpanded ? 0.5 : 0.0,
+                                  turns: _isSoldAssetsExpanded ? 0.25 : 0.0,
                                   duration: const Duration(milliseconds: 200),
                                   child: Icon(
-                                    UIcons.regularRounded.angle_down,
+                                    UIcons.regularRounded.angle_right,
                                     color: AppColors.textSecondary,
                                     size: 16,
                                   ),
