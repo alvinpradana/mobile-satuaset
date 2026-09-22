@@ -97,15 +97,32 @@ class _AccountsDetailScreenState extends ConsumerState<AccountsDetailScreen> {
                     style: const TextStyle(
                       color: AppColors.textPrimary,
                       fontSize: 32,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: -0.8,
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  Text(
-                    '${activeItems.length} active accounts',
-                    style: const TextStyle(
-                      color: AppColors.textSecondary,
-                      fontSize: 14,
+                  const SizedBox(height: 12),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: AppColors.surface,
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: AppColors.border),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(UIcons.regularRounded.wallet, size: 14, color: AppColors.textSecondary),
+                        const SizedBox(width: 8),
+                        Text(
+                          '${activeItems.length} active accounts',
+                          style: const TextStyle(
+                            color: AppColors.textSecondary,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   
