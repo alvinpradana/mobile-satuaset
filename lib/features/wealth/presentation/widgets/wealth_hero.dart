@@ -38,8 +38,9 @@ class WealthHero extends ConsumerWidget {
               'Net Worth',
               style: TextStyle(
                 color: AppColors.textSecondary,
-                fontSize: 12,
+                fontSize: 13,
                 fontWeight: FontWeight.w600,
+                letterSpacing: 0.2,
               ),
             ),
             SizedBox(width: 8),
@@ -55,9 +56,9 @@ class WealthHero extends ConsumerWidget {
               style: const TextStyle(
                 color: AppColors.textPrimary,
                 fontSize: 32,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w800,
                 height: 1.0,
-                letterSpacing: -1,
+                letterSpacing: -0.8,
               ),
             ),
           ],

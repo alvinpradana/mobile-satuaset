@@ -21,8 +21,9 @@ class SectionHeader extends StatelessWidget {
           Text(
             title,
             style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
+              fontSize: 18,
+              fontWeight: FontWeight.w700,
+              letterSpacing: -0.3,
               color: AppColors.textPrimary,
             ),
           ),
@@ -32,7 +33,7 @@ class SectionHeader extends StatelessWidget {
               child: const Text(
                 'Lihat semua',
                 style: TextStyle(
-                  fontSize: 12,
+                  fontSize: 13,
                   fontWeight: FontWeight.w600,
                   color: AppColors.primaryAccent,
                 ),

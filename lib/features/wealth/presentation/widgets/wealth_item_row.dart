@@ -22,10 +22,8 @@ class WealthItemRow extends StatelessWidget {
       decimalDigits: item.currency == 'Rp' ? 0 : 2,
     );
 
-    final isNegative = item.value < 0;
-    // Main value color is usually white, unless it's a liability (which might be red)
-    // Actually, in the screenshot, prices are white.
-    final valueColor = AppColors.textPrimary;
+    // Main value color is usually white, matching Bitget Wallet UI
+    const valueColor = AppColors.textPrimary;
 
     return InkWell(
       onTap: onTap,
@@ -85,7 +83,8 @@ class WealthItemRow extends StatelessWidget {
                   style: TextStyle(
                     color: valueColor,
                     fontSize: 16,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: -0.3,
                   ),
                 ),
                 if (item.percentageChange != null) ...[

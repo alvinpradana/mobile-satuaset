@@ -55,8 +55,8 @@ class PhysicalAssetsHero extends StatelessWidget {
                   style: const TextStyle(
                     color: AppColors.textPrimary,
                     fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: -1,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: -0.8,
                   ),
                 ),
               ],

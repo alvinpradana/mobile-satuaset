@@ -106,8 +106,8 @@ class InvestmentDetailScreen extends ConsumerWidget {
                     style: const TextStyle(
                       color: AppColors.textPrimary,
                       fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: -0.5,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: -0.8,
                     ),
                   ),
                   const SizedBox(height: 8),
