@@ -59,7 +59,7 @@ class ActivityDetailSheet extends ConsumerWidget {
           // Header Type & Icon
           Container(
             padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: AppColors.surface,
               shape: BoxShape.circle,
             ),
@@ -105,7 +105,12 @@ class ActivityDetailSheet extends ConsumerWidget {
             child: Column(
               children: [
                 if (activity.account != null)
-                  _buildMetaRow('Account', activity.account!),
+                  _buildMetaRow(
+                    (activity.type == ActivityType.investmentBuy || activity.type == ActivityType.investmentSell)
+                        ? 'Platform / Broker'
+                        : 'Account',
+                    activity.account!,
+                  ),
                 if (activity.destinationAccount != null)
                   _buildMetaRow('To', activity.destinationAccount!),
                 if (activity.category != null)

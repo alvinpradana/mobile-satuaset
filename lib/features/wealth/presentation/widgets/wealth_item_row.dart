@@ -7,11 +7,13 @@ import '../../domain/models/wealth_item.dart';
 class WealthItemRow extends StatelessWidget {
   final WealthItem item;
   final VoidCallback onTap;
+  final bool showInstitution;
 
   const WealthItemRow({
     super.key,
     required this.item,
     required this.onTap,
+    this.showInstitution = false,
   });
 
   @override
@@ -67,13 +69,24 @@ class WealthItemRow extends StatelessWidget {
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  if (item.institution != null) ...[
+                  if (showInstitution && item.institution != null) ...[
                     const SizedBox(height: 4),
                     Text(
                       item.institution!,
                       style: const TextStyle(
                         color: AppColors.textSecondary,
                         fontSize: 13,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ],
+                  if (item.units != null && item.averagePrice != null) ...[
+                    const SizedBox(height: 2),
+                    Text(
+                      '${item.units} units • Avg ${currencyFormatter.format(item.averagePrice)}',
+                      style: const TextStyle(
+                        color: AppColors.textSecondary,
+                        fontSize: 12,
                         fontWeight: FontWeight.w400,
                       ),
                     ),
@@ -88,7 +101,7 @@ class WealthItemRow extends StatelessWidget {
               children: [
                 Text(
                   currencyFormatter.format(item.value),
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: valueColor,
                     fontSize: 16,
                     fontWeight: FontWeight.w700,

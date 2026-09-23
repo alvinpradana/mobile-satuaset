@@ -8,7 +8,11 @@ import '../../domain/models/wealth_item.dart';
 import '../providers/wealth_provider.dart';
 import '../widgets/portfolio_performance.dart';
 import '../widgets/portfolio_allocation.dart';
+import 'package:flutter/cupertino.dart';
 import '../widgets/wealth_item_row.dart';
+import 'investment_category_detail_screen.dart';
+import '../widgets/add_investment_bottom_sheet.dart';
+import 'holding_detail_screen.dart';
 
 class InvestmentDetailScreen extends ConsumerWidget {
   const InvestmentDetailScreen({super.key});
@@ -167,12 +171,15 @@ class InvestmentDetailScreen extends ConsumerWidget {
                   
                   const SizedBox(height: 32),
                   // --- Portfolio Allocation ---
-                  PortfolioAllocation(allocations: investmentSummary.allocations),
+                  PortfolioAllocation(
+                    allocations: investmentSummary.allocations,
+                    totalValue: investmentSummary.totalValue,
+                  ),
 
                   const SizedBox(height: 40),
-                  // --- Holdings ---
+                  // --- Holdings (Top Gainers by Category) ---
                   const Text(
-                    'Holdings',
+                    'Top Gainers by Category',
                     style: TextStyle(
                       color: AppColors.textPrimary,
                       fontSize: 18,
@@ -182,8 +189,14 @@ class InvestmentDetailScreen extends ConsumerWidget {
                   const SizedBox(height: 24),
                   
                   ...groupedItems.entries.map((entry) {
-                    final category = entry.key; // Keep original casing or capitalize it here
-                    final categoryItems = entry.value;
+                    final category = entry.key;
+                    var categoryItems = List<WealthItem>.from(entry.value);
+                    
+                    // Sort by percentageChange descending
+                    categoryItems.sort((a, b) => (b.percentageChange ?? 0).compareTo(a.percentageChange ?? 0));
+                    
+                    // Take top 2
+                    final topItems = categoryItems.take(2).toList();
 
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 16.0),
@@ -197,26 +210,36 @@ class InvestmentDetailScreen extends ConsumerWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    category,
-                                    style: const TextStyle(
-                                      color: AppColors.textPrimary,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
+                              GestureDetector(
+                                behavior: HitTestBehavior.opaque,
+                                onTap: () {
+                                  Navigator.of(context, rootNavigator: true).push(
+                                    CupertinoPageRoute(
+                                      builder: (context) => InvestmentCategoryDetailScreen(category: category),
                                     ),
-                                  ),
-                                  Icon(
-                                    UIcons.regularRounded.angle_right,
-                                    color: AppColors.textSecondary,
-                                    size: 16,
-                                  ),
-                                ],
+                                  );
+                                },
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      category,
+                                      style: const TextStyle(
+                                        color: AppColors.textPrimary,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Icon(
+                                      UIcons.regularRounded.angle_right,
+                                      color: AppColors.textSecondary,
+                                      size: 16,
+                                    ),
+                                  ],
+                                ),
                               ),
                               const SizedBox(height: 16),
-                              ...categoryItems.asMap().entries.map((itemEntry) {
+                              ...topItems.asMap().entries.map((itemEntry) {
                                 final index = itemEntry.key;
                                 final item = itemEntry.value;
                                 return Column(
@@ -224,15 +247,14 @@ class InvestmentDetailScreen extends ConsumerWidget {
                                     WealthItemRow(
                                       item: item,
                                       onTap: () {
-                                        ScaffoldMessenger.of(context).showSnackBar(
-                                          SnackBar(
-                                            content: Text('Tapped on ${item.name}. Navigation to detail screen will be implemented in the next phase.'),
-                                            duration: const Duration(seconds: 2),
+                                        Navigator.of(context, rootNavigator: true).push(
+                                          CupertinoPageRoute(
+                                            builder: (context) => HoldingDetailScreen(item: item),
                                           ),
                                         );
                                       },
                                     ),
-                                    if (index < categoryItems.length - 1)
+                                    if (index < topItems.length - 1)
                                       const Divider(
                                         color: AppColors.border,
                                         height: 1,

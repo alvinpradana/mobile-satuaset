@@ -93,9 +93,12 @@ class ActivityRow extends StatelessWidget {
     }
 
     // Specific overrides
-    if (activity.type == ActivityType.investmentBuy || activity.type == ActivityType.investmentSell) {
-      iconData = UIcons.solidRounded.stats;
-      iconColor = AppColors.primaryAccent;
+    if (activity.type == ActivityType.investmentBuy) {
+      iconData = UIcons.solidRounded.shopping_cart;
+      iconColor = AppColors.negative; // Money goes out
+    } else if (activity.type == ActivityType.investmentSell) {
+      iconData = UIcons.solidRounded.coins;
+      iconColor = AppColors.positive; // Money comes in
     } else if (activity.type == ActivityType.assetPurchase || activity.type == ActivityType.assetSale) {
       iconData = UIcons.solidRounded.car; // Generic asset icon
       iconColor = AppColors.textPrimary;
@@ -126,7 +129,7 @@ class ActivityRow extends StatelessWidget {
     if (activity.type == ActivityType.transfer && activity.destinationAccount != null) {
       contextText = '${activity.account} → ${activity.destinationAccount} · ${timeFormat.format(activity.date)}';
     } else if (activity.type == ActivityType.investmentBuy || activity.type == ActivityType.investmentSell) {
-      contextText = '${activity.quantity} ${activity.asset} · ${activity.account}';
+      contextText = '${activity.quantity} ${activity.asset}${activity.account != null ? ' · ${activity.account}' : ''}';
     } else {
       contextText = '${activity.account ?? ''} · ${timeFormat.format(activity.date)}';
     }
