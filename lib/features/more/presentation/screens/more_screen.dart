@@ -131,10 +131,7 @@ class MoreScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: AppColors.border,
-          width: 1,
-        ),
+        // border removed
       ),
       child: Row(
         children: [
@@ -236,10 +233,7 @@ class MoreScreen extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 14.0),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: AppColors.border,
-              width: 1,
-            ),
+            // border removed
           ),
           child: Row(
             children: [
@@ -283,10 +277,7 @@ class MoreScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.negative.withOpacity(0.08),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: AppColors.negative.withOpacity(0.2),
-          width: 1,
-        ),
+        // border removed
       ),
       child: Material(
         color: Colors.transparent,

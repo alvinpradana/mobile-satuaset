@@ -120,7 +120,7 @@ class PhysicalAssetsHero extends StatelessWidget {
           decoration: BoxDecoration(
             color: AppColors.surface,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: AppColors.border),
+            // border removed
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,

@@ -115,7 +115,7 @@ class _AccountsDetailScreenState extends ConsumerState<AccountsDetailScreen> {
                     decoration: BoxDecoration(
                       color: AppColors.surface,
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: AppColors.border),
+                      // border removed
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,

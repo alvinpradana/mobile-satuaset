@@ -73,7 +73,7 @@ class WealthScreen extends ConsumerWidget {
               decoration: BoxDecoration(
                 color: AppColors.surface,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: AppColors.border),
+                // border removed
               ),
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Column(

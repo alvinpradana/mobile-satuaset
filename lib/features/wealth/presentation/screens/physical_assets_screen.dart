@@ -108,7 +108,7 @@ class _PhysicalAssetsScreenState extends ConsumerState<PhysicalAssetsScreen> {
                       padding: const EdgeInsets.all(24),
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
-                        border: Border.all(color: AppColors.surfaceHover.withOpacity(0.5)),
+                        // border removed
                         borderRadius: BorderRadius.circular(16),
                       ),
                       child: Column(

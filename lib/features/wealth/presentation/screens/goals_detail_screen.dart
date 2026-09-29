@@ -136,7 +136,7 @@ class _GoalsDetailScreenState extends ConsumerState<GoalsDetailScreen> {
                         decoration: BoxDecoration(
                           color: AppColors.surface,
                           borderRadius: BorderRadius.circular(16),
-                          border: Border.all(color: AppColors.border),
+                          // border removed
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -186,7 +186,7 @@ class _GoalsDetailScreenState extends ConsumerState<GoalsDetailScreen> {
                     decoration: BoxDecoration(
                       color: AppColors.surface,
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: AppColors.border),
+                      // border removed
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -245,7 +245,7 @@ class _GoalsDetailScreenState extends ConsumerState<GoalsDetailScreen> {
                       padding: const EdgeInsets.all(24),
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
-                        border: Border.all(color: AppColors.surfaceHover.withOpacity(0.5)),
+                        // border removed
                         borderRadius: BorderRadius.circular(16),
                       ),
                       child: Column(
@@ -416,7 +416,7 @@ class _SavingGoalCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.border),
+        // border removed
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

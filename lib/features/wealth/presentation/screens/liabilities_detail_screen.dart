@@ -144,7 +144,7 @@ class _LiabilitiesDetailScreenState extends ConsumerState<LiabilitiesDetailScree
                         decoration: BoxDecoration(
                           color: AppColors.surface,
                           borderRadius: BorderRadius.circular(16),
-                          border: Border.all(color: AppColors.border),
+                          // border removed
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -200,7 +200,7 @@ class _LiabilitiesDetailScreenState extends ConsumerState<LiabilitiesDetailScree
                       padding: const EdgeInsets.all(24),
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
-                        border: Border.all(color: AppColors.surfaceHover.withOpacity(0.5)),
+                        // border removed
                         borderRadius: BorderRadius.circular(16),
                       ),
                       child: Column(
