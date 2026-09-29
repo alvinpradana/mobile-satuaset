@@ -66,6 +66,8 @@ class WealthDomainRow extends ConsumerWidget {
                     children: [
                       Text(
                         domain.title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           color: AppColors.textPrimary,
                           fontSize: 16,
@@ -75,6 +77,8 @@ class WealthDomainRow extends ConsumerWidget {
                       const SizedBox(height: 4),
                       Text(
                         domain.subtitle,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           color: AppColors.textSecondary,
                           fontSize: 13,
@@ -83,6 +87,7 @@ class WealthDomainRow extends ConsumerWidget {
                     ],
                   ),
                 ),
+                const SizedBox(width: 16),
                 
                 // Right Column: Nominal Value & Chevron
                 Row(
