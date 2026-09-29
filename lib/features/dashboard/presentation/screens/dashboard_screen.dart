@@ -17,24 +17,33 @@ class DashboardScreen extends StatelessWidget {
       backgroundColor: AppColors.background,
       body: SafeArea(
         bottom: false,
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 16),
-              const DashboardHeader(),
-              const SizedBox(height: 32),
-              const NetWorthSummary(),
-              const SizedBox(height: 24),
-              const FinancialInsightBanner(),
-              const SizedBox(height: 32),
-              const AssetAllocationCarousel(),
-              const SizedBox(height: 40),
-              const FinancialGoalsList(),
-              const SizedBox(height: 40),
-              const RecentActivityList(),
-              const SizedBox(height: 120), // Padding for the floating dock
-            ],
+        child: RefreshIndicator(
+          color: AppColors.primaryAccent,
+          backgroundColor: AppColors.surface,
+          onRefresh: () async {
+            // TODO: Implement actual API refresh logic here
+            await Future.delayed(const Duration(seconds: 1));
+          },
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 16),
+                const DashboardHeader(),
+                const SizedBox(height: 32),
+                const NetWorthSummary(),
+                const SizedBox(height: 24),
+                const FinancialInsightBanner(),
+                const SizedBox(height: 32),
+                const AssetAllocationCarousel(),
+                const SizedBox(height: 40),
+                const FinancialGoalsList(),
+                const SizedBox(height: 40),
+                const RecentActivityList(),
+                const SizedBox(height: 120), // Padding for the floating dock
+              ],
+            ),
           ),
         ),
       ),

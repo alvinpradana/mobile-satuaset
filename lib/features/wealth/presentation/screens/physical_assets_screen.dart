@@ -35,8 +35,16 @@ class _PhysicalAssetsScreenState extends ConsumerState<PhysicalAssetsScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      body: CustomScrollView(
-        slivers: [
+      body: RefreshIndicator(
+        color: AppColors.primaryAccent,
+        backgroundColor: AppColors.surface,
+        onRefresh: () async {
+          // TODO: Implement actual API refresh logic here
+          await Future.delayed(const Duration(seconds: 1));
+        },
+        child: CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          slivers: [
           // App Bar
           SliverAppBar(
             backgroundColor: AppColors.background,
@@ -263,6 +271,7 @@ class _PhysicalAssetsScreenState extends ConsumerState<PhysicalAssetsScreen> {
             ),
           ),
         ],
+      ),
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.fromLTRB(24, 16, 24, 24), // Matches CustomBottomNav margin

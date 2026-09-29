@@ -44,8 +44,16 @@ class _AccountsDetailScreenState extends ConsumerState<AccountsDetailScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      body: CustomScrollView(
-        slivers: [
+      body: RefreshIndicator(
+        color: AppColors.primaryAccent,
+        backgroundColor: AppColors.surface,
+        onRefresh: () async {
+          // TODO: Implement actual API refresh logic here
+          await Future.delayed(const Duration(seconds: 1));
+        },
+        child: CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          slivers: [
           // 1. App Bar
           SliverAppBar(
             backgroundColor: AppColors.background,
@@ -259,6 +267,7 @@ class _AccountsDetailScreenState extends ConsumerState<AccountsDetailScreen> {
             child: SizedBox(height: 100),
           )
         ],
+      ),
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.fromLTRB(24, 16, 24, 24), // Matches CustomBottomNav margin

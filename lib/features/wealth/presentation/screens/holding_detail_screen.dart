@@ -42,8 +42,16 @@ class HoldingDetailScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      body: CustomScrollView(
-        slivers: [
+      body: RefreshIndicator(
+        color: AppColors.primaryAccent,
+        backgroundColor: AppColors.surface,
+        onRefresh: () async {
+          // TODO: Implement actual API refresh logic here
+          await Future.delayed(const Duration(seconds: 1));
+        },
+        child: CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          slivers: [
           // App Bar
           SliverAppBar(
             backgroundColor: AppColors.background,
@@ -316,6 +324,7 @@ class HoldingDetailScreen extends StatelessWidget {
             child: SizedBox(height: 120),
           )
         ],
+      ),
       ),
       bottomNavigationBar: Container(
         color: AppColors.background,

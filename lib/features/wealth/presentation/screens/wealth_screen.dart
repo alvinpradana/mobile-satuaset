@@ -29,7 +29,15 @@ class WealthScreen extends ConsumerWidget {
       backgroundColor: AppColors.background,
       body: SafeArea(
         bottom: false,
-        child: SingleChildScrollView(
+        child: RefreshIndicator(
+          color: AppColors.primaryAccent,
+          backgroundColor: AppColors.surface,
+          onRefresh: () async {
+            // TODO: Implement actual API refresh logic here
+            await Future.delayed(const Duration(seconds: 1));
+          },
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -144,6 +152,7 @@ class WealthScreen extends ConsumerWidget {
               ),
             ],
           ),
+        ),
         ),
       ),
     );
