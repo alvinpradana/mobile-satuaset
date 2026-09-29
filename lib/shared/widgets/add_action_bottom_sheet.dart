@@ -42,33 +42,13 @@ class AddActionBottomSheet extends StatelessWidget {
                   const SizedBox(height: 20),
 
                   // Header
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        'Record Activity',
-                        style: TextStyle(
-                          color: AppColors.textPrimary,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () => Navigator.pop(context),
-                        child: Container(
-                          padding: const EdgeInsets.all(6),
-                          decoration: const BoxDecoration(
-                            color: AppColors.surface,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Icon(
-                            UIcons.regularRounded.cross,
-                            color: AppColors.textSecondary,
-                            size: 14,
-                          ),
-                        ),
-                      ),
-                    ],
+                  const Text(
+                    'Record Activity',
+                    style: TextStyle(
+                      color: AppColors.textPrimary,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   const SizedBox(height: 24),
 
