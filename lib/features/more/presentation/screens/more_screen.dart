@@ -23,12 +23,12 @@ class MoreScreen extends StatelessWidget {
                 'Menu',
                 style: TextStyle(
                   color: AppColors.textPrimary,
-                  fontSize: 28,
+                  fontSize: 20,
                   fontWeight: FontWeight.bold,
-                  letterSpacing: -0.5,
+                  letterSpacing: -0.3,
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 16),
 
               // 1. User Profile Header Card
               _buildProfileCard(context),
