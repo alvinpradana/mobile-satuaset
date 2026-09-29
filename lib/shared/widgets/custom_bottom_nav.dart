@@ -69,7 +69,7 @@ class CustomBottomNav extends StatelessWidget {
                       _NavItem(
                         customIcon: BinanceMoreIcon(
                           color: currentIndex == 3 ? AppColors.primaryAccent : AppColors.textSecondary,
-                          accentColor: const Color(0xFFF0B90B),
+                          accentColor: currentIndex == 3 ? AppColors.primaryAccent : AppColors.textSecondary,
                           size: 18,
                         ), 
                         label: 'More', 
@@ -172,13 +172,13 @@ class _NavItem extends StatelessWidget {
 
 class BinanceMoreIcon extends StatelessWidget {
   final Color color;
-  final Color accentColor;
+  final Color? accentColor;
   final double size;
 
   const BinanceMoreIcon({
     super.key,
     required this.color,
-    this.accentColor = const Color(0xFFF0B90B),
+    this.accentColor,
     this.size = 18.0,
   });
 
@@ -188,7 +188,7 @@ class BinanceMoreIcon extends StatelessWidget {
       size: Size(size, size),
       painter: BinanceMoreIconPainter(
         color: color,
-        accentColor: accentColor,
+        accentColor: accentColor ?? color,
       ),
     );
   }
