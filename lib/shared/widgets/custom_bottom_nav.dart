@@ -67,7 +67,11 @@ class CustomBottomNav extends StatelessWidget {
                         onTap: () => onTabSelected?.call(2),
                       ),
                       _NavItem(
-                        icon: UIcons.solidRounded.menu_dots, 
+                        customIcon: BinanceMoreIcon(
+                          color: currentIndex == 3 ? AppColors.primaryAccent : AppColors.textSecondary,
+                          accentColor: const Color(0xFFF0B90B),
+                          size: 18,
+                        ), 
                         label: 'More', 
                         isActive: currentIndex == 3,
                         onTap: () => onTabSelected?.call(3),
@@ -120,13 +124,15 @@ class CustomBottomNav extends StatelessWidget {
 }
 
 class _NavItem extends StatelessWidget {
-  final IconData icon;
+  final IconData? icon;
+  final Widget? customIcon;
   final String label;
   final bool isActive;
   final VoidCallback? onTap;
 
   const _NavItem({
-    required this.icon,
+    this.icon,
+    this.customIcon,
     required this.label,
     required this.isActive,
     this.onTap,
@@ -141,12 +147,14 @@ class _NavItem extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            icon, 
-            color: color, 
-            size: 18,
-            weight: 300, // Makes the stroke thinner (default is 400)
-          ),
+          if (customIcon != null)
+            customIcon!
+          else if (icon != null)
+            Icon(
+              icon, 
+              color: color, 
+              size: 18,
+            ),
           const SizedBox(height: 4),
           Text(
             label,
@@ -159,5 +167,102 @@ class _NavItem extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class BinanceMoreIcon extends StatelessWidget {
+  final Color color;
+  final Color accentColor;
+  final double size;
+
+  const BinanceMoreIcon({
+    super.key,
+    required this.color,
+    this.accentColor = const Color(0xFFF0B90B),
+    this.size = 18.0,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomPaint(
+      size: Size(size, size),
+      painter: BinanceMoreIconPainter(
+        color: color,
+        accentColor: accentColor,
+      ),
+    );
+  }
+}
+
+class BinanceMoreIconPainter extends CustomPainter {
+  final Color color;
+  final Color accentColor;
+
+  BinanceMoreIconPainter({
+    required this.color,
+    required this.accentColor,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final strokePaint = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.6
+      ..strokeCap = StrokeCap.round
+      ..strokeJoin = StrokeJoin.round;
+
+    final fillPaint = Paint()
+      ..color = accentColor
+      ..style = PaintingStyle.fill;
+
+    final gap = size.width * 0.16;
+    final itemSize = (size.width - gap) / 2;
+    final radius = itemSize * 0.22;
+
+    // 1. Top-Left Square (Outlined)
+    final topLeftRect = Rect.fromLTWH(0, 0, itemSize, itemSize);
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(topLeftRect, Radius.circular(radius)),
+      strokePaint,
+    );
+
+    // 2. Top-Right Diamond (Filled)
+    final topRightCenter = Offset(size.width - itemSize / 2, itemSize / 2);
+    canvas.save();
+    canvas.translate(topRightCenter.dx, topRightCenter.dy);
+    canvas.rotate(0.785398); // 45 degrees (pi / 4)
+    final diamondSize = itemSize * 0.72;
+    final diamondRect = Rect.fromCenter(
+      center: Offset.zero,
+      width: diamondSize,
+      height: diamondSize,
+    );
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(diamondRect, Radius.circular(radius * 0.8)),
+      fillPaint,
+    );
+    canvas.restore();
+
+    // 3. Bottom-Left Circle (Outlined)
+    final bottomLeftCenter = Offset(itemSize / 2, size.height - itemSize / 2);
+    canvas.drawCircle(bottomLeftCenter, itemSize / 2, strokePaint);
+
+    // 4. Bottom-Right Square (Outlined)
+    final bottomRightRect = Rect.fromLTWH(
+      size.width - itemSize,
+      size.height - itemSize,
+      itemSize,
+      itemSize,
+    );
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(bottomRightRect, Radius.circular(radius)),
+      strokePaint,
+    );
+  }
+
+  @override
+  bool shouldRepaint(covariant BinanceMoreIconPainter oldDelegate) {
+    return oldDelegate.color != color || oldDelegate.accentColor != accentColor;
   }
 }
