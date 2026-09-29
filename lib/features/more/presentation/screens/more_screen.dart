@@ -207,7 +207,7 @@ class MoreScreen extends StatelessWidget {
         Expanded(
           child: _buildToolCard(
             icon: UIcons.solidRounded.target,
-            title: 'Financial Goals',
+            title: 'Goals',
             accentColor: AppColors.primaryAccent,
             onTap: () {},
           ),
