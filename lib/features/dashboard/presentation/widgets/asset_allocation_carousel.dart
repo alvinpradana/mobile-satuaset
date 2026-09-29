@@ -104,15 +104,15 @@ class _AssetAllocationCarouselState extends State<AssetAllocationCarousel> {
                       'See All',
                       style: TextStyle(
                         color: AppColors.textSecondary,
-                        fontSize: 10,
+                        fontSize: 13,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    SizedBox(width: 2),
+                    SizedBox(width: 4),
                     Icon(
                       UIcons.regularRounded.angle_right,
                       color: AppColors.textSecondary,
-                      size: 8,
+                      size: 12,
                     ),
                   ],
                 ),
