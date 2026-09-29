@@ -295,26 +295,17 @@ class MoreScreen extends StatelessWidget {
             // TODO: Implement Sign Out
           },
           borderRadius: BorderRadius.circular(16),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 20.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  UIcons.solidRounded.exit,
+          child: const Padding(
+            padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 20.0),
+            child: Center(
+              child: Text(
+                'Sign Out',
+                style: TextStyle(
                   color: AppColors.negative,
-                  size: 18,
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
                 ),
-                const SizedBox(width: 10),
-                const Text(
-                  'Sign Out',
-                  style: TextStyle(
-                    color: AppColors.negative,
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
         ),
