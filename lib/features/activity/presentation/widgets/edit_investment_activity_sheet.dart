@@ -243,6 +243,7 @@ class _EditInvestmentActivitySheetState extends ConsumerState<EditInvestmentActi
     TextInputType? keyboardType,
     TextInputAction? textInputAction,
     List<TextInputFormatter>? inputFormatters,
+    String? errorText,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

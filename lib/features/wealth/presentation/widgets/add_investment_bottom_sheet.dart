@@ -412,6 +412,7 @@ class _AddInvestmentBottomSheetState extends State<AddInvestmentBottomSheet> {
     TextInputType keyboardType = TextInputType.text,
     TextInputAction? textInputAction,
     List<TextInputFormatter>? inputFormatters,
+    String? errorText,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
