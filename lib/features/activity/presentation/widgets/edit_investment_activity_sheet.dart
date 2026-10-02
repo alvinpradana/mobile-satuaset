@@ -218,7 +218,6 @@ class _EditInvestmentActivitySheetState extends ConsumerState<EditInvestmentActi
                       ),
                     ),
                   ],
-                ),
         ),
       ),
     ),
