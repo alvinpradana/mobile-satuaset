@@ -112,11 +112,21 @@ class _SellInvestmentBottomSheetState extends State<SellInvestmentBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        color: AppColors.background,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-      ),
+    String? unitsErrorText;
+    if (_selectedPlatform != null && _unitsController.text.isNotEmpty) {
+      final units = double.tryParse(_unitsController.text.replaceAll(',', '.'));
+      if (units != null && units > _selectedPlatform!.units) {
+        unitsErrorText = 'Exceeds balance';
+      }
+    }
+
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Container(
+        decoration: const BoxDecoration(
+          color: AppColors.background,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        ),
       padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom,
         top: 8,
@@ -203,6 +213,8 @@ class _SellInvestmentBottomSheetState extends State<SellInvestmentBottomSheet> {
                             label: 'Units to Sell',
                             hintText: '0.00',
                             keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                            textInputAction: TextInputAction.next,
+                            errorText: unitsErrorText,
                             inputFormatters: [
                               FilteringTextInputFormatter.allow(RegExp(r'^\d*[\.,]?\d*')),
                               TextInputFormatter.withFunction((oldValue, newValue) {
@@ -250,8 +262,9 @@ class _SellInvestmentBottomSheetState extends State<SellInvestmentBottomSheet> {
           ],
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 
   Widget _buildSelectorField({
     required String label,
@@ -311,7 +324,9 @@ class _SellInvestmentBottomSheetState extends State<SellInvestmentBottomSheet> {
     required String label,
     required String hintText,
     TextInputType keyboardType = TextInputType.text,
+    TextInputAction? textInputAction,
     List<TextInputFormatter>? inputFormatters,
+    String? errorText,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -328,11 +343,14 @@ class _SellInvestmentBottomSheetState extends State<SellInvestmentBottomSheet> {
         TextFormField(
           controller: controller,
           keyboardType: keyboardType,
+          textInputAction: textInputAction,
           inputFormatters: inputFormatters,
           style: const TextStyle(color: AppColors.textPrimary),
           decoration: InputDecoration(
             hintText: hintText,
             hintStyle: const TextStyle(color: AppColors.textSecondary),
+            errorText: errorText,
+            errorStyle: const TextStyle(color: AppColors.negative),
             filled: true,
             fillColor: AppColors.surface,
             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -343,6 +361,14 @@ class _SellInvestmentBottomSheetState extends State<SellInvestmentBottomSheet> {
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: const BorderSide(color: AppColors.primaryAccent, width: 1),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: AppColors.negative, width: 1),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: AppColors.negative, width: 1),
             ),
           ),
         ),
@@ -400,6 +426,7 @@ class _SellInvestmentBottomSheetState extends State<SellInvestmentBottomSheet> {
                 child: TextFormField(
                   controller: _avgPriceController,
                   keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                  textInputAction: TextInputAction.done,
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(RegExp(r'^\d*[\.,]?\d*')),
                     TextInputFormatter.withFunction((oldValue, newValue) {
