@@ -128,7 +128,9 @@ class _SellInvestmentBottomSheetState extends State<SellInvestmentBottomSheet> {
           borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
         ),
       padding: EdgeInsets.only(
-        bottom: MediaQuery.of(context).viewInsets.bottom,
+        bottom: MediaQuery.of(context).viewInsets.bottom + 24,
+        left: 24,
+        right: 24,
         top: 8,
       ),
       child: SafeArea(
@@ -148,26 +150,17 @@ class _SellInvestmentBottomSheetState extends State<SellInvestmentBottomSheet> {
                 ),
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 24),
-              child: Text(
-                'Sell Investment',
-                style: TextStyle(
-                  color: AppColors.textPrimary,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
+            const Text(
+              'Sell Investment',
+              style: TextStyle(
+                color: AppColors.textPrimary,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 24),
             
-            Flexible(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Asset Field (Locked)
+            // Asset Field (Locked)
                     _buildSelectorField(
                       label: 'Asset Name / Ticker',
                       value: '${widget.asset.symbol} - ${widget.asset.name}',
@@ -256,10 +249,6 @@ class _SellInvestmentBottomSheetState extends State<SellInvestmentBottomSheet> {
                     ),
                     const SizedBox(height: 24),
                   ],
-                ),
-              ),
-            ),
-          ],
         ),
       ),
     ),

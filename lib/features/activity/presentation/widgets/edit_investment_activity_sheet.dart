@@ -127,7 +127,9 @@ class _EditInvestmentActivitySheetState extends ConsumerState<EditInvestmentActi
           borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
         ),
       padding: EdgeInsets.only(
-        bottom: MediaQuery.of(context).viewInsets.bottom,
+        bottom: MediaQuery.of(context).viewInsets.bottom + 24,
+        left: 24,
+        right: 24,
         top: 8,
       ),
       child: SafeArea(
@@ -147,26 +149,17 @@ class _EditInvestmentActivitySheetState extends ConsumerState<EditInvestmentActi
                 ),
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 24),
-              child: Text(
-                'Edit Transaction',
-                style: TextStyle(
-                  color: AppColors.textPrimary,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
+            const Text(
+              'Edit Transaction',
+              style: TextStyle(
+                color: AppColors.textPrimary,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 24),
               
-            Flexible(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildSelectorField(
+            _buildSelectorField(
                       label: 'Broker / Platform',
                       value: _selectedPlatform,
                       hint: 'Select Source Platform',
@@ -224,11 +217,8 @@ class _EditInvestmentActivitySheetState extends ConsumerState<EditInvestmentActi
                         ),
                       ),
                     ),
-                    const SizedBox(height: 24),
                   ],
                 ),
-              ),
-            ),
           ],
         ),
       ),
