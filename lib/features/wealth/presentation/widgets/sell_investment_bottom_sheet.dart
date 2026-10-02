@@ -349,8 +349,10 @@ class _SellInvestmentBottomSheetState extends State<SellInvestmentBottomSheet> {
           decoration: InputDecoration(
             hintText: hintText,
             hintStyle: const TextStyle(color: AppColors.textSecondary),
-            errorText: errorText,
-            errorStyle: const TextStyle(color: AppColors.negative),
+            error: errorText != null ? Transform.translate(
+              offset: const Offset(-16, 0),
+              child: Text(errorText, style: const TextStyle(color: AppColors.negative, fontSize: 12)),
+            ) : null,
             filled: true,
             fillColor: AppColors.surface,
             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
