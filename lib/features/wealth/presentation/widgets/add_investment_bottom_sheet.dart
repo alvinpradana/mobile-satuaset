@@ -41,8 +41,16 @@ enum Currency { idr, usd }
 class AddInvestmentBottomSheet extends StatefulWidget {
   final String? initialCategory;
   final bool isCategoryLocked;
+  final CryptoAsset? initialCryptoAsset;
+  final bool isAssetLocked;
 
-  const AddInvestmentBottomSheet({super.key, this.initialCategory, this.isCategoryLocked = false});
+  const AddInvestmentBottomSheet({
+    super.key, 
+    this.initialCategory, 
+    this.isCategoryLocked = false,
+    this.initialCryptoAsset,
+    this.isAssetLocked = false,
+  });
 
   @override
   State<AddInvestmentBottomSheet> createState() => _AddInvestmentBottomSheetState();
@@ -67,6 +75,8 @@ class _AddInvestmentBottomSheetState extends State<AddInvestmentBottomSheet> {
     if (!_categories.contains(_selectedCategory)) {
       _categories.add(_selectedCategory);
     }
+    
+    _selectedCrypto = widget.initialCryptoAsset;
     
     // Listeners for validation updates
     _unitsController.addListener(() => setState(() {}));
@@ -256,7 +266,8 @@ class _AddInvestmentBottomSheetState extends State<AddInvestmentBottomSheet> {
                 value: _selectedCrypto != null ? '${_selectedCrypto!.symbol} - ${_selectedCrypto!.name}' : null,
                 hint: 'Select Crypto Asset',
                 icon: UIcons.regularRounded.search_alt,
-                onTap: _openAssetSelector,
+                onTap: widget.isAssetLocked ? () {} : _openAssetSelector,
+                isLocked: widget.isAssetLocked,
               ),
               const SizedBox(height: 16),
               
@@ -343,6 +354,7 @@ class _AddInvestmentBottomSheetState extends State<AddInvestmentBottomSheet> {
     required String hint,
     required IconData icon,
     required VoidCallback onTap,
+    bool isLocked = false,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -372,12 +384,15 @@ class _AddInvestmentBottomSheetState extends State<AddInvestmentBottomSheet> {
                   child: Text(
                     value ?? hint,
                     style: TextStyle(
-                      color: value != null ? AppColors.textPrimary : AppColors.textSecondary,
+                      color: value != null ? (isLocked ? AppColors.textSecondary : AppColors.textPrimary) : AppColors.textSecondary,
                       fontSize: 16,
                     ),
                   ),
                 ),
-                Icon(UIcons.regularRounded.angle_small_down, color: AppColors.textSecondary, size: 16),
+                if (!isLocked)
+                  Icon(UIcons.regularRounded.angle_small_down, color: AppColors.textSecondary, size: 16)
+                else
+                  Icon(UIcons.regularRounded.lock, color: AppColors.textSecondary, size: 16),
               ],
             ),
           ),

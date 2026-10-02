@@ -6,6 +6,8 @@ import '../../domain/models/wealth_item.dart';
 import '../widgets/portfolio_performance.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'holding_history_screen.dart';
+import '../widgets/add_investment_bottom_sheet.dart';
+import '../widgets/sell_investment_bottom_sheet.dart';
 
 class HoldingDetailScreen extends StatelessWidget {
   final WealthItem item;
@@ -332,51 +334,98 @@ class HoldingDetailScreen extends StatelessWidget {
         child: Row(
           children: [
             Expanded(
-              child: OutlinedButton(
-                onPressed: () {
-                  // TODO: Implement sell action
-                },
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: AppColors.textPrimary,
-                  side: const BorderSide(color: AppColors.border),
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(28),
+                child: OutlinedButton(
+                  onPressed: () {
+                    final allocations = item.exchangeAllocations?.isNotEmpty == true
+                        ? item.exchangeAllocations!
+                        : (item.institution != null && item.units != null
+                            ? [
+                                AssetExchangeAllocation(
+                                  exchangeName: item.institution!,
+                                  units: item.units!,
+                                  value: item.value,
+                                  averagePrice: item.averagePrice,
+                                )
+                              ]
+                            : <AssetExchangeAllocation>[]);
+
+                    if (allocations.isEmpty) return;
+
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      backgroundColor: Colors.transparent,
+                      builder: (context) => Padding(
+                        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                        child: SellInvestmentBottomSheet(
+                          asset: CryptoAsset(
+                            item.id,
+                            item.name == 'Bitcoin' ? 'BTC' : (item.name == 'Ethereum' ? 'ETH' : item.name.substring(0, 3).toUpperCase()),
+                            item.name,
+                          ),
+                          allocations: allocations,
+                        ),
+                      ),
+                    );
+                  },
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: AppColors.textPrimary,
+                    side: const BorderSide(color: AppColors.border),
+                    minimumSize: const Size.fromHeight(56),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(28),
+                    ),
                   ),
-                ),
-                child: const Text(
-                  'Sell',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
+                  child: const Text(
+                    'Sell',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: ElevatedButton(
-                onPressed: () {
-                  // TODO: Implement buy action
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primaryAccent,
-                  foregroundColor: Colors.black,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(28),
+              const SizedBox(width: 16),
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () {
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      backgroundColor: Colors.transparent,
+                      builder: (context) => Padding(
+                        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                        child: AddInvestmentBottomSheet(
+                          initialCategory: 'Crypto',
+                          isCategoryLocked: true,
+                          initialCryptoAsset: CryptoAsset(
+                            item.id,
+                            item.name == 'Bitcoin' ? 'BTC' : (item.name == 'Ethereum' ? 'ETH' : item.name.substring(0, 3).toUpperCase()),
+                            item.name,
+                          ),
+                          isAssetLocked: true,
+                        ),
+                      ),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primaryAccent,
+                    foregroundColor: Colors.black,
+                    minimumSize: const Size.fromHeight(56),
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(28),
+                    ),
                   ),
-                ),
-                child: const Text(
-                  'Buy',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
+                  child: const Text(
+                    'Buy',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
               ),
-            ),
           ],
         ),
       ),
