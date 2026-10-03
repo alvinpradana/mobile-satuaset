@@ -264,14 +264,11 @@ class _AddAccountBottomSheetState extends State<AddAccountBottomSheet> {
                     ),
                     if (field.hasError) ...[
                       const SizedBox(height: 8),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 12),
-                        child: Text(
-                          field.errorText!,
-                          style: const TextStyle(
-                            color: AppColors.negative,
-                            fontSize: 12,
-                          ),
+                      Text(
+                        field.errorText!,
+                        style: const TextStyle(
+                          color: AppColors.negative,
+                          fontSize: 12,
                         ),
                       ),
                     ],
@@ -325,48 +322,59 @@ class _AddAccountBottomSheetState extends State<AddAccountBottomSheet> {
     TextInputType keyboardType = TextInputType.text,
     String? Function(String?)? validator,
   }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: const TextStyle(
-            color: AppColors.textSecondary,
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        const SizedBox(height: 8),
-        TextFormField(
-          controller: controller,
-          keyboardType: keyboardType,
-          style: const TextStyle(color: AppColors.textPrimary),
-          validator: validator,
-          decoration: InputDecoration(
-            hintText: hint,
-            hintStyle: const TextStyle(color: AppColors.textSecondary),
-            filled: true,
-            fillColor: AppColors.surface,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide.none,
+    return FormField<String>(
+      initialValue: controller.text,
+      validator: validator,
+      builder: (FormFieldState<String> field) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              label,
+              style: const TextStyle(
+                color: AppColors.textSecondary,
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+              ),
             ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: AppColors.primaryAccent, width: 1),
+            const SizedBox(height: 8),
+            TextField(
+              controller: controller,
+              keyboardType: keyboardType,
+              style: const TextStyle(color: AppColors.textPrimary),
+              onChanged: (val) => field.didChange(val),
+              decoration: InputDecoration(
+                hintText: hint,
+                hintStyle: const TextStyle(color: AppColors.textSecondary),
+                filled: true,
+                fillColor: AppColors.surface,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: field.hasError ? const BorderSide(color: AppColors.negative, width: 1) : BorderSide.none,
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: field.hasError ? const BorderSide(color: AppColors.negative, width: 1) : BorderSide.none,
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: field.hasError ? const BorderSide(color: AppColors.negative, width: 1) : const BorderSide(color: AppColors.primaryAccent, width: 1),
+                ),
+              ),
             ),
-            errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: AppColors.negative, width: 1),
-            ),
-            focusedErrorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: AppColors.negative, width: 1),
-            ),
-            errorStyle: const TextStyle(color: AppColors.negative),
-          ),
-        ),
-      ],
+            if (field.hasError) ...[
+              const SizedBox(height: 8),
+              Text(
+                field.errorText!,
+                style: const TextStyle(
+                  color: AppColors.negative,
+                  fontSize: 12,
+                ),
+              ),
+            ],
+          ],
+        );
+      },
     );
   }
 }
