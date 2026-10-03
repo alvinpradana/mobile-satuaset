@@ -5,6 +5,10 @@ import 'package:uicons/uicons.dart';
 import '../../../../shared/models/currency_model.dart';
 import '../../../../shared/widgets/currency_picker_sheet.dart';
 
+const List<String> dummyBankProviders = ['Bank BCA', 'Bank Mandiri', 'Bank BNI', 'Bank BRI', 'Bank Syariah Indonesia (BSI)', 'CIMB Niaga', 'Permata Bank', 'Bank Jago', 'SeaBank', 'Jenius'];
+const List<String> dummyEwalletProviders = ['GoPay', 'OVO', 'DANA', 'ShopeePay', 'LinkAja'];
+const List<String> dummyCryptoProviders = ['Indodax', 'Tokocrypto', 'Pintu', 'Pluang', 'Binance', 'Metamask', 'Trust Wallet'];
+
 class AddAccountBottomSheet extends StatefulWidget {
   const AddAccountBottomSheet({super.key});
 
@@ -16,6 +20,7 @@ class _AddAccountBottomSheetState extends State<AddAccountBottomSheet> {
   String _selectedCategory = 'BANK';
   final _categories = ['BANK', 'E-WALLET', 'CASH', 'CRYPTO'];
   Currency _selectedCurrency = Currency.idr;
+  String? _selectedProvider;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -107,6 +112,7 @@ class _AddAccountBottomSheetState extends State<AddAccountBottomSheet> {
                     onTap: () {
                       setState(() {
                         _selectedCategory = cat;
+                        _selectedProvider = null;
                         if (cat == 'CRYPTO') {
                           _selectedCurrency = Currency.usd;
                         } else {
@@ -138,6 +144,18 @@ class _AddAccountBottomSheetState extends State<AddAccountBottomSheet> {
               }).toList(),
             ),
             const SizedBox(height: 24),
+
+            // Provider Selector
+            if (_selectedCategory != 'CASH') ...[
+              _buildSelectorField(
+                label: 'Provider / Platform',
+                value: _selectedProvider,
+                hint: 'Select Provider',
+                icon: UIcons.regularRounded.building,
+                onTap: _openProviderSelector,
+              ),
+              const SizedBox(height: 16),
+            ],
 
             // Name Input
             _buildTextField(
@@ -282,6 +300,16 @@ class _AddAccountBottomSheetState extends State<AddAccountBottomSheet> {
             ElevatedButton(
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
+                  if (_selectedCategory != 'CASH' && _selectedProvider == null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Please select a provider'),
+                        backgroundColor: AppColors.negative,
+                      ),
+                    );
+                    return;
+                  }
+
                   // Mock submission
                   Navigator.pop(context); // Close bottom sheet
                   SuccessAlertDialog.show(
@@ -312,6 +340,81 @@ class _AddAccountBottomSheetState extends State<AddAccountBottomSheet> {
         ),
         ),
       ),
+    );
+  }
+
+  Future<void> _openProviderSelector() async {
+    List<String> providers;
+    if (_selectedCategory == 'BANK') {
+      providers = dummyBankProviders;
+    } else if (_selectedCategory == 'E-WALLET') {
+      providers = dummyEwalletProviders;
+    } else if (_selectedCategory == 'CRYPTO') {
+      providers = dummyCryptoProviders;
+    } else {
+      return;
+    }
+
+    final result = await showModalBottomSheet<String>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => _ProviderSelectorSheet(providers: providers),
+    );
+
+    if (result != null) {
+      setState(() {
+        _selectedProvider = result;
+      });
+    }
+  }
+
+  Widget _buildSelectorField({
+    required String label,
+    required String? value,
+    required String hint,
+    required IconData icon,
+    required VoidCallback onTap,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(
+            color: AppColors.textSecondary,
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        const SizedBox(height: 8),
+        GestureDetector(
+          onTap: onTap,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            decoration: BoxDecoration(
+              color: AppColors.surface,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Row(
+              children: [
+                Icon(icon, color: AppColors.textSecondary, size: 18),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    value ?? hint,
+                    style: TextStyle(
+                      color: value != null ? AppColors.textPrimary : AppColors.textSecondary,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+                Icon(UIcons.regularRounded.angle_small_down, color: AppColors.textSecondary, size: 16),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -373,6 +476,121 @@ class _AddAccountBottomSheetState extends State<AddAccountBottomSheet> {
               ),
             ],
           ],
+        );
+      },
+    );
+  }
+}
+
+class _ProviderSelectorSheet extends StatefulWidget {
+  final List<String> providers;
+  const _ProviderSelectorSheet({required this.providers});
+
+  @override
+  State<_ProviderSelectorSheet> createState() => _ProviderSelectorSheetState();
+}
+
+class _ProviderSelectorSheetState extends State<_ProviderSelectorSheet> {
+  final TextEditingController _searchController = TextEditingController();
+  List<String> _filteredProviders = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _filteredProviders = widget.providers;
+    _searchController.addListener(_onSearchChanged);
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _onSearchChanged() {
+    final query = _searchController.text.toLowerCase();
+    setState(() {
+      if (query.isEmpty) {
+        _filteredProviders = widget.providers;
+      } else {
+        _filteredProviders = widget.providers.where((provider) {
+          return provider.toLowerCase().contains(query);
+        }).toList();
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return DraggableScrollableSheet(
+      expand: false,
+      initialChildSize: 0.8,
+      maxChildSize: 0.9,
+      minChildSize: 0.5,
+      builder: (_, scrollController) {
+        return Container(
+          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: Column(
+            children: [
+              const SizedBox(height: 12),
+              Container(width: 40, height: 4, decoration: BoxDecoration(color: AppColors.border, borderRadius: BorderRadius.circular(2))),
+              const Padding(
+                padding: EdgeInsets.all(24.0),
+                child: Text('Select Provider', style: TextStyle(color: AppColors.textPrimary, fontSize: 18, fontWeight: FontWeight.bold)),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                child: TextField(
+                  controller: _searchController,
+                  style: const TextStyle(color: AppColors.textPrimary),
+                  decoration: InputDecoration(
+                    hintText: 'Search provider...',
+                    hintStyle: const TextStyle(color: AppColors.textSecondary),
+                    prefixIcon: Icon(UIcons.regularRounded.search, color: AppColors.textSecondary, size: 20),
+                    suffixIcon: _searchController.text.isNotEmpty ? IconButton(
+                      icon: Icon(UIcons.regularRounded.cross_circle, color: AppColors.textSecondary, size: 18),
+                      onPressed: () {
+                        _searchController.clear();
+                      },
+                    ) : null,
+                    filled: true,
+                    fillColor: AppColors.surfaceHover,
+                    contentPadding: const EdgeInsets.symmetric(vertical: 16),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16),
+                      borderSide: BorderSide.none,
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16),
+                      borderSide: const BorderSide(color: AppColors.primaryAccent, width: 1),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              Expanded(
+                child: _filteredProviders.isEmpty 
+                  ? Center(
+                      child: Text(
+                        'No providers found for "${_searchController.text}"', 
+                        style: const TextStyle(color: AppColors.textSecondary),
+                      ),
+                    )
+                  : ListView.builder(
+                      controller: scrollController,
+                      itemCount: _filteredProviders.length,
+                      itemBuilder: (context, index) {
+                        final provider = _filteredProviders[index];
+                        return ListTile(
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 4),
+                          title: Text(provider, style: const TextStyle(color: AppColors.textPrimary)),
+                          onTap: () => Navigator.pop(context, provider),
+                        );
+                      },
+                    ),
+              ),
+            ],
+          ),
         );
       },
     );
