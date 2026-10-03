@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:uicons/uicons.dart';
 import '../../../../core/theme/app_colors.dart';
-import '../../domain/models/wealth_summary_model.dart';
 import '../../domain/models/wealth_item.dart';
 import '../providers/wealth_provider.dart';
 import '../widgets/portfolio_performance.dart';
@@ -11,14 +10,28 @@ import '../widgets/portfolio_allocation.dart';
 import 'package:flutter/cupertino.dart';
 import '../widgets/wealth_item_row.dart';
 import 'investment_category_detail_screen.dart';
-import '../widgets/add_investment_bottom_sheet.dart';
 import 'holding_detail_screen.dart';
 
-class InvestmentDetailScreen extends ConsumerWidget {
+class InvestmentDetailScreen extends ConsumerStatefulWidget {
   const InvestmentDetailScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<InvestmentDetailScreen> createState() => _InvestmentDetailScreenState();
+}
+
+class _InvestmentDetailScreenState extends ConsumerState<InvestmentDetailScreen> {
+  bool _isSearching = false;
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     // 1. Fetch Data
     final investmentSummary = ref.watch(investmentSummaryProvider);
     final items = ref.watch(wealthItemsProvider('investments'));
@@ -37,6 +50,19 @@ class InvestmentDetailScreen extends ConsumerWidget {
     final groupedItems = <String, List<WealthItem>>{};
     for (var item in items) {
       groupedItems.putIfAbsent(item.category, () => []).add(item);
+    }
+
+    // 3b. Search filtering
+    List<WealthItem> filteredItems = [];
+    if (_isSearching) {
+      if (_searchQuery.isEmpty) {
+        filteredItems = items;
+      } else {
+        filteredItems = items.where((item) {
+          final matchesName = item.name.toLowerCase().contains(_searchQuery.toLowerCase());
+          return matchesName;
+        }).toList();
+      }
     }
 
     return Scaffold(
@@ -59,7 +85,17 @@ class InvestmentDetailScreen extends ConsumerWidget {
             leading: Padding(
               padding: const EdgeInsets.only(left: 24.0, top: 8.0, bottom: 8.0),
               child: GestureDetector(
-                onTap: () => Navigator.pop(context),
+                onTap: () {
+                  if (_isSearching) {
+                    setState(() {
+                      _isSearching = false;
+                      _searchQuery = '';
+                      _searchController.clear();
+                    });
+                  } else {
+                    Navigator.pop(context);
+                  }
+                },
                 behavior: HitTestBehavior.opaque,
                 child: SizedBox(
                   width: 40,
@@ -70,34 +106,124 @@ class InvestmentDetailScreen extends ConsumerWidget {
                 ),
               ),
             ),
-            title: const Text(
-              'Investments',
-              style: TextStyle(
-                color: AppColors.textPrimary,
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-              ),
-            ),
-            centerTitle: true,
-            actions: [
-              Padding(
-                padding: const EdgeInsets.only(right: 24.0, top: 8.0, bottom: 8.0),
-                child: GestureDetector(
-                  onTap: () {},
-                  behavior: HitTestBehavior.opaque,
-                  child: SizedBox(
-                    width: 40,
-                    height: 40,
-                    child: Center(
-                      child: Icon(UIcons.regularRounded.search, color: AppColors.textPrimary, size: 20),
+            title: _isSearching
+                ? TextField(
+                    controller: _searchController,
+                    autofocus: true,
+                    style: const TextStyle(color: AppColors.textPrimary, fontSize: 16),
+                    decoration: const InputDecoration(
+                      hintText: 'Search assets...',
+                      hintStyle: TextStyle(color: AppColors.textSecondary, fontSize: 16),
+                      border: InputBorder.none,
+                      isDense: true,
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        _searchQuery = value;
+                      });
+                    },
+                  )
+                : const Text(
+                    'Investments',
+                    style: TextStyle(
+                      color: AppColors.textPrimary,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
                     ),
                   ),
-                ),
-              )
+            centerTitle: !_isSearching,
+            actions: [
+              if (!_isSearching)
+                Padding(
+                  padding: const EdgeInsets.only(right: 24.0, top: 8.0, bottom: 8.0),
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _isSearching = true;
+                      });
+                    },
+                    behavior: HitTestBehavior.opaque,
+                    child: SizedBox(
+                      width: 40,
+                      height: 40,
+                      child: Center(
+                        child: Icon(UIcons.regularRounded.search, color: AppColors.textPrimary, size: 20),
+                      ),
+                    ),
+                  ),
+                )
+              else if (_searchQuery.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(right: 24.0, top: 8.0, bottom: 8.0),
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _searchController.clear();
+                        _searchQuery = '';
+                      });
+                    },
+                    behavior: HitTestBehavior.opaque,
+                    child: SizedBox(
+                      width: 40,
+                      height: 40,
+                      child: Center(
+                        child: Icon(UIcons.regularRounded.cross_small, color: AppColors.textSecondary, size: 20),
+                      ),
+                    ),
+                  ),
+                )
             ],
           ),
 
           // 5. Main Content
+          if (_isSearching)
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+                child: filteredItems.isEmpty
+                    ? const Center(
+                        child: Padding(
+                          padding: EdgeInsets.all(32.0),
+                          child: Text(
+                            'No assets found',
+                            style: TextStyle(color: AppColors.textSecondary, fontSize: 16),
+                          ),
+                        ),
+                      )
+                    : Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.surface,
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            children: filteredItems.asMap().entries.map((entry) {
+                              final index = entry.key;
+                              final item = entry.value;
+                              return Column(
+                                children: [
+                                  WealthItemRow(
+                                    item: item,
+                                    onTap: () {
+                                      Navigator.of(context, rootNavigator: true).push(
+                                        CupertinoPageRoute(
+                                          builder: (context) => HoldingDetailScreen(item: item),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                  if (index < filteredItems.length - 1)
+                                    const Divider(color: AppColors.border, height: 1, thickness: 1),
+                                ],
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                      ),
+              ),
+            )
+          else
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
@@ -270,13 +396,13 @@ class InvestmentDetailScreen extends ConsumerWidget {
                                       ),
                                   ],
                                 );
-                              }).toList(),
+                              }),
                             ],
                           ),
                         ),
                       ),
                     );
-                  }).toList(),
+                  }),
                 ],
               ),
             ),
