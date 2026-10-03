@@ -346,32 +346,12 @@ class _InvestmentDetailScreenState extends ConsumerState<InvestmentDetailScreen>
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              GestureDetector(
-                                behavior: HitTestBehavior.opaque,
-                                onTap: () {
-                                  Navigator.of(context, rootNavigator: true).push(
-                                    CupertinoPageRoute(
-                                      builder: (context) => InvestmentCategoryDetailScreen(category: category),
-                                    ),
-                                  );
-                                },
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      category,
-                                      style: const TextStyle(
-                                        color: AppColors.textPrimary,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    Icon(
-                                      UIcons.regularRounded.angle_right,
-                                      color: AppColors.textSecondary,
-                                      size: 16,
-                                    ),
-                                  ],
+                              Text(
+                                category,
+                                style: const TextStyle(
+                                  color: AppColors.textPrimary,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                               const SizedBox(height: 16),
@@ -399,6 +379,30 @@ class _InvestmentDetailScreenState extends ConsumerState<InvestmentDetailScreen>
                                   ],
                                 );
                               }),
+                              const SizedBox(height: 12),
+                              Center(
+                                child: GestureDetector(
+                                  behavior: HitTestBehavior.opaque,
+                                  onTap: () {
+                                    Navigator.of(context, rootNavigator: true).push(
+                                      CupertinoPageRoute(
+                                        builder: (context) => InvestmentCategoryDetailScreen(category: category),
+                                      ),
+                                    );
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                                    child: Text(
+                                      'Show all',
+                                      style: TextStyle(
+                                        color: AppColors.textSecondary.withOpacity(0.8),
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
                             ],
                           ),
                         ),
