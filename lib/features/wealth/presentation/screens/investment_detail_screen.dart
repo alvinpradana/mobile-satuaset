@@ -65,8 +65,10 @@ class _InvestmentDetailScreenState extends ConsumerState<InvestmentDetailScreen>
       }
     }
 
-    return Scaffold(
-      backgroundColor: AppColors.background,
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        backgroundColor: AppColors.background,
       body: RefreshIndicator(
         color: AppColors.primaryAccent,
         backgroundColor: AppColors.surface,
@@ -413,6 +415,7 @@ class _InvestmentDetailScreenState extends ConsumerState<InvestmentDetailScreen>
             child: SizedBox(height: 120),
           )
         ],
+      ),
       ),
       ),
     );
