@@ -182,74 +182,102 @@ class _AddAccountBottomSheetState extends State<AddAccountBottomSheet> {
               ),
             ),
             const SizedBox(height: 8),
-            Container(
-              decoration: BoxDecoration(
-                color: AppColors.surface,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Row(
-                children: [
-                  // Currency Toggle
-                  GestureDetector(
-                    onTap: () {
-                      CurrencyPickerSheet.show(
-                        context,
-                        selectedCurrency: _selectedCurrency,
-                        onCurrencySelected: (currency) {
-                          setState(() {
-                            _selectedCurrency = currency;
-                          });
-                        },
-                      );
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-                      decoration: const BoxDecoration(
-                        border: Border(right: BorderSide(color: AppColors.border, width: 1)),
+            FormField<String>(
+              initialValue: _balanceController.text,
+              validator: (value) {
+                final text = _balanceController.text;
+                if (text.trim().isEmpty) {
+                  return 'Initial balance is required';
+                }
+                if (double.tryParse(text) == null) {
+                  return 'Must be a valid number';
+                }
+                return null;
+              },
+              builder: (FormFieldState<String> field) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        color: AppColors.surface,
+                        borderRadius: BorderRadius.circular(12),
+                        border: field.hasError
+                            ? Border.all(color: AppColors.negative, width: 1)
+                            : null,
                       ),
                       child: Row(
                         children: [
-                          Text(
-                            _selectedCurrency.name.toUpperCase(),
-                            style: const TextStyle(color: AppColors.primaryAccent, fontWeight: FontWeight.bold),
+                          // Currency Toggle
+                          GestureDetector(
+                            onTap: () {
+                              CurrencyPickerSheet.show(
+                                context,
+                                selectedCurrency: _selectedCurrency,
+                                onCurrencySelected: (currency) {
+                                  setState(() {
+                                    _selectedCurrency = currency;
+                                  });
+                                },
+                              );
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                              decoration: const BoxDecoration(
+                                border: Border(right: BorderSide(color: AppColors.border, width: 1)),
+                              ),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    _selectedCurrency.name.toUpperCase(),
+                                    style: const TextStyle(color: AppColors.primaryAccent, fontWeight: FontWeight.bold),
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Icon(UIcons.regularRounded.angle_small_down, color: AppColors.primaryAccent, size: 12),
+                                ],
+                              ),
+                            ),
                           ),
-                          const SizedBox(width: 4),
-                          Icon(UIcons.regularRounded.angle_small_down, color: AppColors.primaryAccent, size: 12),
+                          
+                          // Input Field
+                          Expanded(
+                            child: TextField(
+                              controller: _balanceController,
+                              keyboardType: TextInputType.number,
+                              style: const TextStyle(color: AppColors.textPrimary),
+                              onChanged: (val) => field.didChange(val),
+                              decoration: const InputDecoration(
+                                hintText: '0',
+                                hintStyle: TextStyle(color: AppColors.textSecondary),
+                                filled: true,
+                                fillColor: Colors.transparent,
+                                border: InputBorder.none,
+                                focusedBorder: InputBorder.none,
+                                errorBorder: InputBorder.none,
+                                focusedErrorBorder: InputBorder.none,
+                                contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
-                  ),
-                  
-                  // Input Field
-                  Expanded(
-                    child: TextFormField(
-                      controller: _balanceController,
-                      keyboardType: TextInputType.number,
-                      style: const TextStyle(color: AppColors.textPrimary),
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return 'Initial balance is required';
-                        }
-                        if (double.tryParse(value) == null) {
-                          return 'Must be a valid number';
-                        }
-                        return null;
-                      },
-                      decoration: const InputDecoration(
-                        hintText: '0',
-                        hintStyle: TextStyle(color: AppColors.textSecondary),
-                        filled: true,
-                        fillColor: Colors.transparent,
-                        border: InputBorder.none,
-                        focusedBorder: InputBorder.none,
-                        errorBorder: InputBorder.none,
-                        focusedErrorBorder: InputBorder.none,
-                        contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                    if (field.hasError) ...[
+                      const SizedBox(height: 8),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 12),
+                        child: Text(
+                          field.errorText!,
+                          style: const TextStyle(
+                            color: AppColors.negative,
+                            fontSize: 12,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                ],
-              ),
+                    ],
+                  ],
+                );
+              },
             ),
             const SizedBox(height: 32),
 
@@ -335,6 +363,7 @@ class _AddAccountBottomSheetState extends State<AddAccountBottomSheet> {
               borderRadius: BorderRadius.circular(12),
               borderSide: const BorderSide(color: AppColors.negative, width: 1),
             ),
+            errorStyle: const TextStyle(color: AppColors.negative),
           ),
         ),
       ],
