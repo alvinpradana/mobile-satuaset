@@ -530,6 +530,10 @@ class _ProviderSelectorSheetState extends State<_ProviderSelectorSheet> {
       builder: (_, scrollController) {
         return Container(
           padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          decoration: const BoxDecoration(
+            color: AppColors.background,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+          ),
           child: Column(
             children: [
               const SizedBox(height: 12),
