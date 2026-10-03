@@ -4,7 +4,6 @@ import 'package:intl/intl.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../domain/models/wealth_summary_model.dart';
 import '../../../../shared/providers/privacy_provider.dart';
-import 'package:uicons/uicons.dart';
 
 class WealthDomainRow extends ConsumerWidget {
   final WealthDomain domain;
@@ -58,9 +57,8 @@ class WealthDomainRow extends ConsumerWidget {
                 ),
                 const SizedBox(width: 16),
                 
-                // Middle Column: Title & Subtitle
+                // Content Column: Title on top, Subtitle and Value on bottom
                 Expanded(
-                  flex: 3,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -75,48 +73,37 @@ class WealthDomainRow extends ConsumerWidget {
                         ),
                       ),
                       const SizedBox(height: 4),
-                      Text(
-                        domain.subtitle,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          color: AppColors.textSecondary,
-                          fontSize: 13,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 16),
-                
-                // Right Column: Nominal Value & Chevron
-                Flexible(
-                  flex: 4,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      if (domain.value > 0)
-                        Flexible(
-                          child: FittedBox(
-                            fit: BoxFit.scaleDown,
-                            alignment: Alignment.centerRight,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Flexible(
                             child: Text(
-                              isObscured ? 'Rp ••••••••' : 'Rp $formattedValue',
+                              domain.subtitle,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
-                                color: AppColors.textPrimary,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                                letterSpacing: -0.3,
+                                color: AppColors.textSecondary,
+                                fontSize: 13,
                               ),
                             ),
                           ),
-                        ),
-                      const SizedBox(width: 8),
-                      Icon(
-                        UIcons.regularRounded.angle_right,
-                        color: AppColors.textSecondary,
-                        size: 14,
+                          if (domain.value > 0) ...[
+                            const SizedBox(width: 16),
+                            FittedBox(
+                              fit: BoxFit.scaleDown,
+                              alignment: Alignment.centerRight,
+                              child: Text(
+                                isObscured ? 'Rp ••••••••' : 'Rp $formattedValue',
+                                style: const TextStyle(
+                                  color: AppColors.textPrimary,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700,
+                                  letterSpacing: -0.3,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ],
                       ),
                     ],
                   ),
