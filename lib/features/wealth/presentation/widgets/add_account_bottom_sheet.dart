@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../shared/widgets/success_alert_dialog.dart';
+import 'package:uicons/uicons.dart';
+import '../../../../shared/models/currency_model.dart';
+import '../../../../shared/widgets/currency_picker_sheet.dart';
 
 class AddAccountBottomSheet extends StatefulWidget {
   const AddAccountBottomSheet({super.key});
@@ -11,7 +14,8 @@ class AddAccountBottomSheet extends StatefulWidget {
 
 class _AddAccountBottomSheetState extends State<AddAccountBottomSheet> {
   String _selectedCategory = 'BANK';
-  final _categories = ['BANK', 'E-WALLET', 'CASH'];
+  final _categories = ['BANK', 'E-WALLET', 'CASH', 'CRYPTO'];
+  Currency _selectedCurrency = Currency.idr;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -25,6 +29,21 @@ class _AddAccountBottomSheetState extends State<AddAccountBottomSheet> {
     _identifierController.dispose();
     _balanceController.dispose();
     super.dispose();
+  }
+
+  String get _accountNameHint {
+    switch (_selectedCategory) {
+      case 'BANK':
+        return 'e.g. BCA Utama';
+      case 'E-WALLET':
+        return 'e.g. Gopay';
+      case 'CASH':
+        return 'e.g. Dompet Pribadi';
+      case 'CRYPTO':
+        return 'e.g. Metamask';
+      default:
+        return 'e.g. Tabungan Liburan';
+    }
   }
 
   @override
@@ -85,7 +104,16 @@ class _AddAccountBottomSheetState extends State<AddAccountBottomSheet> {
                 return Padding(
                   padding: const EdgeInsets.only(right: 8.0),
                   child: InkWell(
-                    onTap: () => setState(() => _selectedCategory = cat),
+                    onTap: () {
+                      setState(() {
+                        _selectedCategory = cat;
+                        if (cat == 'CRYPTO') {
+                          _selectedCurrency = Currency.usd;
+                        } else {
+                          _selectedCurrency = Currency.idr;
+                        }
+                      });
+                    },
                     borderRadius: BorderRadius.circular(20),
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -115,7 +143,7 @@ class _AddAccountBottomSheetState extends State<AddAccountBottomSheet> {
             _buildTextField(
               controller: _nameController,
               label: 'Account Name',
-              hint: 'e.g. Tabungan Liburan',
+              hint: _accountNameHint,
               validator: (value) {
                 if (value == null || value.trim().isEmpty) {
                   return 'Account name is required';
@@ -129,11 +157,11 @@ class _AddAccountBottomSheetState extends State<AddAccountBottomSheet> {
             if (_selectedCategory != 'CASH') ...[
               _buildTextField(
                 controller: _identifierController,
-                label: 'Account Number / ID (Optional)',
-                hint: 'e.g. 1234567890',
-                keyboardType: TextInputType.number,
+                label: _selectedCategory == 'CRYPTO' ? 'Wallet Address (Optional)' : 'Account Number / ID (Optional)',
+                hint: _selectedCategory == 'CRYPTO' ? 'e.g. 0x...abc' : 'e.g. 1234567890',
+                keyboardType: _selectedCategory == 'CRYPTO' ? TextInputType.text : TextInputType.number,
                 validator: (value) {
-                  if (value != null && value.trim().isNotEmpty) {
+                  if (_selectedCategory != 'CRYPTO' && value != null && value.trim().isNotEmpty) {
                     if (int.tryParse(value) == null) {
                       return 'Must be numeric';
                     }
@@ -145,20 +173,83 @@ class _AddAccountBottomSheetState extends State<AddAccountBottomSheet> {
             ],
 
             // Initial Balance Input
-            _buildTextField(
-              controller: _balanceController,
-              label: 'Initial Balance (Rp)',
-              hint: '0',
-              keyboardType: TextInputType.number,
-              validator: (value) {
-                if (value == null || value.trim().isEmpty) {
-                  return 'Initial balance is required';
-                }
-                if (double.tryParse(value) == null) {
-                  return 'Must be a valid number';
-                }
-                return null;
-              },
+            const Text(
+              'Initial Balance',
+              style: TextStyle(
+                color: AppColors.textSecondary,
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Container(
+              decoration: BoxDecoration(
+                color: AppColors.surface,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Row(
+                children: [
+                  // Currency Toggle
+                  GestureDetector(
+                    onTap: () {
+                      CurrencyPickerSheet.show(
+                        context,
+                        selectedCurrency: _selectedCurrency,
+                        onCurrencySelected: (currency) {
+                          setState(() {
+                            _selectedCurrency = currency;
+                          });
+                        },
+                      );
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                      decoration: const BoxDecoration(
+                        border: Border(right: BorderSide(color: AppColors.border, width: 1)),
+                      ),
+                      child: Row(
+                        children: [
+                          Text(
+                            _selectedCurrency.name.toUpperCase(),
+                            style: const TextStyle(color: AppColors.primaryAccent, fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(width: 4),
+                          Icon(UIcons.regularRounded.angle_small_down, color: AppColors.primaryAccent, size: 12),
+                        ],
+                      ),
+                    ),
+                  ),
+                  
+                  // Input Field
+                  Expanded(
+                    child: TextFormField(
+                      controller: _balanceController,
+                      keyboardType: TextInputType.number,
+                      style: const TextStyle(color: AppColors.textPrimary),
+                      validator: (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return 'Initial balance is required';
+                        }
+                        if (double.tryParse(value) == null) {
+                          return 'Must be a valid number';
+                        }
+                        return null;
+                      },
+                      decoration: const InputDecoration(
+                        hintText: '0',
+                        hintStyle: TextStyle(color: AppColors.textSecondary),
+                        filled: true,
+                        fillColor: Colors.transparent,
+                        border: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        errorBorder: InputBorder.none,
+                        focusedErrorBorder: InputBorder.none,
+                        contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
             const SizedBox(height: 32),
 

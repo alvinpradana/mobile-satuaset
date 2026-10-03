@@ -5,7 +5,9 @@ import 'package:uicons/uicons.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../shared/widgets/success_alert_dialog.dart';
 import '../../domain/models/wealth_item.dart';
-import 'add_investment_bottom_sheet.dart' show CryptoAsset, Currency;
+import 'add_investment_bottom_sheet.dart' show CryptoAsset;
+import '../../../../shared/models/currency_model.dart';
+import '../../../../shared/widgets/currency_picker_sheet.dart';
 
 class SellInvestmentBottomSheet extends StatefulWidget {
   final CryptoAsset asset;
@@ -390,9 +392,15 @@ class _SellInvestmentBottomSheetState extends State<SellInvestmentBottomSheet> {
               // Currency Toggle
               GestureDetector(
                 onTap: () {
-                  setState(() {
-                    _selectedCurrency = _selectedCurrency == Currency.usd ? Currency.idr : Currency.usd;
-                  });
+                  CurrencyPickerSheet.show(
+                    context,
+                    selectedCurrency: _selectedCurrency,
+                    onCurrencySelected: (currency) {
+                      setState(() {
+                        _selectedCurrency = currency;
+                      });
+                    },
+                  );
                 },
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),

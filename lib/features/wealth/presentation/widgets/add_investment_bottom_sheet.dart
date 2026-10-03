@@ -4,6 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:uicons/uicons.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../shared/widgets/success_alert_dialog.dart';
+import '../../../../shared/models/currency_model.dart';
+import '../../../../shared/widgets/currency_picker_sheet.dart';
 
 // --- DUMMY DATA MODELS ---
 class InvestmentAssetItem {
@@ -64,7 +66,7 @@ const List<String> dummyStockPlatforms = [
   'Other'
 ];
 
-enum Currency { idr, usd }
+// Use shared Currency enum
 
 class AddInvestmentBottomSheet extends StatefulWidget {
   final String? initialCategory;
@@ -532,9 +534,15 @@ class _AddInvestmentBottomSheetState extends State<AddInvestmentBottomSheet> {
               // Currency Toggle
               GestureDetector(
                 onTap: () {
-                  setState(() {
-                    _selectedCurrency = _selectedCurrency == Currency.usd ? Currency.idr : Currency.usd;
-                  });
+                  CurrencyPickerSheet.show(
+                    context,
+                    selectedCurrency: _selectedCurrency,
+                    onCurrencySelected: (currency) {
+                      setState(() {
+                        _selectedCurrency = currency;
+                      });
+                    },
+                  );
                 },
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
