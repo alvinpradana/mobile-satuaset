@@ -236,7 +236,7 @@ class _SellInvestmentBottomSheetState extends State<SellInvestmentBottomSheet> {
                           foregroundColor: Colors.black,
                           disabledForegroundColor: AppColors.textSecondary,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.circular(28),
                           ),
                           elevation: 0,
                         ),

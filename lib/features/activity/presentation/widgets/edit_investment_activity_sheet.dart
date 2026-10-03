@@ -204,7 +204,7 @@ class _EditInvestmentActivitySheetState extends ConsumerState<EditInvestmentActi
                           foregroundColor: Colors.black,
                           disabledForegroundColor: AppColors.textSecondary,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.circular(28),
                           ),
                           elevation: 0,
                         ),
