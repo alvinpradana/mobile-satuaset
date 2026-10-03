@@ -48,20 +48,19 @@ class WealthHero extends ConsumerWidget {
           ],
         ),
         const SizedBox(height: 8),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Text(
-              isObscured ? 'Rp •••••••••' : 'Rp $formattedNetWorth',
-              style: const TextStyle(
-                color: AppColors.textPrimary,
-                fontSize: 32,
-                fontWeight: FontWeight.w800,
-                height: 1.0,
-                letterSpacing: -0.8,
-              ),
+        FittedBox(
+          fit: BoxFit.scaleDown,
+          alignment: Alignment.centerLeft,
+          child: Text(
+            isObscured ? 'Rp •••••••••' : 'Rp $formattedNetWorth',
+            style: const TextStyle(
+              color: AppColors.textPrimary,
+              fontSize: 32,
+              fontWeight: FontWeight.w800,
+              height: 1.0,
+              letterSpacing: -0.8,
             ),
-          ],
+          ),
         ),
         const SizedBox(height: 12),
         Row(

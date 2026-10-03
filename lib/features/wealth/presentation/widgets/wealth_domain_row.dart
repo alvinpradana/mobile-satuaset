@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -61,6 +60,7 @@ class WealthDomainRow extends ConsumerWidget {
                 
                 // Middle Column: Title & Subtitle
                 Expanded(
+                  flex: 3,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -90,26 +90,36 @@ class WealthDomainRow extends ConsumerWidget {
                 const SizedBox(width: 16),
                 
                 // Right Column: Nominal Value & Chevron
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    if (domain.value > 0)
-                      Text(
-                        isObscured ? 'Rp ••••••••' : 'Rp $formattedValue',
-                        style: const TextStyle(
-                          color: AppColors.textPrimary,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: -0.3,
+                Flexible(
+                  flex: 4,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      if (domain.value > 0)
+                        Flexible(
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              isObscured ? 'Rp ••••••••' : 'Rp $formattedValue',
+                              style: const TextStyle(
+                                color: AppColors.textPrimary,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                                letterSpacing: -0.3,
+                              ),
+                            ),
+                          ),
                         ),
+                      const SizedBox(width: 8),
+                      Icon(
+                        UIcons.regularRounded.angle_right,
+                        color: AppColors.textSecondary,
+                        size: 14,
                       ),
-                    const SizedBox(width: 8),
-                    Icon(
-                      UIcons.regularRounded.angle_right,
-                      color: AppColors.textSecondary,
-                      size: 14,
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ],
             ),

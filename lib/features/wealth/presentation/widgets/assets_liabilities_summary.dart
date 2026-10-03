@@ -98,13 +98,17 @@ class _MetricPair extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 6),
-        Text(
-          isObscured ? 'Rp ••••••' : 'Rp $formattedValue',
-          style: TextStyle(
-            color: isPositive ? AppColors.textPrimary : AppColors.negative,
-            fontSize: 18,
-            fontWeight: FontWeight.w800,
-            letterSpacing: -0.5,
+        FittedBox(
+          fit: BoxFit.scaleDown,
+          alignment: Alignment.centerLeft,
+          child: Text(
+            isObscured ? 'Rp ••••••' : 'Rp $formattedValue',
+            style: TextStyle(
+              color: isPositive ? AppColors.textPrimary : AppColors.negative,
+              fontSize: 18,
+              fontWeight: FontWeight.w800,
+              letterSpacing: -0.5,
+            ),
           ),
         ),
       ],
