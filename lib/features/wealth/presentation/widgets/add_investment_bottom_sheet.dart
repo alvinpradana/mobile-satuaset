@@ -6,13 +6,16 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../shared/widgets/success_alert_dialog.dart';
 
 // --- DUMMY DATA MODELS ---
-class CryptoAsset {
+class InvestmentAssetItem {
   final String id;
   final String symbol;
   final String name;
 
-  const CryptoAsset(this.id, this.symbol, this.name);
+  const InvestmentAssetItem(this.id, this.symbol, this.name);
 }
+
+typedef CryptoAsset = InvestmentAssetItem;
+typedef StockAsset = InvestmentAssetItem;
 
 const List<CryptoAsset> dummyCryptoAssets = [
   CryptoAsset('bitcoin', 'BTC', 'Bitcoin'),
@@ -23,6 +26,18 @@ const List<CryptoAsset> dummyCryptoAssets = [
   CryptoAsset('ripple', 'XRP', 'XRP'),
   CryptoAsset('cardano', 'ADA', 'Cardano'),
   CryptoAsset('dogecoin', 'DOGE', 'Dogecoin'),
+];
+
+const List<StockAsset> dummyStockAssets = [
+  StockAsset('bbca', 'BBCA', 'Bank Central Asia Tbk'),
+  StockAsset('bbri', 'BBRI', 'Bank Rakyat Indonesia (Persero) Tbk'),
+  StockAsset('tlkm', 'TLKM', 'Telkom Indonesia (Persero) Tbk'),
+  StockAsset('bmri', 'BMRI', 'Bank Mandiri (Persero) Tbk'),
+  StockAsset('asii', 'ASII', 'Astra International Tbk'),
+  StockAsset('goto', 'GOTO', 'GoTo Gojek Tokopedia Tbk'),
+  StockAsset('nvda', 'NVDA', 'NVIDIA Corporation'),
+  StockAsset('tsla', 'TSLA', 'Tesla, Inc.'),
+  StockAsset('aapl', 'AAPL', 'Apple Inc.'),
 ];
 
 const List<String> dummyCryptoPlatforms = [
@@ -36,12 +51,26 @@ const List<String> dummyCryptoPlatforms = [
   'Other'
 ];
 
+const List<String> dummyStockPlatforms = [
+  'Ajaib',
+  'Stockbit',
+  'Indo Premier (IPOT)',
+  'Mandiri Sekuritas',
+  'BNI Sekuritas',
+  'Mirae Asset',
+  'Gotrade',
+  'Pluang',
+  'Interactive Brokers',
+  'Other'
+];
+
 enum Currency { idr, usd }
 
 class AddInvestmentBottomSheet extends StatefulWidget {
   final String? initialCategory;
   final bool isCategoryLocked;
   final CryptoAsset? initialCryptoAsset;
+  final StockAsset? initialStockAsset;
   final bool isAssetLocked;
 
   const AddInvestmentBottomSheet({
@@ -49,6 +78,7 @@ class AddInvestmentBottomSheet extends StatefulWidget {
     this.initialCategory, 
     this.isCategoryLocked = false,
     this.initialCryptoAsset,
+    this.initialStockAsset,
     this.isAssetLocked = false,
   });
 
@@ -60,7 +90,7 @@ class _AddInvestmentBottomSheetState extends State<AddInvestmentBottomSheet> {
   late String _selectedCategory;
   
   // Form State
-  CryptoAsset? _selectedCrypto;
+  InvestmentAssetItem? _selectedAsset;
   String? _selectedPlatform;
   final TextEditingController _unitsController = TextEditingController();
   final TextEditingController _avgPriceController = TextEditingController();
@@ -76,7 +106,12 @@ class _AddInvestmentBottomSheetState extends State<AddInvestmentBottomSheet> {
       _categories.add(_selectedCategory);
     }
     
-    _selectedCrypto = widget.initialCryptoAsset;
+    _selectedAsset = widget.initialCryptoAsset ?? widget.initialStockAsset;
+    
+    // Default currency based on category
+    if (_selectedCategory == 'Stocks') {
+      _selectedCurrency = Currency.idr;
+    }
     
     // Listeners for validation updates
     _unitsController.addListener(() => setState(() {}));
@@ -91,8 +126,8 @@ class _AddInvestmentBottomSheetState extends State<AddInvestmentBottomSheet> {
   }
 
   bool _isFormValid() {
-    if (_selectedCategory == 'Crypto') {
-      if (_selectedCrypto == null) return false;
+    if (_selectedCategory == 'Crypto' || _selectedCategory == 'Stocks') {
+      if (_selectedAsset == null) return false;
       if (_selectedPlatform == null) return false;
       
       final units = double.tryParse(_unitsController.text.replaceAll(',', '.'));
@@ -112,9 +147,9 @@ class _AddInvestmentBottomSheetState extends State<AddInvestmentBottomSheet> {
     
     final payload = {
       "investment_category": _selectedCategory.toUpperCase(),
-      "asset_id": _selectedCrypto?.id,
-      "ticker": _selectedCrypto?.symbol,
-      "name": _selectedCrypto?.name,
+      "asset_id": _selectedAsset?.id,
+      "ticker": _selectedAsset?.symbol,
+      "name": _selectedAsset?.name,
       "platform": _selectedPlatform?.toUpperCase(),
       "units": double.parse(_unitsController.text.replaceAll(',', '.')),
       "average_price": double.parse(_avgPriceController.text.replaceAll(',', '.')),
@@ -128,34 +163,36 @@ class _AddInvestmentBottomSheetState extends State<AddInvestmentBottomSheet> {
     SuccessAlertDialog.show(
       context,
       title: 'Investment Added',
-      message: 'Investment "${_selectedCrypto?.symbol}" has been successfully added to your portfolio.',
+      message: 'Investment "${_selectedAsset?.symbol}" has been successfully added to your portfolio.',
     );
   }
 
   // --- SELECTORS ---
   Future<void> _openAssetSelector() async {
-    final result = await showModalBottomSheet<CryptoAsset>(
+    final assets = _selectedCategory == 'Stocks' ? dummyStockAssets : dummyCryptoAssets;
+    final result = await showModalBottomSheet<InvestmentAssetItem>(
       context: context,
       isScrollControlled: true,
       backgroundColor: AppColors.background,
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
-      builder: (context) => const _AssetSelectorSheet(assets: dummyCryptoAssets),
+      builder: (context) => _AssetSelectorSheet(assets: assets),
     );
 
     if (result != null) {
       setState(() {
-        _selectedCrypto = result;
+        _selectedAsset = result;
       });
     }
   }
 
   Future<void> _openPlatformSelector() async {
+    final platforms = _selectedCategory == 'Stocks' ? dummyStockPlatforms : dummyCryptoPlatforms;
     final result = await showModalBottomSheet<String>(
       context: context,
       isScrollControlled: true,
       backgroundColor: AppColors.background,
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
-      builder: (context) => const _PlatformSelectorSheet(platforms: dummyCryptoPlatforms),
+      builder: (context) => _PlatformSelectorSheet(platforms: platforms),
     );
 
     if (result != null) {
@@ -168,8 +205,8 @@ class _AddInvestmentBottomSheetState extends State<AddInvestmentBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    // Only support Crypto for now as requested
-    final isCrypto = _selectedCategory == 'Crypto';
+    // Support Crypto and Stocks
+    final isCryptoOrStocks = _selectedCategory == 'Crypto' || _selectedCategory == 'Stocks';
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
@@ -231,12 +268,20 @@ class _AddInvestmentBottomSheetState extends State<AddInvestmentBottomSheet> {
                       child: GestureDetector(
                         onTap: () {
                           setState(() {
-                            _selectedCategory = category;
-                            // reset fields when category changes
-                            _selectedCrypto = null;
-                            _selectedPlatform = null;
-                            _unitsController.clear();
-                            _avgPriceController.clear();
+                            if (_selectedCategory != category) {
+                              _selectedCategory = category;
+                              // reset fields when category changes
+                              _selectedAsset = null;
+                              _selectedPlatform = null;
+                              _unitsController.clear();
+                              _avgPriceController.clear();
+                              // default currency based on category
+                              if (category == 'Stocks') {
+                                _selectedCurrency = Currency.idr;
+                              } else if (category == 'Crypto') {
+                                _selectedCurrency = Currency.usd;
+                              }
+                            }
                           });
                         },
                         child: Container(
@@ -261,12 +306,12 @@ class _AddInvestmentBottomSheetState extends State<AddInvestmentBottomSheet> {
               const SizedBox(height: 24),
             ],
             
-            if (isCrypto) ...[
+            if (isCryptoOrStocks) ...[
               // Asset Selector
               _buildSelectorField(
                 label: 'Asset Name / Ticker',
-                value: _selectedCrypto != null ? '${_selectedCrypto!.symbol} - ${_selectedCrypto!.name}' : null,
-                hint: 'Select Crypto Asset',
+                value: _selectedAsset != null ? '${_selectedAsset!.symbol} - ${_selectedAsset!.name}' : null,
+                hint: 'Select $_selectedCategory Asset',
                 icon: UIcons.regularRounded.search_alt,
                 onTap: widget.isAssetLocked ? () {} : _openAssetSelector,
                 isLocked: widget.isAssetLocked,
@@ -309,14 +354,14 @@ class _AddInvestmentBottomSheetState extends State<AddInvestmentBottomSheet> {
                 ],
               ),
             ] else ...[
-              // Placeholder for non-crypto categories
+              // Placeholder for non-crypto/stocks categories
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: AppColors.surface,
                   borderRadius: BorderRadius.circular(12)
                 ),
-                child: const Text('Only Crypto is available for testing right now.', style: TextStyle(color: AppColors.textSecondary)),
+                child: const Text('Only Crypto and Stocks are available right now.', style: TextStyle(color: AppColors.textSecondary)),
               ),
             ],
             
@@ -539,7 +584,7 @@ class _AddInvestmentBottomSheetState extends State<AddInvestmentBottomSheet> {
 }
 
 class _AssetSelectorSheet extends StatefulWidget {
-  final List<CryptoAsset> assets;
+  final List<InvestmentAssetItem> assets;
   const _AssetSelectorSheet({required this.assets});
 
   @override
@@ -548,7 +593,7 @@ class _AssetSelectorSheet extends StatefulWidget {
 
 class _AssetSelectorSheetState extends State<_AssetSelectorSheet> {
   final TextEditingController _searchController = TextEditingController();
-  List<CryptoAsset> _filteredAssets = [];
+  List<InvestmentAssetItem> _filteredAssets = [];
 
   @override
   void initState() {
