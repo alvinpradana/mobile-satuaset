@@ -15,8 +15,8 @@ class PortfolioAllocation extends StatefulWidget {
 }
 
 class _PortfolioAllocationState extends State<PortfolioAllocation> {
-  int? _selectedIndex = 0; // Default open for first asset
-  Timer? _hideTimer;
+  int? _selectedIndex; // Initially null for the delay effect
+  Timer? _timer;
 
   static const List<Color> _segmentColors = [
     AppColors.primaryAccent,
@@ -31,18 +31,26 @@ class _PortfolioAllocationState extends State<PortfolioAllocation> {
   @override
   void initState() {
     super.initState();
-    _startHideTimer();
+    // Delay slightly before showing the tooltip to grab user attention
+    _timer = Timer(const Duration(milliseconds: 600), () {
+      if (mounted) {
+        setState(() {
+          _selectedIndex = 0;
+        });
+        _startHideTimer();
+      }
+    });
   }
 
   @override
   void dispose() {
-    _hideTimer?.cancel();
+    _timer?.cancel();
     super.dispose();
   }
 
   void _startHideTimer() {
-    _hideTimer?.cancel();
-    _hideTimer = Timer(const Duration(seconds: 3), () {
+    _timer?.cancel();
+    _timer = Timer(const Duration(seconds: 3), () {
       if (mounted) {
         setState(() {
           _selectedIndex = null;
@@ -55,7 +63,7 @@ class _PortfolioAllocationState extends State<PortfolioAllocation> {
     setState(() {
       if (_selectedIndex == index) {
         _selectedIndex = null;
-        _hideTimer?.cancel();
+        _timer?.cancel();
       } else {
         _selectedIndex = index;
         _startHideTimer();
