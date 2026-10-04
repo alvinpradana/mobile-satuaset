@@ -113,7 +113,7 @@ class WealthItemRow extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
                     decoration: BoxDecoration(
-                      color: (item.percentageChange! > 0 ? AppColors.positive : AppColors.negative).withOpacity(0.1),
+                      color: (item.percentageChange! > 0 ? AppColors.primaryAccent : AppColors.negative).withOpacity(0.1),
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: Row(
@@ -124,13 +124,13 @@ class WealthItemRow extends StatelessWidget {
                               ? UIcons.regularRounded.arrow_trend_up 
                               : UIcons.regularRounded.arrow_trend_down,
                           size: 8,
-                          color: item.percentageChange! > 0 ? AppColors.positive : AppColors.negative,
+                          color: item.percentageChange! > 0 ? AppColors.primaryAccent : AppColors.negative,
                         ),
                         const SizedBox(width: 2),
                         Text(
                           '${item.percentageChange!.abs().toStringAsFixed(1)}%',
                           style: TextStyle(
-                            color: item.percentageChange! > 0 ? AppColors.positive : AppColors.negative,
+                            color: item.percentageChange! > 0 ? AppColors.primaryAccent : AppColors.negative,
                             fontSize: 11,
                             fontWeight: FontWeight.bold,
                           ),

@@ -32,7 +32,7 @@ class HoldingDetailScreen extends StatelessWidget {
     ];
 
     final isPositive = (item.percentageChange ?? 0) >= 0;
-    final returnColor = isPositive ? AppColors.positive : AppColors.negative;
+    final returnColor = isPositive ? AppColors.primaryAccent : AppColors.negative;
 
     // Calculate nominal PnL amount
     double? nominalPnL;

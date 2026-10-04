@@ -50,7 +50,7 @@ class PhysicalAssetRow extends StatelessWidget {
     final gainPercentage = isSold ? asset.realizedGainPercentage : asset.estimatedGainPercentage;
     
     final isGainPositive = gain >= 0;
-    final gainColor = isGainPositive ? AppColors.positive : AppColors.negative;
+    final gainColor = isGainPositive ? AppColors.primaryAccent : AppColors.negative;
     final gainPrefix = isGainPositive ? '+' : '';
 
     return GestureDetector(

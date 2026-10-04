@@ -27,7 +27,7 @@ class PhysicalAssetsHero extends StatelessWidget {
     );
 
     final isGainPositive = summary.totalEstimatedGain >= 0;
-    final gainColor = isGainPositive ? AppColors.positive : AppColors.negative;
+    final gainColor = isGainPositive ? AppColors.primaryAccent : AppColors.negative;
     final gainPrefix = isGainPositive ? '+' : '';
 
     return Column(
