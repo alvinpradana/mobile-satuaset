@@ -70,7 +70,7 @@ class WealthHero extends ConsumerWidget {
             const Text(
               '+Rp 58.800.000', // Mock nominal gain
               style: TextStyle(
-                color: AppColors.primaryAccent,
+                color: AppColors.positive,
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
               ),
@@ -79,7 +79,7 @@ class WealthHero extends ConsumerWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
               decoration: BoxDecoration(
-                color: AppColors.primaryAccent.withOpacity(0.12),
+                color: AppColors.positive.withOpacity(0.12),
                 borderRadius: BorderRadius.circular(4),
               ),
               child: Row(
@@ -87,13 +87,13 @@ class WealthHero extends ConsumerWidget {
                   Icon(
                     UIcons.regularRounded.arrow_trend_up,
                     size: 10,
-                    color: AppColors.primaryAccent,
+                    color: AppColors.positive,
                   ),
                   const SizedBox(width: 4),
                   Text(
                     '${changePercentage.abs().toStringAsFixed(1)}%',
                     style: const TextStyle(
-                      color: AppColors.primaryAccent,
+                      color: AppColors.positive,
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
                     ),

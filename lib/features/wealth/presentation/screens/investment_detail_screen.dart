@@ -44,7 +44,7 @@ class _InvestmentDetailScreenState extends ConsumerState<InvestmentDetailScreen>
     );
     final isNegativeReturn = investmentSummary.returnPercentage < 0;
     final returnSign = isNegativeReturn ? '' : '+';
-    final returnColor = isNegativeReturn ? AppColors.negative : AppColors.primaryAccent;
+    final returnColor = isNegativeReturn ? AppColors.negative : AppColors.positive;
 
     // 3. Group holdings
     final groupedItems = <String, List<WealthItem>>{};

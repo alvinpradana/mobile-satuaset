@@ -67,7 +67,7 @@ class NetWorthSummary extends ConsumerWidget {
                         Text(
                           '+2.4%',
                           style: TextStyle(
-                            color: AppColors.primaryAccent,
+                            color: AppColors.positive,
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
                           ),

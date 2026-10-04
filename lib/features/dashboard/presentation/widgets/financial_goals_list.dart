@@ -46,7 +46,7 @@ class FinancialGoalsList extends StatelessWidget {
                     Text(
                       'See All',
                       style: TextStyle(
-                        color: AppColors.textSecondary,
+                        color: AppColors.primaryAccent,
                         fontSize: 13,
                         fontWeight: FontWeight.w600,
                       ),
@@ -54,7 +54,7 @@ class FinancialGoalsList extends StatelessWidget {
                     SizedBox(width: 4),
                     Icon(
                       UIcons.regularRounded.angle_right,
-                      color: AppColors.textSecondary,
+                      color: AppColors.primaryAccent,
                       size: 12,
                     ),
                   ],

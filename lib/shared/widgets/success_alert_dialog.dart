@@ -69,12 +69,12 @@ class SuccessAlertDialog extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: AppColors.positive.withOpacity(0.1),
+                color: AppColors.primaryAccent.withOpacity(0.1),
                 shape: BoxShape.circle,
               ),
               child: const Icon(
                 Icons.check_circle_outline_rounded,
-                color: AppColors.positive,
+                color: AppColors.primaryAccent,
                 size: 48,
               ),
             ),

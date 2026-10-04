@@ -47,7 +47,7 @@ class RecentActivityList extends ConsumerWidget {
                     Text(
                       'See All',
                       style: TextStyle(
-                        color: AppColors.textSecondary,
+                        color: AppColors.primaryAccent,
                         fontSize: 13,
                         fontWeight: FontWeight.w600,
                       ),
@@ -55,7 +55,7 @@ class RecentActivityList extends ConsumerWidget {
                     SizedBox(width: 4),
                     Icon(
                       UIcons.regularRounded.angle_right,
-                      color: AppColors.textSecondary,
+                      color: AppColors.primaryAccent,
                       size: 12,
                     ),
                   ],

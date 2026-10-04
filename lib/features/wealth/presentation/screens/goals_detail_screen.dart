@@ -428,13 +428,13 @@ class _SavingGoalCard extends StatelessWidget {
                 width: 44,
                 height: 44,
                 decoration: BoxDecoration(
-                  color: isCompleted ? AppColors.positive.withOpacity(0.12) : AppColors.surfaceHover,
+                  color: isCompleted ? AppColors.primaryAccent.withOpacity(0.12) : AppColors.surfaceHover,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Center(
                   child: Icon(
                     goal.iconData,
-                    color: isCompleted ? AppColors.positive : AppColors.textPrimary,
+                    color: isCompleted ? AppColors.primaryAccent : AppColors.textPrimary,
                     size: 20,
                   ),
                 ),
@@ -468,18 +468,18 @@ class _SavingGoalCard extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
-                    color: AppColors.positive.withOpacity(0.12),
+                    color: AppColors.primaryAccent.withOpacity(0.12),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(UIcons.solidRounded.shield_check, size: 12, color: AppColors.positive),
+                      Icon(UIcons.solidRounded.shield_check, size: 12, color: AppColors.primaryAccent),
                       const SizedBox(width: 4),
                       const Text(
                         'Achieved',
                         style: TextStyle(
-                          color: AppColors.positive,
+                          color: AppColors.primaryAccent,
                           fontSize: 11,
                           fontWeight: FontWeight.bold,
                         ),
@@ -536,7 +536,7 @@ class _SavingGoalCard extends StatelessWidget {
               Text(
                 '${(goal.progressPercentage * 100).toStringAsFixed(0)}%',
                 style: TextStyle(
-                  color: isCompleted ? AppColors.positive : AppColors.primaryAccent,
+                  color: AppColors.primaryAccent,
                   fontSize: 14,
                   fontWeight: FontWeight.w800,
                 ),
@@ -552,8 +552,8 @@ class _SavingGoalCard extends StatelessWidget {
               value: goal.progressPercentage,
               minHeight: 8,
               backgroundColor: AppColors.surfaceHover,
-              valueColor: AlwaysStoppedAnimation<Color>(
-                isCompleted ? AppColors.positive : AppColors.primaryAccent,
+              valueColor: const AlwaysStoppedAnimation<Color>(
+                AppColors.primaryAccent,
               ),
             ),
           ),
@@ -581,12 +581,12 @@ class _SavingGoalCard extends StatelessWidget {
               else if (isCompleted)
                 Row(
                   children: [
-                    Icon(UIcons.solidRounded.shield_check, size: 12, color: AppColors.positive),
+                    Icon(UIcons.solidRounded.shield_check, size: 12, color: AppColors.primaryAccent),
                     const SizedBox(width: 4),
                     const Text(
                       'Target 100% Reached',
                       style: TextStyle(
-                        color: AppColors.positive,
+                        color: AppColors.primaryAccent,
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
                       ),
