@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uicons/uicons.dart';
@@ -7,6 +8,7 @@ import '../providers/physical_assets_provider.dart';
 import '../widgets/physical_asset_row.dart';
 import '../widgets/physical_assets_hero.dart';
 import '../widgets/value_breakdown_bar.dart';
+import 'physical_asset_detail_screen.dart';
 
 class PhysicalAssetsScreen extends ConsumerStatefulWidget {
   const PhysicalAssetsScreen({super.key});
@@ -87,7 +89,10 @@ class _PhysicalAssetsScreenState extends ConsumerState<PhysicalAssetsScreen> {
                   const SizedBox(height: 32),
                   
                   // Value Breakdown
-                  ValueBreakdownBar(allocations: summary.allocations),
+                  ValueBreakdownBar(
+                    allocations: summary.allocations,
+                    totalValue: summary.totalValue,
+                  ),
                   const SizedBox(height: 48),
 
                   // Your Assets Header
@@ -168,7 +173,11 @@ class _PhysicalAssetsScreenState extends ConsumerState<PhysicalAssetsScreen> {
                                     PhysicalAssetRow(
                                       asset: asset,
                                       onTap: () {
-                                        // Navigate to asset detail
+                                        Navigator.of(context, rootNavigator: true).push(
+                                          CupertinoPageRoute(
+                                            builder: (context) => PhysicalAssetDetailScreen(assetId: asset.id),
+                                          ),
+                                        );
                                       },
                                     ),
                                     if (index < categoryAssets.length - 1)
@@ -242,7 +251,11 @@ class _PhysicalAssetsScreenState extends ConsumerState<PhysicalAssetsScreen> {
                                     child: PhysicalAssetRow(
                                       asset: asset,
                                       onTap: () {
-                                        // Navigate to sold asset detail
+                                        Navigator.of(context, rootNavigator: true).push(
+                                          CupertinoPageRoute(
+                                            builder: (context) => PhysicalAssetDetailScreen(assetId: asset.id),
+                                          ),
+                                        );
                                       },
                                     ),
                                   ),
