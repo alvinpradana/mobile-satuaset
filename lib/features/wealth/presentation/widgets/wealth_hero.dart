@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:uicons/uicons.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../shared/providers/privacy_provider.dart';
 import '../../../../shared/widgets/privacy_toggle_button.dart';
@@ -54,7 +55,7 @@ class WealthHero extends ConsumerWidget {
             isObscured ? 'Rp •••••••••' : 'Rp $formattedNetWorth',
             style: const TextStyle(
               color: AppColors.textPrimary,
-              fontSize: 40,
+              fontSize: 32,
               fontWeight: FontWeight.w800,
               height: 1.0,
               letterSpacing: -0.8,
@@ -66,12 +67,46 @@ class WealthHero extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(
-              '+Rp 58.800.000 +${changePercentage.abs().toStringAsFixed(2)}%', // Mock nominal gain
-              style: const TextStyle(
+            const Text(
+              '+Rp 58.800.000', // Mock nominal gain
+              style: TextStyle(
                 color: AppColors.positive,
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(width: 8),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+              decoration: BoxDecoration(
+                color: AppColors.positive.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Row(
+                children: [
+                  Icon(
+                    UIcons.regularRounded.arrow_trend_up,
+                    size: 10,
+                    color: AppColors.positive,
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    '${changePercentage.abs().toStringAsFixed(1)}%',
+                    style: const TextStyle(
+                      color: AppColors.positive,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 8),
+            const Text(
+              'this month',
+              style: TextStyle(
+                color: AppColors.textSecondary,
+                fontSize: 12,
               ),
             ),
           ],
@@ -87,15 +122,15 @@ class WealthHero extends ConsumerWidget {
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
-                  color: isSelected ? AppColors.textPrimary : Colors.transparent,
+                  color: isSelected ? AppColors.surfaceHover : Colors.transparent,
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Text(
                   period,
                   style: TextStyle(
-                    color: isSelected ? AppColors.background : AppColors.textSecondary,
+                    color: isSelected ? AppColors.textPrimary : AppColors.textSecondary,
                     fontSize: 12,
-                    fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                    fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                   ),
                 ),
               ),
