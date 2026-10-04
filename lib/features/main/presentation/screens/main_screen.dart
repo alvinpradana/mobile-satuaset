@@ -1,37 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../shared/widgets/custom_bottom_nav.dart';
 import '../../../activity/presentation/screens/activity_screen.dart';
 import '../../../dashboard/presentation/screens/dashboard_screen.dart';
 import '../../../wealth/presentation/screens/wealth_tab_navigator.dart';
 import '../../../more/presentation/screens/more_screen.dart';
+import '../providers/main_navigation_provider.dart';
 
-class MainScreen extends StatefulWidget {
+class MainScreen extends ConsumerWidget {
   const MainScreen({super.key});
 
-  @override
-  State<MainScreen> createState() => _MainScreenState();
-}
-
-class _MainScreenState extends State<MainScreen> {
-  int _currentIndex = 0;
-
-  final List<Widget> _screens = [
-    const DashboardScreen(),
-    const ActivityScreen(),
-    const WealthTabNavigator(),
-    const MoreScreen(),
+  final List<Widget> _screens = const [
+    DashboardScreen(),
+    ActivityScreen(),
+    WealthTabNavigator(),
+    MoreScreen(),
   ];
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentIndex = ref.watch(mainNavigationProvider);
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: AppColors.background,
       body: Stack(
         children: [
           // Render the current screen
-          _screens[_currentIndex],
+          _screens[currentIndex],
           
           // Gradient shadow to smoothly fade out the content behind the bottom nav
           Positioned(
@@ -63,11 +60,9 @@ class _MainScreenState extends State<MainScreen> {
             left: 0,
             right: 0,
             child: CustomBottomNav(
-              currentIndex: _currentIndex,
+              currentIndex: currentIndex,
               onTabSelected: (index) {
-                setState(() {
-                  _currentIndex = index;
-                });
+                ref.read(mainNavigationProvider.notifier).state = index;
               },
             ),
           ),

@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../domain/models/recent_activity.dart';
 import 'package:uicons/uicons.dart';
 import 'package:intl/intl.dart';
-import '../../../activity/presentation/screens/activity_screen.dart';
+import '../../../main/presentation/providers/main_navigation_provider.dart';
 
-class RecentActivityList extends StatelessWidget {
+class RecentActivityList extends ConsumerWidget {
   const RecentActivityList({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     // Mock data
     final activities = [
       RecentActivity(title: 'Gaji Bulanan', amount: 15000000, type: ActivityType.income, date: 'Hari ini, 09:00'),
@@ -40,11 +40,7 @@ class RecentActivityList extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () {
-                  Navigator.of(context, rootNavigator: true).push(
-                    CupertinoPageRoute(
-                      builder: (context) => const ActivityScreen(),
-                    ),
-                  );
+                  ref.read(mainNavigationProvider.notifier).state = 1; // Activity tab index
                 },
                 child: Row(
                   children: [
