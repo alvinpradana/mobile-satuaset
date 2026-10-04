@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import '../../../../core/theme/app_colors.dart';
 import 'package:uicons/uicons.dart';
+import '../../../wealth/presentation/screens/investment_detail_screen.dart';
 
 class AssetAllocationCarousel extends StatefulWidget {
   const AssetAllocationCarousel({super.key});
@@ -96,7 +97,11 @@ class _AssetAllocationCarouselState extends State<AssetAllocationCarousel> {
               ),
               GestureDetector(
                 onTap: () {
-                  // TODO: Navigate to Asset Allocation Details
+                  Navigator.of(context, rootNavigator: true).push(
+                    CupertinoPageRoute(
+                      builder: (context) => const InvestmentDetailScreen(),
+                    ),
+                  );
                 },
                 child: Row(
                   children: [

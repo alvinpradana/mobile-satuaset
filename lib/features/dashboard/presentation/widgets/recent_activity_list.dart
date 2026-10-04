@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../domain/models/recent_activity.dart';
-import 'package:intl/intl.dart';
 import 'package:uicons/uicons.dart';
+import 'package:intl/intl.dart';
+import '../../../activity/presentation/screens/activity_screen.dart';
 
 class RecentActivityList extends StatelessWidget {
   const RecentActivityList({super.key});
@@ -39,7 +40,11 @@ class RecentActivityList extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () {
-                  // TODO: Navigate to Activity History
+                  Navigator.of(context, rootNavigator: true).push(
+                    CupertinoPageRoute(
+                      builder: (context) => const ActivityScreen(),
+                    ),
+                  );
                 },
                 child: Row(
                   children: [

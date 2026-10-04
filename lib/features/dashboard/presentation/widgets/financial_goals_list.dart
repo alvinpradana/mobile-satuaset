@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../domain/models/financial_goal.dart';
 import 'package:uicons/uicons.dart';
+import '../../../wealth/presentation/screens/goals_detail_screen.dart';
 
 class FinancialGoalsList extends StatelessWidget {
   const FinancialGoalsList({super.key});
@@ -34,7 +35,11 @@ class FinancialGoalsList extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () {
-                  // TODO: Navigate to Financial Goals Details
+                  Navigator.of(context, rootNavigator: true).push(
+                    CupertinoPageRoute(
+                      builder: (context) => const GoalsDetailScreen(),
+                    ),
+                  );
                 },
                 child: Row(
                   children: [

@@ -58,27 +58,6 @@ class NetWorthSummary extends ConsumerWidget {
                             letterSpacing: -1,
                           ),
                         ),
-                        const SizedBox(width: 8),
-                        const Padding(
-                          padding: EdgeInsets.only(bottom: 4.0),
-                          child: Text(
-                            'IDR',
-                            style: TextStyle(
-                              color: AppColors.textPrimary,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 4),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 6.0),
-                          child: Icon(
-                            UIcons.regularRounded.angle_down,
-                            color: AppColors.textPrimary,
-                            size: 10,
-                          ),
-                        ),
                       ],
                     ),
                     const SizedBox(height: 12),
