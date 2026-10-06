@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/models/physical_asset_model.dart';
 
-final physicalAssetsProvider = Provider<List<PhysicalAssetModel>>((ref) {
-  return [
+class PhysicalAssetsNotifier extends StateNotifier<List<PhysicalAssetModel>> {
+  PhysicalAssetsNotifier() : super([
     PhysicalAssetModel(
       id: 'pa1',
       category: 'Property',
@@ -62,7 +62,15 @@ final physicalAssetsProvider = Provider<List<PhysicalAssetModel>>((ref) {
       saleDate: DateTime(2026, 8, 10),
       status: PhysicalAssetStatus.sold,
     ),
-  ];
+  ]);
+
+  void addAsset(PhysicalAssetModel asset) {
+    state = [...state, asset];
+  }
+}
+
+final physicalAssetsProvider = StateNotifierProvider<PhysicalAssetsNotifier, List<PhysicalAssetModel>>((ref) {
+  return PhysicalAssetsNotifier();
 });
 
 final physicalAssetsSummaryProvider = Provider<PhysicalAssetsSummary>((ref) {

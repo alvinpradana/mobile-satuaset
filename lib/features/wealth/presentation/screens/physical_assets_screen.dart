@@ -8,6 +8,7 @@ import '../providers/physical_assets_provider.dart';
 import '../widgets/physical_asset_row.dart';
 import '../widgets/physical_assets_hero.dart';
 import '../widgets/value_breakdown_bar.dart';
+import '../widgets/add_physical_asset_bottom_sheet.dart';
 import 'physical_asset_detail_screen.dart';
 
 class PhysicalAssetsScreen extends ConsumerStatefulWidget {
@@ -132,7 +133,14 @@ class _PhysicalAssetsScreenState extends ConsumerState<PhysicalAssetsScreen> {
                           ),
                           const SizedBox(height: 16),
                           ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              showModalBottomSheet(
+                                context: context,
+                                isScrollControlled: true,
+                                backgroundColor: Colors.transparent,
+                                builder: (context) => const AddPhysicalAssetBottomSheet(),
+                              );
+                            },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppColors.primaryAccent,
                               foregroundColor: AppColors.background,
@@ -290,7 +298,12 @@ class _PhysicalAssetsScreenState extends ConsumerState<PhysicalAssetsScreen> {
         padding: const EdgeInsets.fromLTRB(24, 16, 24, 24), // Matches CustomBottomNav margin
         child: ElevatedButton(
           onPressed: () {
-            // Add new asset action
+            showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              backgroundColor: Colors.transparent,
+              builder: (context) => const AddPhysicalAssetBottomSheet(),
+            );
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: AppColors.primaryAccent,
