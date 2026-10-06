@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:uicons/uicons.dart';
+import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../shared/widgets/success_alert_dialog.dart';
 import '../../domain/models/wealth_item.dart';
@@ -24,12 +25,18 @@ class _AccountManagementScreenState extends ConsumerState<AccountManagementScree
   late TextEditingController _identifierController;
   late TextEditingController _balanceController;
   
+  final _currencyFormatter = CurrencyTextInputFormatter.currency(
+    locale: 'id_ID',
+    symbol: '',
+    decimalDigits: 0,
+  );
+  
   @override
   void initState() {
     super.initState();
     _nameController = TextEditingController(text: widget.account.name);
     _identifierController = TextEditingController(text: widget.account.identifier ?? '');
-    _balanceController = TextEditingController(text: widget.account.value.toStringAsFixed(0));
+    _balanceController = TextEditingController(text: _currencyFormatter.formatDouble(widget.account.value));
   }
 
   @override
@@ -213,13 +220,16 @@ class _AccountManagementScreenState extends ConsumerState<AccountManagementScree
             const SizedBox(height: 8),
             TextFormField(
               controller: _balanceController,
-              keyboardType: TextInputType.number,
+              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              inputFormatters: [
+                _currencyFormatter,
+              ],
               style: const TextStyle(color: AppColors.textPrimary),
               validator: (value) {
                 if (value == null || value.trim().isEmpty) {
                   return 'Current balance is required';
                 }
-                if (double.tryParse(value) == null) {
+                if (double.tryParse(value.replaceAll('.', '')) == null) {
                   return 'Must be a valid number';
                 }
                 return null;

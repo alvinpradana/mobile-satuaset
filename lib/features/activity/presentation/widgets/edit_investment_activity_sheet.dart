@@ -7,6 +7,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../shared/widgets/success_alert_dialog.dart';
 import '../../domain/models/activity_item.dart';
 import 'package:intl/intl.dart';
+import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 
 enum Currency { idr, usd }
 
@@ -57,6 +58,31 @@ class _EditInvestmentActivitySheetState extends ConsumerState<EditInvestmentActi
     super.dispose();
   }
 
+  double _parseFormattedPrice(String value) {
+    if (value.isEmpty) return 0;
+    if (_selectedCurrency == Currency.usd) {
+      return double.tryParse(value.replaceAll(',', '')) ?? 0;
+    } else {
+      return double.tryParse(value.replaceAll('.', '')) ?? 0;
+    }
+  }
+
+  CurrencyTextInputFormatter get _currencyFormatter {
+    if (_selectedCurrency == Currency.usd) {
+      return CurrencyTextInputFormatter.currency(
+        locale: 'en_US',
+        symbol: '',
+        decimalDigits: 2,
+      );
+    } else {
+      return CurrencyTextInputFormatter.currency(
+        locale: 'id_ID',
+        symbol: '',
+        decimalDigits: 0,
+      );
+    }
+  }
+
   void _openPlatformSelector() {
     final List<String> mockPlatforms = ['Indodax', 'Binance', 'Tokocrypto', 'Pluang', 'Gotrade', 'Ajaib', 'Pintu'];
     showModalBottomSheet(
@@ -81,8 +107,8 @@ class _EditInvestmentActivitySheetState extends ConsumerState<EditInvestmentActi
     final units = double.tryParse(_unitsController.text.replaceAll(',', '.'));
     if (units == null || units <= 0) return false;
     
-    final price = double.tryParse(_avgPriceController.text.replaceAll(',', '.'));
-    if (price == null || price <= 0) return false;
+    final price = _parseFormattedPrice(_avgPriceController.text);
+    if (price <= 0) return false;
     
     return true;
   }
@@ -90,8 +116,8 @@ class _EditInvestmentActivitySheetState extends ConsumerState<EditInvestmentActi
   void _submitForm() {
     if (!_isFormValid()) return;
     
-    final units = double.parse(_unitsController.text.replaceAll(',', '.'));
-    final price = double.parse(_avgPriceController.text.replaceAll(',', '.'));
+    final units = double.tryParse(_unitsController.text.replaceAll(',', '.')) ?? 0;
+    final price = _parseFormattedPrice(_avgPriceController.text);
     final totalValue = units * price;
     
     final payload = {
@@ -335,10 +361,7 @@ class _EditInvestmentActivitySheetState extends ConsumerState<EditInvestmentActi
                   keyboardType: const TextInputType.numberWithOptions(decimal: true),
                   textInputAction: TextInputAction.done,
                   inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp(r'^\d*[\.,]?\d*')),
-                    TextInputFormatter.withFunction((oldValue, newValue) {
-                      return newValue.copyWith(text: newValue.text.replaceAll(',', '.'));
-                    }),
+                    _currencyFormatter,
                   ],
                   style: const TextStyle(color: AppColors.textPrimary),
                   decoration: const InputDecoration(

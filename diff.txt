@@ -1,0 +1,578 @@
+diff --git a/lib/features/activity/presentation/widgets/edit_investment_activity_sheet.dart b/lib/features/activity/presentation/widgets/edit_investment_activity_sheet.dart
+index a040d96..b946427 100644
+--- a/lib/features/activity/presentation/widgets/edit_investment_activity_sheet.dart
++++ b/lib/features/activity/presentation/widgets/edit_investment_activity_sheet.dart
+@@ -7,6 +7,7 @@ import '../../../../core/theme/app_colors.dart';
+ import '../../../../shared/widgets/success_alert_dialog.dart';
+ import '../../domain/models/activity_item.dart';
+ import 'package:intl/intl.dart';
++import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
+ 
+ enum Currency { idr, usd }
+ 
+@@ -57,6 +58,31 @@ class _EditInvestmentActivitySheetState extends ConsumerState<EditInvestmentActi
+     super.dispose();
+   }
+ 
++  double _parseFormattedPrice(String value) {
++    if (value.isEmpty) return 0;
++    if (_selectedCurrency == Currency.usd) {
++      return double.tryParse(value.replaceAll(',', '')) ?? 0;
++    } else {
++      return double.tryParse(value.replaceAll('.', '')) ?? 0;
++    }
++  }
++
++  CurrencyTextInputFormatter get _currencyFormatter {
++    if (_selectedCurrency == Currency.usd) {
++      return CurrencyTextInputFormatter.currency(
++        locale: 'en_US',
++        symbol: '',
++        decimalDigits: 2,
++      );
++    } else {
++      return CurrencyTextInputFormatter.currency(
++        locale: 'id_ID',
++        symbol: '',
++        decimalDigits: 0,
++      );
++    }
++  }
++
+   void _openPlatformSelector() {
+     final List<String> mockPlatforms = ['Indodax', 'Binance', 'Tokocrypto', 'Pluang', 'Gotrade', 'Ajaib', 'Pintu'];
+     showModalBottomSheet(
+@@ -81,8 +107,8 @@ class _EditInvestmentActivitySheetState extends ConsumerState<EditInvestmentActi
+     final units = double.tryParse(_unitsController.text.replaceAll(',', '.'));
+     if (units == null || units <= 0) return false;
+     
+-    final price = double.tryParse(_avgPriceController.text.replaceAll(',', '.'));
+-    if (price == null || price <= 0) return false;
++    final price = _parseFormattedPrice(_avgPriceController.text);
++    if (price <= 0) return false;
+     
+     return true;
+   }
+@@ -90,8 +116,8 @@ class _EditInvestmentActivitySheetState extends ConsumerState<EditInvestmentActi
+   void _submitForm() {
+     if (!_isFormValid()) return;
+     
+-    final units = double.parse(_unitsController.text.replaceAll(',', '.'));
+-    final price = double.parse(_avgPriceController.text.replaceAll(',', '.'));
++    final units = double.tryParse(_unitsController.text.replaceAll(',', '.')) ?? 0;
++    final price = _parseFormattedPrice(_avgPriceController.text);
+     final totalValue = units * price;
+     
+     final payload = {
+@@ -335,10 +361,7 @@ class _EditInvestmentActivitySheetState extends ConsumerState<EditInvestmentActi
+                   keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                   textInputAction: TextInputAction.done,
+                   inputFormatters: [
+-                    FilteringTextInputFormatter.allow(RegExp(r'^\d*[\.,]?\d*')),
+-                    TextInputFormatter.withFunction((oldValue, newValue) {
+-                      return newValue.copyWith(text: newValue.text.replaceAll(',', '.'));
+-                    }),
++                    _currencyFormatter,
+                   ],
+                   style: const TextStyle(color: AppColors.textPrimary),
+                   decoration: const InputDecoration(
+diff --git a/lib/features/wealth/presentation/screens/account_management_screen.dart b/lib/features/wealth/presentation/screens/account_management_screen.dart
+index ae0d2e5..abd716a 100644
+--- a/lib/features/wealth/presentation/screens/account_management_screen.dart
++++ b/lib/features/wealth/presentation/screens/account_management_screen.dart
+@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:intl/intl.dart';
+ import 'package:uicons/uicons.dart';
++import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
+ import '../../../../core/theme/app_colors.dart';
+ import '../../../../shared/widgets/success_alert_dialog.dart';
+ import '../../domain/models/wealth_item.dart';
+@@ -24,12 +25,18 @@ class _AccountManagementScreenState extends ConsumerState<AccountManagementScree
+   late TextEditingController _identifierController;
+   late TextEditingController _balanceController;
+   
++  final _currencyFormatter = CurrencyTextInputFormatter.currency(
++    locale: 'id_ID',
++    symbol: '',
++    decimalDigits: 0,
++  );
++  
+   @override
+   void initState() {
+     super.initState();
+     _nameController = TextEditingController(text: widget.account.name);
+     _identifierController = TextEditingController(text: widget.account.identifier ?? '');
+-    _balanceController = TextEditingController(text: widget.account.value.toStringAsFixed(0));
++    _balanceController = TextEditingController(text: _currencyFormatter.formatDouble(widget.account.value));
+   }
+ 
+   @override
+@@ -213,13 +220,16 @@ class _AccountManagementScreenState extends ConsumerState<AccountManagementScree
+             const SizedBox(height: 8),
+             TextFormField(
+               controller: _balanceController,
+-              keyboardType: TextInputType.number,
++              keyboardType: const TextInputType.numberWithOptions(decimal: true),
++              inputFormatters: [
++                _currencyFormatter,
++              ],
+               style: const TextStyle(color: AppColors.textPrimary),
+               validator: (value) {
+                 if (value == null || value.trim().isEmpty) {
+                   return 'Current balance is required';
+                 }
+-                if (double.tryParse(value) == null) {
++                if (double.tryParse(value.replaceAll('.', '')) == null) {
+                   return 'Must be a valid number';
+                 }
+                 return null;
+diff --git a/lib/features/wealth/presentation/widgets/add_account_bottom_sheet.dart b/lib/features/wealth/presentation/widgets/add_account_bottom_sheet.dart
+index e288aad..a760d85 100644
+--- a/lib/features/wealth/presentation/widgets/add_account_bottom_sheet.dart
++++ b/lib/features/wealth/presentation/widgets/add_account_bottom_sheet.dart
+@@ -4,6 +4,7 @@ import '../../../../shared/widgets/success_alert_dialog.dart';
+ import 'package:uicons/uicons.dart';
+ import '../../../../shared/models/currency_model.dart';
+ import '../../../../shared/widgets/currency_picker_sheet.dart';
++import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
+ 
+ const List<String> dummyBankProviders = ['Bank BCA', 'Bank Mandiri', 'Bank BNI', 'Bank BRI', 'Bank Syariah Indonesia (BSI)', 'CIMB Niaga', 'Permata Bank', 'Bank Jago', 'SeaBank', 'Jenius'];
+ const List<String> dummyEwalletProviders = ['GoPay', 'OVO', 'DANA', 'ShopeePay', 'LinkAja'];
+@@ -36,6 +37,31 @@ class _AddAccountBottomSheetState extends State<AddAccountBottomSheet> {
+     super.dispose();
+   }
+ 
++  double _parseFormattedValue(String value) {
++    if (value.isEmpty) return 0;
++    if (_selectedCurrency == Currency.usd) {
++      return double.tryParse(value.replaceAll(',', '')) ?? 0;
++    } else {
++      return double.tryParse(value.replaceAll('.', '')) ?? 0;
++    }
++  }
++
++  CurrencyTextInputFormatter get _currencyFormatter {
++    if (_selectedCurrency == Currency.usd) {
++      return CurrencyTextInputFormatter.currency(
++        locale: 'en_US',
++        symbol: '',
++        decimalDigits: 2,
++      );
++    } else {
++      return CurrencyTextInputFormatter.currency(
++        locale: 'id_ID',
++        symbol: '',
++        decimalDigits: 0,
++      );
++    }
++  }
++
+   String get _accountNameHint {
+     switch (_selectedCategory) {
+       case 'BANK':
+@@ -207,8 +233,10 @@ class _AddAccountBottomSheetState extends State<AddAccountBottomSheet> {
+                 if (text.trim().isEmpty) {
+                   return 'Initial balance is required';
+                 }
+-                if (double.tryParse(text) == null) {
+-                  return 'Must be a valid number';
++                final parsedValue = _parseFormattedValue(text);
++                if (parsedValue == 0 && text.isNotEmpty && text != '0' && text != '0.00') {
++                  // It's invalid if it's not zero but parsing returns 0
++                  // However, if the user types 'abc', the formatter would have cleared it.
+                 }
+                 return null;
+               },
+@@ -261,7 +289,10 @@ class _AddAccountBottomSheetState extends State<AddAccountBottomSheet> {
+                           Expanded(
+                             child: TextField(
+                               controller: _balanceController,
+-                              keyboardType: TextInputType.number,
++                              keyboardType: const TextInputType.numberWithOptions(decimal: true),
++                              inputFormatters: [
++                                _currencyFormatter,
++                              ],
+                               style: const TextStyle(color: AppColors.textPrimary),
+                               onChanged: (val) => field.didChange(val),
+                               decoration: const InputDecoration(
+diff --git a/lib/features/wealth/presentation/widgets/add_goal_bottom_sheet.dart b/lib/features/wealth/presentation/widgets/add_goal_bottom_sheet.dart
+index 41264f7..3caf187 100644
+--- a/lib/features/wealth/presentation/widgets/add_goal_bottom_sheet.dart
++++ b/lib/features/wealth/presentation/widgets/add_goal_bottom_sheet.dart
+@@ -1,4 +1,6 @@
+ import 'package:flutter/material.dart';
++import 'package:flutter/services.dart';
++import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
+ import '../../../../core/theme/app_colors.dart';
+ import '../../../../shared/widgets/success_alert_dialog.dart';
+ 
+@@ -21,6 +23,12 @@ class _AddGoalBottomSheetState extends State<AddGoalBottomSheet> {
+   final _targetMonthsController = TextEditingController();
+   final _accountController = TextEditingController();
+ 
++  final _currencyFormatter = CurrencyTextInputFormatter.currency(
++    locale: 'id_ID',
++    symbol: '',
++    decimalDigits: 0,
++  );
++
+   @override
+   void dispose() {
+     _nameController.dispose();
+@@ -136,12 +144,13 @@ class _AddGoalBottomSheetState extends State<AddGoalBottomSheet> {
+                 controller: _targetAmountController,
+                 label: 'Target Amount (Rp)',
+                 hint: '0',
+-                keyboardType: TextInputType.number,
++                keyboardType: const TextInputType.numberWithOptions(decimal: true),
++                inputFormatters: [_currencyFormatter],
+                 validator: (value) {
+                   if (value == null || value.trim().isEmpty) {
+                     return 'Target amount is required';
+                   }
+-                  if (double.tryParse(value) == null) {
++                  if (double.tryParse(value.replaceAll('.', '')) == null) {
+                     return 'Must be a valid number';
+                   }
+                   return null;
+@@ -154,10 +163,11 @@ class _AddGoalBottomSheetState extends State<AddGoalBottomSheet> {
+                 controller: _currentAmountController,
+                 label: 'Initial Saved Amount (Rp)',
+                 hint: '0',
+-                keyboardType: TextInputType.number,
++                keyboardType: const TextInputType.numberWithOptions(decimal: true),
++                inputFormatters: [_currencyFormatter],
+                 validator: (value) {
+                   if (value != null && value.trim().isNotEmpty) {
+-                    if (double.tryParse(value) == null) {
++                    if (double.tryParse(value.replaceAll('.', '')) == null) {
+                       return 'Must be a valid number';
+                     }
+                   }
+@@ -233,6 +243,7 @@ class _AddGoalBottomSheetState extends State<AddGoalBottomSheet> {
+     required String label,
+     required String hint,
+     TextInputType keyboardType = TextInputType.text,
++    List<TextInputFormatter>? inputFormatters,
+     String? Function(String?)? validator,
+   }) {
+     return Column(
+@@ -250,6 +261,7 @@ class _AddGoalBottomSheetState extends State<AddGoalBottomSheet> {
+         TextFormField(
+           controller: controller,
+           keyboardType: keyboardType,
++          inputFormatters: inputFormatters,
+           style: const TextStyle(color: AppColors.textPrimary),
+           validator: validator,
+           decoration: InputDecoration(
+diff --git a/lib/features/wealth/presentation/widgets/add_investment_bottom_sheet.dart b/lib/features/wealth/presentation/widgets/add_investment_bottom_sheet.dart
+index 4d2da03..f814705 100644
+--- a/lib/features/wealth/presentation/widgets/add_investment_bottom_sheet.dart
++++ b/lib/features/wealth/presentation/widgets/add_investment_bottom_sheet.dart
+@@ -5,7 +5,9 @@ import 'package:uicons/uicons.dart';
+ import '../../../../core/theme/app_colors.dart';
+ import '../../../../shared/widgets/success_alert_dialog.dart';
+ import '../../../../shared/models/currency_model.dart';
++import '../../../../shared/models/currency_model.dart';
+ import '../../../../shared/widgets/currency_picker_sheet.dart';
++import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
+ 
+ // --- DUMMY DATA MODELS ---
+ class InvestmentAssetItem {
+@@ -127,6 +129,31 @@ class _AddInvestmentBottomSheetState extends State<AddInvestmentBottomSheet> {
+     super.dispose();
+   }
+ 
++  double _parseFormattedPrice(String value) {
++    if (value.isEmpty) return 0;
++    if (_selectedCurrency == Currency.usd) {
++      return double.tryParse(value.replaceAll(',', '')) ?? 0;
++    } else {
++      return double.tryParse(value.replaceAll('.', '')) ?? 0;
++    }
++  }
++
++  CurrencyTextInputFormatter get _currencyFormatter {
++    if (_selectedCurrency == Currency.usd) {
++      return CurrencyTextInputFormatter.currency(
++        locale: 'en_US',
++        symbol: '',
++        decimalDigits: 2,
++      );
++    } else {
++      return CurrencyTextInputFormatter.currency(
++        locale: 'id_ID',
++        symbol: '',
++        decimalDigits: 0,
++      );
++    }
++  }
++
+   bool _isFormValid() {
+     if (_selectedCategory == 'Crypto' || _selectedCategory == 'Stocks') {
+       if (_selectedAsset == null) return false;
+@@ -135,8 +162,8 @@ class _AddInvestmentBottomSheetState extends State<AddInvestmentBottomSheet> {
+       final units = double.tryParse(_unitsController.text.replaceAll(',', '.'));
+       if (units == null || units <= 0) return false;
+       
+-      final price = double.tryParse(_avgPriceController.text.replaceAll(',', '.'));
+-      if (price == null || price <= 0) return false;
++      final price = _parseFormattedPrice(_avgPriceController.text);
++      if (price <= 0) return false;
+       
+       return true;
+     }
+@@ -153,8 +180,8 @@ class _AddInvestmentBottomSheetState extends State<AddInvestmentBottomSheet> {
+       "ticker": _selectedAsset?.symbol,
+       "name": _selectedAsset?.name,
+       "platform": _selectedPlatform?.toUpperCase(),
+-      "units": double.parse(_unitsController.text.replaceAll(',', '.')),
+-      "average_price": double.parse(_avgPriceController.text.replaceAll(',', '.')),
++      "units": double.tryParse(_unitsController.text.replaceAll(',', '.')) ?? 0,
++      "average_price": _parseFormattedPrice(_avgPriceController.text),
+       "currency": _selectedCurrency.name.toUpperCase(),
+     };
+     
+@@ -569,10 +596,7 @@ class _AddInvestmentBottomSheetState extends State<AddInvestmentBottomSheet> {
+                   keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                   textInputAction: TextInputAction.done,
+                   inputFormatters: [
+-                    FilteringTextInputFormatter.allow(RegExp(r'^\d*[\.,]?\d*')),
+-                    TextInputFormatter.withFunction((oldValue, newValue) {
+-                      return newValue.copyWith(text: newValue.text.replaceAll(',', '.'));
+-                    }),
++                    _currencyFormatter,
+                   ],
+                   style: const TextStyle(color: AppColors.textPrimary),
+                   decoration: const InputDecoration(
+diff --git a/lib/features/wealth/presentation/widgets/add_liability_bottom_sheet.dart b/lib/features/wealth/presentation/widgets/add_liability_bottom_sheet.dart
+index 18b5a83..529b1d5 100644
+--- a/lib/features/wealth/presentation/widgets/add_liability_bottom_sheet.dart
++++ b/lib/features/wealth/presentation/widgets/add_liability_bottom_sheet.dart
+@@ -1,4 +1,6 @@
+ import 'package:flutter/material.dart';
++import 'package:flutter/services.dart';
++import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
+ import '../../../../core/theme/app_colors.dart';
+ import '../../../../shared/widgets/success_alert_dialog.dart';
+ 
+@@ -20,6 +22,12 @@ class _AddLiabilityBottomSheetState extends State<AddLiabilityBottomSheet> {
+   final _balanceController = TextEditingController();
+   final _monthlyPaymentController = TextEditingController();
+ 
++  final _currencyFormatter = CurrencyTextInputFormatter.currency(
++    locale: 'id_ID',
++    symbol: '',
++    decimalDigits: 0,
++  );
++
+   @override
+   void dispose() {
+     _nameController.dispose();
+@@ -149,12 +157,13 @@ class _AddLiabilityBottomSheetState extends State<AddLiabilityBottomSheet> {
+                 controller: _balanceController,
+                 label: 'Total Outstanding Balance (Rp)',
+                 hint: '0',
+-                keyboardType: TextInputType.number,
++                keyboardType: const TextInputType.numberWithOptions(decimal: true),
++                inputFormatters: [_currencyFormatter],
+                 validator: (value) {
+                   if (value == null || value.trim().isEmpty) {
+                     return 'Outstanding balance is required';
+                   }
+-                  if (double.tryParse(value) == null) {
++                  if (double.tryParse(value.replaceAll('.', '')) == null) {
+                     return 'Must be a valid number';
+                   }
+                   return null;
+@@ -167,10 +176,11 @@ class _AddLiabilityBottomSheetState extends State<AddLiabilityBottomSheet> {
+                 controller: _monthlyPaymentController,
+                 label: 'Monthly Installment / Payment (Rp) (Optional)',
+                 hint: '0',
+-                keyboardType: TextInputType.number,
++                keyboardType: const TextInputType.numberWithOptions(decimal: true),
++                inputFormatters: [_currencyFormatter],
+                 validator: (value) {
+                   if (value != null && value.trim().isNotEmpty) {
+-                    if (double.tryParse(value) == null) {
++                    if (double.tryParse(value.replaceAll('.', '')) == null) {
+                       return 'Must be a valid number';
+                     }
+                   }
+@@ -220,6 +230,7 @@ class _AddLiabilityBottomSheetState extends State<AddLiabilityBottomSheet> {
+     required String label,
+     required String hint,
+     TextInputType keyboardType = TextInputType.text,
++    List<TextInputFormatter>? inputFormatters,
+     String? Function(String?)? validator,
+   }) {
+     return Column(
+@@ -237,6 +248,7 @@ class _AddLiabilityBottomSheetState extends State<AddLiabilityBottomSheet> {
+         TextFormField(
+           controller: controller,
+           keyboardType: keyboardType,
++          inputFormatters: inputFormatters,
+           style: const TextStyle(color: AppColors.textPrimary),
+           validator: validator,
+           decoration: InputDecoration(
+diff --git a/lib/features/wealth/presentation/widgets/add_physical_asset_bottom_sheet.dart b/lib/features/wealth/presentation/widgets/add_physical_asset_bottom_sheet.dart
+index c28262f..bdb52f7 100644
+--- a/lib/features/wealth/presentation/widgets/add_physical_asset_bottom_sheet.dart
++++ b/lib/features/wealth/presentation/widgets/add_physical_asset_bottom_sheet.dart
+@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:uicons/uicons.dart';
+ import 'package:intl/intl.dart';
++import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
+ import '../../../../core/theme/app_colors.dart';
+ import '../../../../shared/widgets/success_alert_dialog.dart';
+ import '../../domain/models/physical_asset_model.dart';
+@@ -30,6 +31,12 @@ class _AddPhysicalAssetBottomSheetState extends ConsumerState<AddPhysicalAssetBo
+   DateTime _purchaseDate = DateTime.now();
+   bool _showOptionalDetails = false;
+ 
++  final _currencyFormatter = CurrencyTextInputFormatter.currency(
++    locale: 'id_ID',
++    symbol: '',
++    decimalDigits: 0,
++  );
++
+   @override
+   void dispose() {
+     _nameController.dispose();
+@@ -69,11 +76,11 @@ class _AddPhysicalAssetBottomSheetState extends ConsumerState<AddPhysicalAssetBo
+ 
+   void _submitForm() {
+     if (_formKey.currentState!.validate()) {
+-      final purchasePrice = double.tryParse(_purchasePriceController.text.replaceAll(',', '')) ?? 0;
++      final purchasePrice = double.tryParse(_purchasePriceController.text.replaceAll('.', '')) ?? 0;
+       final estimatedValText = _estimatedValueController.text.trim();
+       final estimatedValue = estimatedValText.isEmpty 
+           ? purchasePrice 
+-          : (double.tryParse(estimatedValText.replaceAll(',', '')) ?? purchasePrice);
++          : (double.tryParse(estimatedValText.replaceAll('.', '')) ?? purchasePrice);
+ 
+       final newAsset = PhysicalAssetModel(
+         id: DateTime.now().millisecondsSinceEpoch.toString(),
+@@ -422,8 +429,10 @@ class _AddPhysicalAssetBottomSheetState extends ConsumerState<AddPhysicalAssetBo
+                   Expanded(
+                     child: TextField(
+                       controller: controller,
+-                      keyboardType: TextInputType.number,
+-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
++                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
++                      inputFormatters: [
++                        _currencyFormatter,
++                      ],
+                       style: const TextStyle(color: AppColors.textPrimary),
+                       onChanged: (val) => field.didChange(val),
+                       decoration: InputDecoration(
+diff --git a/lib/features/wealth/presentation/widgets/sell_investment_bottom_sheet.dart b/lib/features/wealth/presentation/widgets/sell_investment_bottom_sheet.dart
+index 5adf5a5..b87c9f7 100644
+--- a/lib/features/wealth/presentation/widgets/sell_investment_bottom_sheet.dart
++++ b/lib/features/wealth/presentation/widgets/sell_investment_bottom_sheet.dart
+@@ -8,6 +8,7 @@ import '../../domain/models/wealth_item.dart';
+ import 'add_investment_bottom_sheet.dart' show CryptoAsset;
+ import '../../../../shared/models/currency_model.dart';
+ import '../../../../shared/widgets/currency_picker_sheet.dart';
++import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
+ 
+ class SellInvestmentBottomSheet extends StatefulWidget {
+   final CryptoAsset asset;
+@@ -50,14 +51,39 @@ class _SellInvestmentBottomSheetState extends State<SellInvestmentBottomSheet> {
+     super.dispose();
+   }
+ 
++  double _parseFormattedPrice(String value) {
++    if (value.isEmpty) return 0;
++    if (_selectedCurrency == Currency.usd) {
++      return double.tryParse(value.replaceAll(',', '')) ?? 0;
++    } else {
++      return double.tryParse(value.replaceAll('.', '')) ?? 0;
++    }
++  }
++
++  CurrencyTextInputFormatter get _currencyFormatter {
++    if (_selectedCurrency == Currency.usd) {
++      return CurrencyTextInputFormatter.currency(
++        locale: 'en_US',
++        symbol: '',
++        decimalDigits: 2,
++      );
++    } else {
++      return CurrencyTextInputFormatter.currency(
++        locale: 'id_ID',
++        symbol: '',
++        decimalDigits: 0,
++      );
++    }
++  }
++
+   bool _isFormValid() {
+     if (_selectedPlatform == null) return false;
+     
+     final units = double.tryParse(_unitsController.text.replaceAll(',', '.'));
+     if (units == null || units <= 0 || units > _selectedPlatform!.units) return false;
+     
+-    final price = double.tryParse(_avgPriceController.text.replaceAll(',', '.'));
+-    if (price == null || price <= 0) return false;
++    final price = _parseFormattedPrice(_avgPriceController.text);
++    if (price <= 0) return false;
+     
+     return true;
+   }
+@@ -71,8 +97,8 @@ class _SellInvestmentBottomSheetState extends State<SellInvestmentBottomSheet> {
+       "ticker": widget.asset.symbol,
+       "name": widget.asset.name,
+       "platform": _selectedPlatform?.exchangeName,
+-      "units_sold": double.parse(_unitsController.text.replaceAll(',', '.')),
+-      "sell_price": double.parse(_avgPriceController.text.replaceAll(',', '.')),
++      "units_sold": double.tryParse(_unitsController.text.replaceAll(',', '.')) ?? 0,
++      "sell_price": _parseFormattedPrice(_avgPriceController.text),
+       "currency": _selectedCurrency.name.toUpperCase(),
+     };
+     
+@@ -427,10 +453,7 @@ class _SellInvestmentBottomSheetState extends State<SellInvestmentBottomSheet> {
+                   keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                   textInputAction: TextInputAction.done,
+                   inputFormatters: [
+-                    FilteringTextInputFormatter.allow(RegExp(r'^\d*[\.,]?\d*')),
+-                    TextInputFormatter.withFunction((oldValue, newValue) {
+-                      return newValue.copyWith(text: newValue.text.replaceAll(',', '.'));
+-                    }),
++                    _currencyFormatter,
+                   ],
+                   style: const TextStyle(color: AppColors.textPrimary),
+                   decoration: const InputDecoration(
+diff --git a/pubspec.lock b/pubspec.lock
+index 133dd42..aac5715 100644
+--- a/pubspec.lock
++++ b/pubspec.lock
+@@ -57,6 +57,14 @@ packages:
+       url: "https://pub.dev"
+     source: hosted
+     version: "1.0.8"
++  currency_text_input_formatter:
++    dependency: "direct main"
++    description:
++      name: currency_text_input_formatter
++      sha256: a75b64922b444b00bb1fb7fe22b5a30c60a3608ae8d2361cffe82538c5ad1c66
++      url: "https://pub.dev"
++    source: hosted
++    version: "2.3.2"
+   equatable:
+     dependency: transitive
+     description:
+diff --git a/pubspec.yaml b/pubspec.yaml
+index 903f3bd..d8075cc 100644
+--- a/pubspec.yaml
++++ b/pubspec.yaml
+@@ -42,6 +42,7 @@ dependencies:
+   google_fonts: ^6.3.0
+   intl: ^0.20.2
+   uicons: ^1.0.1
++  currency_text_input_formatter: ^2.3.2
+ 
+ dev_dependencies:
+   flutter_test:

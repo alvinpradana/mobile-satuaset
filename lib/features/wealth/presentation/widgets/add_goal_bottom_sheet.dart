@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../shared/widgets/success_alert_dialog.dart';
 
@@ -20,6 +22,12 @@ class _AddGoalBottomSheetState extends State<AddGoalBottomSheet> {
   final _currentAmountController = TextEditingController();
   final _targetMonthsController = TextEditingController();
   final _accountController = TextEditingController();
+
+  final _currencyFormatter = CurrencyTextInputFormatter.currency(
+    locale: 'id_ID',
+    symbol: '',
+    decimalDigits: 0,
+  );
 
   @override
   void dispose() {
@@ -136,12 +144,13 @@ class _AddGoalBottomSheetState extends State<AddGoalBottomSheet> {
                 controller: _targetAmountController,
                 label: 'Target Amount (Rp)',
                 hint: '0',
-                keyboardType: TextInputType.number,
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                inputFormatters: [_currencyFormatter],
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
                     return 'Target amount is required';
                   }
-                  if (double.tryParse(value) == null) {
+                  if (double.tryParse(value.replaceAll('.', '')) == null) {
                     return 'Must be a valid number';
                   }
                   return null;
@@ -154,10 +163,11 @@ class _AddGoalBottomSheetState extends State<AddGoalBottomSheet> {
                 controller: _currentAmountController,
                 label: 'Initial Saved Amount (Rp)',
                 hint: '0',
-                keyboardType: TextInputType.number,
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                inputFormatters: [_currencyFormatter],
                 validator: (value) {
                   if (value != null && value.trim().isNotEmpty) {
-                    if (double.tryParse(value) == null) {
+                    if (double.tryParse(value.replaceAll('.', '')) == null) {
                       return 'Must be a valid number';
                     }
                   }
@@ -233,6 +243,7 @@ class _AddGoalBottomSheetState extends State<AddGoalBottomSheet> {
     required String label,
     required String hint,
     TextInputType keyboardType = TextInputType.text,
+    List<TextInputFormatter>? inputFormatters,
     String? Function(String?)? validator,
   }) {
     return Column(
@@ -250,6 +261,7 @@ class _AddGoalBottomSheetState extends State<AddGoalBottomSheet> {
         TextFormField(
           controller: controller,
           keyboardType: keyboardType,
+          inputFormatters: inputFormatters,
           style: const TextStyle(color: AppColors.textPrimary),
           validator: validator,
           decoration: InputDecoration(

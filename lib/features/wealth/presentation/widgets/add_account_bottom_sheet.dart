@@ -4,6 +4,7 @@ import '../../../../shared/widgets/success_alert_dialog.dart';
 import 'package:uicons/uicons.dart';
 import '../../../../shared/models/currency_model.dart';
 import '../../../../shared/widgets/currency_picker_sheet.dart';
+import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 
 const List<String> dummyBankProviders = ['Bank BCA', 'Bank Mandiri', 'Bank BNI', 'Bank BRI', 'Bank Syariah Indonesia (BSI)', 'CIMB Niaga', 'Permata Bank', 'Bank Jago', 'SeaBank', 'Jenius'];
 const List<String> dummyEwalletProviders = ['GoPay', 'OVO', 'DANA', 'ShopeePay', 'LinkAja'];
@@ -34,6 +35,31 @@ class _AddAccountBottomSheetState extends State<AddAccountBottomSheet> {
     _identifierController.dispose();
     _balanceController.dispose();
     super.dispose();
+  }
+
+  double _parseFormattedValue(String value) {
+    if (value.isEmpty) return 0;
+    if (_selectedCurrency == Currency.usd) {
+      return double.tryParse(value.replaceAll(',', '')) ?? 0;
+    } else {
+      return double.tryParse(value.replaceAll('.', '')) ?? 0;
+    }
+  }
+
+  CurrencyTextInputFormatter get _currencyFormatter {
+    if (_selectedCurrency == Currency.usd) {
+      return CurrencyTextInputFormatter.currency(
+        locale: 'en_US',
+        symbol: '',
+        decimalDigits: 2,
+      );
+    } else {
+      return CurrencyTextInputFormatter.currency(
+        locale: 'id_ID',
+        symbol: '',
+        decimalDigits: 0,
+      );
+    }
   }
 
   String get _accountNameHint {
@@ -207,8 +233,10 @@ class _AddAccountBottomSheetState extends State<AddAccountBottomSheet> {
                 if (text.trim().isEmpty) {
                   return 'Initial balance is required';
                 }
-                if (double.tryParse(text) == null) {
-                  return 'Must be a valid number';
+                final parsedValue = _parseFormattedValue(text);
+                if (parsedValue == 0 && text.isNotEmpty && text != '0' && text != '0.00') {
+                  // It's invalid if it's not zero but parsing returns 0
+                  // However, if the user types 'abc', the formatter would have cleared it.
                 }
                 return null;
               },
@@ -261,7 +289,10 @@ class _AddAccountBottomSheetState extends State<AddAccountBottomSheet> {
                           Expanded(
                             child: TextField(
                               controller: _balanceController,
-                              keyboardType: TextInputType.number,
+                              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                              inputFormatters: [
+                                _currencyFormatter,
+                              ],
                               style: const TextStyle(color: AppColors.textPrimary),
                               onChanged: (val) => field.didChange(val),
                               decoration: const InputDecoration(

@@ -8,6 +8,7 @@ import '../../domain/models/wealth_item.dart';
 import 'add_investment_bottom_sheet.dart' show CryptoAsset;
 import '../../../../shared/models/currency_model.dart';
 import '../../../../shared/widgets/currency_picker_sheet.dart';
+import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 
 class SellInvestmentBottomSheet extends StatefulWidget {
   final CryptoAsset asset;
@@ -50,14 +51,39 @@ class _SellInvestmentBottomSheetState extends State<SellInvestmentBottomSheet> {
     super.dispose();
   }
 
+  double _parseFormattedPrice(String value) {
+    if (value.isEmpty) return 0;
+    if (_selectedCurrency == Currency.usd) {
+      return double.tryParse(value.replaceAll(',', '')) ?? 0;
+    } else {
+      return double.tryParse(value.replaceAll('.', '')) ?? 0;
+    }
+  }
+
+  CurrencyTextInputFormatter get _currencyFormatter {
+    if (_selectedCurrency == Currency.usd) {
+      return CurrencyTextInputFormatter.currency(
+        locale: 'en_US',
+        symbol: '',
+        decimalDigits: 2,
+      );
+    } else {
+      return CurrencyTextInputFormatter.currency(
+        locale: 'id_ID',
+        symbol: '',
+        decimalDigits: 0,
+      );
+    }
+  }
+
   bool _isFormValid() {
     if (_selectedPlatform == null) return false;
     
     final units = double.tryParse(_unitsController.text.replaceAll(',', '.'));
     if (units == null || units <= 0 || units > _selectedPlatform!.units) return false;
     
-    final price = double.tryParse(_avgPriceController.text.replaceAll(',', '.'));
-    if (price == null || price <= 0) return false;
+    final price = _parseFormattedPrice(_avgPriceController.text);
+    if (price <= 0) return false;
     
     return true;
   }
@@ -71,8 +97,8 @@ class _SellInvestmentBottomSheetState extends State<SellInvestmentBottomSheet> {
       "ticker": widget.asset.symbol,
       "name": widget.asset.name,
       "platform": _selectedPlatform?.exchangeName,
-      "units_sold": double.parse(_unitsController.text.replaceAll(',', '.')),
-      "sell_price": double.parse(_avgPriceController.text.replaceAll(',', '.')),
+      "units_sold": double.tryParse(_unitsController.text.replaceAll(',', '.')) ?? 0,
+      "sell_price": _parseFormattedPrice(_avgPriceController.text),
       "currency": _selectedCurrency.name.toUpperCase(),
     };
     
@@ -427,10 +453,7 @@ class _SellInvestmentBottomSheetState extends State<SellInvestmentBottomSheet> {
                   keyboardType: const TextInputType.numberWithOptions(decimal: true),
                   textInputAction: TextInputAction.done,
                   inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp(r'^\d*[\.,]?\d*')),
-                    TextInputFormatter.withFunction((oldValue, newValue) {
-                      return newValue.copyWith(text: newValue.text.replaceAll(',', '.'));
-                    }),
+                    _currencyFormatter,
                   ],
                   style: const TextStyle(color: AppColors.textPrimary),
                   decoration: const InputDecoration(

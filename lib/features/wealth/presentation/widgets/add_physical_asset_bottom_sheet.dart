@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uicons/uicons.dart';
 import 'package:intl/intl.dart';
+import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../shared/widgets/success_alert_dialog.dart';
 import '../../domain/models/physical_asset_model.dart';
@@ -29,6 +30,12 @@ class _AddPhysicalAssetBottomSheetState extends ConsumerState<AddPhysicalAssetBo
   
   DateTime _purchaseDate = DateTime.now();
   bool _showOptionalDetails = false;
+
+  final _currencyFormatter = CurrencyTextInputFormatter.currency(
+    locale: 'id_ID',
+    symbol: '',
+    decimalDigits: 0,
+  );
 
   @override
   void dispose() {
@@ -69,11 +76,11 @@ class _AddPhysicalAssetBottomSheetState extends ConsumerState<AddPhysicalAssetBo
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
-      final purchasePrice = double.tryParse(_purchasePriceController.text.replaceAll(',', '')) ?? 0;
+      final purchasePrice = double.tryParse(_purchasePriceController.text.replaceAll('.', '')) ?? 0;
       final estimatedValText = _estimatedValueController.text.trim();
       final estimatedValue = estimatedValText.isEmpty 
           ? purchasePrice 
-          : (double.tryParse(estimatedValText.replaceAll(',', '')) ?? purchasePrice);
+          : (double.tryParse(estimatedValText.replaceAll('.', '')) ?? purchasePrice);
 
       final newAsset = PhysicalAssetModel(
         id: DateTime.now().millisecondsSinceEpoch.toString(),
@@ -422,8 +429,10 @@ class _AddPhysicalAssetBottomSheetState extends ConsumerState<AddPhysicalAssetBo
                   Expanded(
                     child: TextField(
                       controller: controller,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                      inputFormatters: [
+                        _currencyFormatter,
+                      ],
                       style: const TextStyle(color: AppColors.textPrimary),
                       onChanged: (val) => field.didChange(val),
                       decoration: InputDecoration(
