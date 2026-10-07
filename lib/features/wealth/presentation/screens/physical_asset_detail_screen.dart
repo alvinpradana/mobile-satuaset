@@ -9,6 +9,7 @@ import '../../domain/models/physical_asset_model.dart';
 import '../providers/physical_assets_provider.dart';
 import '../widgets/add_physical_asset_bottom_sheet.dart';
 import '../widgets/update_physical_asset_value_bottom_sheet.dart';
+import '../widgets/sell_physical_asset_bottom_sheet.dart';
 
 class PhysicalAssetDetailScreen extends ConsumerWidget {
   final String assetId;
@@ -351,7 +352,12 @@ class PhysicalAssetDetailScreen extends ConsumerWidget {
                 flex: 1,
                 child: OutlinedButton(
                   onPressed: () {
-                    // Mark as sold
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      backgroundColor: Colors.transparent,
+                      builder: (context) => SellPhysicalAssetBottomSheet(asset: asset),
+                    );
                   },
                   style: OutlinedButton.styleFrom(
                     side: const BorderSide(color: AppColors.border),
