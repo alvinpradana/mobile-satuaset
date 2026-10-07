@@ -10,7 +10,12 @@ import '../../domain/models/physical_asset_model.dart';
 import '../providers/physical_assets_provider.dart';
 
 class AddPhysicalAssetBottomSheet extends ConsumerStatefulWidget {
-  const AddPhysicalAssetBottomSheet({super.key});
+  final PhysicalAssetModel? assetToEdit;
+
+  const AddPhysicalAssetBottomSheet({
+    super.key,
+    this.assetToEdit,
+  });
 
   @override
   ConsumerState<AddPhysicalAssetBottomSheet> createState() => _AddPhysicalAssetBottomSheetState();
@@ -36,6 +41,25 @@ class _AddPhysicalAssetBottomSheetState extends ConsumerState<AddPhysicalAssetBo
     symbol: '',
     decimalDigits: 0,
   );
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.assetToEdit != null) {
+      _selectedCategory = widget.assetToEdit!.category;
+      _nameController.text = widget.assetToEdit!.name;
+      _purchasePriceController.text = _currencyFormatter.formatDouble(widget.assetToEdit!.purchasePrice);
+      if (widget.assetToEdit!.currentEstimatedValue != widget.assetToEdit!.purchasePrice) {
+        _estimatedValueController.text = _currencyFormatter.formatDouble(widget.assetToEdit!.currentEstimatedValue);
+      }
+      _purchaseDate = widget.assetToEdit!.purchaseDate;
+      if (widget.assetToEdit!.location != null || widget.assetToEdit!.notes != null) {
+        _showOptionalDetails = true;
+        _locationController.text = widget.assetToEdit!.location ?? '';
+        _notesController.text = widget.assetToEdit!.notes ?? '';
+      }
+    }
+  }
 
   @override
   void dispose() {
@@ -83,24 +107,32 @@ class _AddPhysicalAssetBottomSheetState extends ConsumerState<AddPhysicalAssetBo
           : (double.tryParse(estimatedValText.replaceAll('.', '')) ?? purchasePrice);
 
       final newAsset = PhysicalAssetModel(
-        id: DateTime.now().millisecondsSinceEpoch.toString(),
+        id: widget.assetToEdit?.id ?? DateTime.now().millisecondsSinceEpoch.toString(),
         category: _selectedCategory,
         name: _nameController.text.trim(),
         purchasePrice: purchasePrice,
         currentEstimatedValue: estimatedValue,
         purchaseDate: _purchaseDate,
-        lastValuedDate: DateTime.now(),
+        lastValuedDate: widget.assetToEdit?.lastValuedDate ?? DateTime.now(),
         location: _locationController.text.trim().isEmpty ? null : _locationController.text.trim(),
         notes: _notesController.text.trim().isEmpty ? null : _notesController.text.trim(),
       );
 
-      ref.read(physicalAssetsProvider.notifier).addAsset(newAsset);
+      if (widget.assetToEdit != null) {
+        // Edit mode (not actually implemented in the provider right now, might need to call updateAsset if it exists)
+        // If there's an edit function, call it, else simulate.
+        ref.read(physicalAssetsProvider.notifier).updateAsset(newAsset);
+      } else {
+        ref.read(physicalAssetsProvider.notifier).addAsset(newAsset);
+      }
 
       Navigator.pop(context);
       SuccessAlertDialog.show(
         context,
-        title: 'Asset Added',
-        message: '"${newAsset.name}" has been successfully added to your physical assets.',
+        title: widget.assetToEdit != null ? 'Asset Updated' : 'Asset Added',
+        message: widget.assetToEdit != null 
+          ? '"${newAsset.name}" has been successfully updated.'
+          : '"${newAsset.name}" has been successfully added to your physical assets.',
       );
     }
   }
@@ -138,9 +170,9 @@ class _AddPhysicalAssetBottomSheetState extends ConsumerState<AddPhysicalAssetBo
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
-                    'Add Physical Asset',
-                    style: TextStyle(
+                  Text(
+                    widget.assetToEdit != null ? 'Edit Physical Asset' : 'Add Physical Asset',
+                    style: const TextStyle(
                       color: AppColors.textPrimary,
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -320,9 +352,9 @@ class _AddPhysicalAssetBottomSheetState extends ConsumerState<AddPhysicalAssetBo
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
                   elevation: 0,
                 ),
-                child: const Text(
-                  'Save Asset',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                child: Text(
+                  widget.assetToEdit != null ? 'Save Changes' : 'Save Asset',
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
               ),
             ],

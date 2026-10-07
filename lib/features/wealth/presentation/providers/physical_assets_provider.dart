@@ -67,6 +67,13 @@ class PhysicalAssetsNotifier extends StateNotifier<List<PhysicalAssetModel>> {
   void addAsset(PhysicalAssetModel asset) {
     state = [...state, asset];
   }
+
+  void updateAsset(PhysicalAssetModel updatedAsset) {
+    state = [
+      for (final asset in state)
+        if (asset.id == updatedAsset.id) updatedAsset else asset
+    ];
+  }
 }
 
 final physicalAssetsProvider = StateNotifierProvider<PhysicalAssetsNotifier, List<PhysicalAssetModel>>((ref) {

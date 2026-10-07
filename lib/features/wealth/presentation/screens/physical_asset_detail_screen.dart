@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../domain/models/physical_asset_model.dart';
 import '../providers/physical_assets_provider.dart';
+import '../widgets/add_physical_asset_bottom_sheet.dart';
 
 class PhysicalAssetDetailScreen extends ConsumerWidget {
   final String assetId;
@@ -62,7 +63,12 @@ class PhysicalAssetDetailScreen extends ConsumerWidget {
             padding: const EdgeInsets.only(right: 24.0),
             child: GestureDetector(
               onTap: () {
-                // Edit asset
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  backgroundColor: Colors.transparent,
+                  builder: (context) => AddPhysicalAssetBottomSheet(assetToEdit: asset),
+                );
               },
               behavior: HitTestBehavior.opaque,
               child: Icon(UIcons.regularRounded.pencil, color: AppColors.textPrimary, size: 20),
