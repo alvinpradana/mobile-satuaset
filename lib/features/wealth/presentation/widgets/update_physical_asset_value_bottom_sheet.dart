@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uicons/uicons.dart';
+import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../shared/widgets/success_alert_dialog.dart';
-import '../../../../shared/formatters/currency_text_input_formatter.dart';
 import '../../domain/models/physical_asset_model.dart';
 import '../providers/physical_assets_provider.dart';
 
@@ -25,7 +25,7 @@ class _UpdatePhysicalAssetValueBottomSheetState extends ConsumerState<UpdatePhys
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _valueController;
 
-  final _currencyFormatter = CurrencyTextInputFormatter(
+  final _currencyFormatter = CurrencyTextInputFormatter.currency(
     locale: 'id_ID',
     symbol: '',
     decimalDigits: 0,
