@@ -82,8 +82,10 @@ class _AddAccountBottomSheetState extends State<AddAccountBottomSheet> {
     // Add padding to account for keyboard
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
 
-    return Container(
-      padding: EdgeInsets.fromLTRB(24, 24, 24, 24 + bottomInset),
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Container(
+        padding: EdgeInsets.fromLTRB(24, 24, 24, 24 + bottomInset),
       decoration: const BoxDecoration(
         color: AppColors.background,
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
@@ -370,6 +372,7 @@ class _AddAccountBottomSheetState extends State<AddAccountBottomSheet> {
           ],
         ),
         ),
+      ),
       ),
     );
   }

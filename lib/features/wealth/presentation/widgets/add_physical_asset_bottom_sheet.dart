@@ -141,8 +141,10 @@ class _AddPhysicalAssetBottomSheetState extends ConsumerState<AddPhysicalAssetBo
   Widget build(BuildContext context) {
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
 
-    return Container(
-      padding: EdgeInsets.fromLTRB(24, 24, 24, 24 + bottomInset),
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Container(
+        padding: EdgeInsets.fromLTRB(24, 24, 24, 24 + bottomInset),
       decoration: const BoxDecoration(
         color: AppColors.background,
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
@@ -362,6 +364,7 @@ class _AddPhysicalAssetBottomSheetState extends ConsumerState<AddPhysicalAssetBo
             ],
           ),
         ),
+      ),
       ),
     );
   }

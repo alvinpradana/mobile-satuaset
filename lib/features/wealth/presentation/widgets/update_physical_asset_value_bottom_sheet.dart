@@ -70,12 +70,14 @@ class _UpdatePhysicalAssetValueBottomSheetState extends ConsumerState<UpdatePhys
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        color: AppColors.background,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-      ),
-      padding: EdgeInsets.only(
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Container(
+        decoration: const BoxDecoration(
+          color: AppColors.background,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        ),
+        padding: EdgeInsets.only(
         left: 24,
         right: 24,
         top: 24,
@@ -210,6 +212,7 @@ class _UpdatePhysicalAssetValueBottomSheetState extends ConsumerState<UpdatePhys
             ],
           ),
         ),
+      ),
       ),
     );
   }
