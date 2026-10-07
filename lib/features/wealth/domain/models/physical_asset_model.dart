@@ -36,6 +36,36 @@ class PhysicalAssetModel {
   
   double get realizedGain => (salePrice != null) ? salePrice! - purchasePrice : 0.0;
   double get realizedGainPercentage => (salePrice != null && purchasePrice > 0) ? (realizedGain / purchasePrice) * 100 : 0.0;
+
+  PhysicalAssetModel copyWith({
+    String? id,
+    String? category,
+    String? name,
+    double? purchasePrice,
+    double? currentEstimatedValue,
+    DateTime? purchaseDate,
+    DateTime? lastValuedDate,
+    String? location,
+    String? notes,
+    PhysicalAssetStatus? status,
+    double? salePrice,
+    DateTime? saleDate,
+  }) {
+    return PhysicalAssetModel(
+      id: id ?? this.id,
+      category: category ?? this.category,
+      name: name ?? this.name,
+      purchasePrice: purchasePrice ?? this.purchasePrice,
+      currentEstimatedValue: currentEstimatedValue ?? this.currentEstimatedValue,
+      purchaseDate: purchaseDate ?? this.purchaseDate,
+      lastValuedDate: lastValuedDate ?? this.lastValuedDate,
+      location: location ?? this.location,
+      notes: notes ?? this.notes,
+      status: status ?? this.status,
+      salePrice: salePrice ?? this.salePrice,
+      saleDate: saleDate ?? this.saleDate,
+    );
+  }
 }
 
 class PhysicalAssetsSummary {

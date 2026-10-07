@@ -8,6 +8,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../domain/models/physical_asset_model.dart';
 import '../providers/physical_assets_provider.dart';
 import '../widgets/add_physical_asset_bottom_sheet.dart';
+import '../widgets/update_physical_asset_value_bottom_sheet.dart';
 
 class PhysicalAssetDetailScreen extends ConsumerWidget {
   final String assetId;
@@ -371,7 +372,12 @@ class PhysicalAssetDetailScreen extends ConsumerWidget {
                 flex: 2,
                 child: ElevatedButton(
                   onPressed: () {
-                    // Update value
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      backgroundColor: Colors.transparent,
+                      builder: (context) => UpdatePhysicalAssetValueBottomSheet(asset: asset),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primaryAccent,
