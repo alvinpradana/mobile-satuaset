@@ -195,16 +195,18 @@ class _AddPhysicalAssetBottomSheetState extends ConsumerState<AddPhysicalAssetBo
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
-                  children: _categories.map((cat) {
+                  children: (widget.assetToEdit != null ? [_selectedCategory] : _categories).map((cat) {
                     final isSelected = _selectedCategory == cat;
                     return Padding(
                       padding: const EdgeInsets.only(right: 8.0),
                       child: InkWell(
-                        onTap: () {
-                          setState(() {
-                            _selectedCategory = cat;
-                          });
-                        },
+                        onTap: widget.assetToEdit != null 
+                            ? null 
+                            : () {
+                                setState(() {
+                                  _selectedCategory = cat;
+                                });
+                              },
                         borderRadius: BorderRadius.circular(20),
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
