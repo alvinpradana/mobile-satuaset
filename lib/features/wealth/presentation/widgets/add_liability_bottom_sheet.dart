@@ -113,46 +113,47 @@ class _AddLiabilityBottomSheetState extends State<AddLiabilityBottomSheet> {
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
-                  children: () {
+                  children: (() {
                     List<String> displayCategories = List.from(_categories);
                     if (widget.liabilityToEdit != null && !displayCategories.contains(_selectedCategory)) {
                       displayCategories.add(_selectedCategory);
                     }
                     return displayCategories.map((cat) {
                       final isSelected = _selectedCategory == cat;
-                    final isEditMode = widget.liabilityToEdit != null;
-                    final isDisabled = isEditMode && !isSelected;
-
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
-                      child: InkWell(
-                        onTap: isDisabled ? null : () => setState(() => _selectedCategory = cat),
-                        borderRadius: BorderRadius.circular(20),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                          decoration: BoxDecoration(
-                            color: isSelected ? AppColors.primaryAccent : AppColors.surface,
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(
-                              color: isSelected ? AppColors.primaryAccent : AppColors.border,
+                      final isEditMode = widget.liabilityToEdit != null;
+                      final isDisabled = isEditMode && !isSelected;
+  
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: InkWell(
+                          onTap: isDisabled ? null : () => setState(() => _selectedCategory = cat),
+                          borderRadius: BorderRadius.circular(20),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                            decoration: BoxDecoration(
+                              color: isSelected ? AppColors.primaryAccent : AppColors.surface,
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(
+                                color: isSelected ? AppColors.primaryAccent : AppColors.border,
+                              ),
                             ),
-                          ),
-                          child: Text(
-                            cat,
-                            style: TextStyle(
-                              color: isSelected 
-                                  ? Colors.black 
-                                  : isDisabled 
-                                      ? AppColors.textSecondary.withOpacity(0.5) 
-                                      : AppColors.textPrimary,
-                              fontSize: 12,
-                              fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                            child: Text(
+                              cat,
+                              style: TextStyle(
+                                color: isSelected 
+                                    ? Colors.black 
+                                    : isDisabled 
+                                        ? AppColors.textSecondary.withOpacity(0.5) 
+                                        : AppColors.textPrimary,
+                                fontSize: 12,
+                                fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    );
-                  })().toList(),
+                      );
+                    }).toList();
+                  })(),
                 ),
               ),
               const SizedBox(height: 24),
