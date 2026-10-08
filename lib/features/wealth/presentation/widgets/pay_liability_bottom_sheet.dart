@@ -104,60 +104,26 @@ class _PayLiabilityBottomSheetState extends ConsumerState<PayLiabilityBottomShee
                 const SizedBox(height: 24),
 
                 // Source Account Selector
-                const Text(
-                  'Source Account',
-                  style: TextStyle(
-                    color: AppColors.textSecondary,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                GestureDetector(
+                _buildSelectorField(
+                  label: 'Source Account',
+                  value: _selectedAccountId != null
+                      ? '${accounts.firstWhere((a) => a.id == _selectedAccountId).name} - Rp ${_currencyFormatter.formatDouble(accounts.firstWhere((a) => a.id == _selectedAccountId).value)}'
+                      : null,
+                  hint: 'Select account',
+                  icon: UIcons.regularRounded.bank,
                   onTap: () => _showAccountPicker(accounts),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                    decoration: BoxDecoration(
-                      color: AppColors.surface,
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          _selectedAccountId != null
-                              ? '${accounts.firstWhere((a) => a.id == _selectedAccountId).name} - Rp ${_currencyFormatter.formatDouble(accounts.firstWhere((a) => a.id == _selectedAccountId).value)}'
-                              : 'Select account',
-                          style: TextStyle(
-                            color: _selectedAccountId != null ? AppColors.textPrimary : AppColors.textSecondary,
-                            fontSize: 16,
-                          ),
-                        ),
-                        const Icon(Icons.arrow_drop_down, color: AppColors.textSecondary),
-                      ],
-                    ),
-                  ),
                 ),
                 if (_selectedAccountId == null && _formKey.currentState?.validate() == false)
                   const Padding(
-                    padding: EdgeInsets.only(left: 16, top: 8),
+                    padding: EdgeInsets.only(top: 8.0, left: 4.0),
                     child: Text(
                       'Please select a source account',
                       style: TextStyle(color: AppColors.negative, fontSize: 12),
                     ),
                   ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 16),
 
                 // Amount Field
-                const Text(
-                  'Amount',
-                  style: TextStyle(
-                    color: AppColors.textSecondary,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(height: 8),
                 FormField<String>(
                   initialValue: _amountController.text,
                   validator: (value) {
@@ -178,38 +144,49 @@ class _PayLiabilityBottomSheetState extends ConsumerState<PayLiabilityBottomShee
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        const Text(
+                          'Amount',
+                          style: TextStyle(color: AppColors.textSecondary, fontSize: 14, fontWeight: FontWeight.w500),
+                        ),
+                        const SizedBox(height: 8),
                         Container(
                           decoration: BoxDecoration(
                             color: AppColors.surface,
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.circular(12),
                             border: field.hasError ? Border.all(color: AppColors.negative, width: 1) : null,
                           ),
                           child: Row(
                             children: [
-                              const Padding(
-                                padding: EdgeInsets.only(left: 16),
-                                child: Text(
-                                  'Rp',
-                                  style: TextStyle(color: AppColors.textPrimary, fontSize: 16),
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                                decoration: const BoxDecoration(
+                                  border: Border(right: BorderSide(color: AppColors.border, width: 1)),
+                                ),
+                                child: const Text(
+                                  'IDR',
+                                  style: TextStyle(color: AppColors.primaryAccent, fontWeight: FontWeight.bold),
                                 ),
                               ),
                               Expanded(
                                 child: TextField(
                                   controller: _amountController,
-                                  keyboardType: TextInputType.number,
+                                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
                                   inputFormatters: [_currencyFormatter],
-                                  style: const TextStyle(color: AppColors.textPrimary, fontSize: 16),
+                                  style: const TextStyle(color: AppColors.textPrimary),
                                   onChanged: (val) {
                                     field.didChange(val);
+                                    setState(() {});
                                   },
                                   decoration: const InputDecoration(
+                                    hintText: '0',
+                                    hintStyle: TextStyle(color: AppColors.textSecondary),
                                     filled: true,
                                     fillColor: Colors.transparent,
                                     border: InputBorder.none,
                                     focusedBorder: InputBorder.none,
                                     errorBorder: InputBorder.none,
                                     focusedErrorBorder: InputBorder.none,
-                                    contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                                    contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
                                   ),
                                 ),
                               ),
@@ -218,12 +195,9 @@ class _PayLiabilityBottomSheetState extends ConsumerState<PayLiabilityBottomShee
                         ),
                         if (field.hasError) ...[
                           const SizedBox(height: 8),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 16),
-                            child: Text(
-                              field.errorText!,
-                              style: const TextStyle(color: AppColors.negative, fontSize: 12),
-                            ),
+                          Text(
+                            field.errorText!,
+                            style: const TextStyle(color: AppColors.negative, fontSize: 12),
                           ),
                         ],
                       ],
@@ -342,6 +316,59 @@ class _PayLiabilityBottomSheetState extends ConsumerState<PayLiabilityBottomShee
           ),
         );
       },
+    );
+  }
+
+  Widget _buildSelectorField({
+    required String label,
+    required String? value,
+    required String hint,
+    required IconData icon,
+    required VoidCallback onTap,
+    bool isLocked = false,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(
+            color: AppColors.textSecondary,
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        const SizedBox(height: 8),
+        GestureDetector(
+          onTap: onTap,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            decoration: BoxDecoration(
+              color: AppColors.surface,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Row(
+              children: [
+                Icon(icon, color: AppColors.textSecondary, size: 18),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    value ?? hint,
+                    style: TextStyle(
+                      color: value != null ? (isLocked ? AppColors.textSecondary : AppColors.textPrimary) : AppColors.textSecondary,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+                if (!isLocked)
+                  Icon(UIcons.regularRounded.angle_small_down, color: AppColors.textSecondary, size: 16)
+                else
+                  Icon(UIcons.regularRounded.lock, color: AppColors.textSecondary, size: 16),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
