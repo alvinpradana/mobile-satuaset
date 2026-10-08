@@ -491,6 +491,7 @@ class _LiabilityItemDetailScreenState extends ConsumerState<LiabilityItemDetailS
                         ],
                       ),
                     ),
+                    ),
                   ),
                 ),
               );
