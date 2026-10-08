@@ -30,8 +30,8 @@ class LiabilityItemDetailScreen extends ConsumerWidget {
     final double progressPercentage = (paidAmount / principalAmount).clamp(0.0, 1.0);
     
     final double monthlyPayment = outstandingBalance * 0.05; // Mock 5% of outstanding
-    final double interestRate = 8.5; // Mock 8.5% p.a.
-    final int remainingTenure = 48; // Mock 48 months
+    const double interestRate = 8.5; // Mock 8.5% p.a.
+    const int remainingTenure = 48; // Mock 48 months
     final DateTime nextPaymentDate = DateTime.now().add(const Duration(days: 12));
     final DateFormat dateFormatter = DateFormat('MMM dd, yyyy');
 
@@ -323,7 +323,7 @@ class LiabilityItemDetailScreen extends ConsumerWidget {
                         color: AppColors.surface,
                         shape: BoxShape.circle,
                       ),
-                      child: Icon(UIcons.regularRounded.check_circle, color: AppColors.positive, size: 20),
+                      child: const Icon(Icons.check_circle_outline_rounded, color: AppColors.positive, size: 20),
                     ),
                     const SizedBox(width: 16),
                     Expanded(

@@ -36,7 +36,7 @@ class _PayLiabilityBottomSheetState extends ConsumerState<PayLiabilityBottomShee
     super.initState();
     // Default to the mock monthly payment
     final double defaultMonthlyPayment = widget.liability.value.abs() * 0.05;
-    _amountController.text = _currencyFormatter.format(defaultMonthlyPayment.toStringAsFixed(0));
+    _amountController.text = _currencyFormatter.formatDouble(defaultMonthlyPayment);
   }
 
   @override
@@ -131,7 +131,7 @@ class _PayLiabilityBottomSheetState extends ConsumerState<PayLiabilityBottomShee
                   items: accounts.map((account) {
                     return DropdownMenuItem<String>(
                       value: account.id,
-                      child: Text('${account.name} - ${_currencyFormatter.format(account.value.toStringAsFixed(0))}'),
+                      child: Text('${account.name} - ${_currencyFormatter.formatDouble(account.value)}'),
                     );
                   }).toList(),
                   onChanged: (value) {
