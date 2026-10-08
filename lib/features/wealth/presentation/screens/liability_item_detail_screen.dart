@@ -350,7 +350,7 @@ class _LiabilityItemDetailScreenState extends ConsumerState<LiabilityItemDetailS
                   endActionPane: ActionPane(
                     motion: const ScrollMotion(),
                     children: [
-                      SlidableAction(
+                      CustomSlidableAction(
                         onPressed: (context) {
                           // Show edit form
                           showModalBottomSheet(
@@ -366,13 +366,21 @@ class _LiabilityItemDetailScreenState extends ConsumerState<LiabilityItemDetailS
                             ),
                           );
                         },
-                        backgroundColor: AppColors.primaryAccent,
-                        foregroundColor: AppColors.background,
-                        icon: UIcons.regularRounded.edit,
-                        borderRadius: BorderRadius.circular(12),
+                        padding: EdgeInsets.zero,
+                        backgroundColor: Colors.transparent,
+                        child: Container(
+                          margin: const EdgeInsets.only(left: 8),
+                          width: double.infinity,
+                          height: double.infinity,
+                          decoration: BoxDecoration(
+                            color: AppColors.primaryAccent.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(color: AppColors.primaryAccent.withOpacity(0.3), width: 1),
+                          ),
+                          child: const Icon(UIcons.regularRounded.pencil, color: AppColors.primaryAccent, size: 18),
+                        ),
                       ),
-                      const SizedBox(width: 8),
-                      SlidableAction(
+                      CustomSlidableAction(
                         onPressed: (context) {
                           // Show delete confirmation
                           showDialog(
@@ -405,10 +413,19 @@ class _LiabilityItemDetailScreenState extends ConsumerState<LiabilityItemDetailS
                             ),
                           );
                         },
-                        backgroundColor: AppColors.negative,
-                        foregroundColor: Colors.white,
-                        icon: UIcons.regularRounded.trash,
-                        borderRadius: BorderRadius.circular(12),
+                        padding: EdgeInsets.zero,
+                        backgroundColor: Colors.transparent,
+                        child: Container(
+                          margin: const EdgeInsets.only(left: 8),
+                          width: double.infinity,
+                          height: double.infinity,
+                          decoration: BoxDecoration(
+                            color: AppColors.negative.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(color: AppColors.negative.withOpacity(0.3), width: 1),
+                          ),
+                          child: const Icon(UIcons.regularRounded.trash, color: AppColors.negative, size: 18),
+                        ),
                       ),
                     ],
                   ),
