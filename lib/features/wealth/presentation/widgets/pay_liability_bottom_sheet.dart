@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
+import 'package:uicons/uicons.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../shared/widgets/success_alert_dialog.dart';
@@ -112,40 +113,39 @@ class _PayLiabilityBottomSheetState extends ConsumerState<PayLiabilityBottomShee
                   ),
                 ),
                 const SizedBox(height: 8),
-                DropdownButtonFormField<String>(
-                  value: _selectedAccountId,
-                  dropdownColor: AppColors.surface,
-                  icon: const Icon(Icons.arrow_drop_down, color: AppColors.textSecondary),
-                  style: const TextStyle(color: AppColors.textPrimary, fontSize: 16),
-                  decoration: InputDecoration(
-                    hintText: 'Select account',
-                    hintStyle: const TextStyle(color: AppColors.textSecondary),
-                    filled: true,
-                    fillColor: AppColors.surface,
-                    border: OutlineInputBorder(
+                GestureDetector(
+                  onTap: () => _showAccountPicker(accounts),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                    decoration: BoxDecoration(
+                      color: AppColors.surface,
                       borderRadius: BorderRadius.circular(16),
-                      borderSide: BorderSide.none,
                     ),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          _selectedAccountId != null
+                              ? '${accounts.firstWhere((a) => a.id == _selectedAccountId).name} - Rp ${_currencyFormatter.formatDouble(accounts.firstWhere((a) => a.id == _selectedAccountId).value)}'
+                              : 'Select account',
+                          style: TextStyle(
+                            color: _selectedAccountId != null ? AppColors.textPrimary : AppColors.textSecondary,
+                            fontSize: 16,
+                          ),
+                        ),
+                        const Icon(Icons.arrow_drop_down, color: AppColors.textSecondary),
+                      ],
+                    ),
                   ),
-                  items: accounts.map((account) {
-                    return DropdownMenuItem<String>(
-                      value: account.id,
-                      child: Text('${account.name} - ${_currencyFormatter.formatDouble(account.value)}'),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedAccountId = value;
-                    });
-                  },
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please select a source account';
-                    }
-                    return null;
-                  },
                 ),
+                if (_selectedAccountId == null && _formKey.currentState?.validate() == false)
+                  const Padding(
+                    padding: EdgeInsets.only(left: 16, top: 8),
+                    child: Text(
+                      'Please select a source account',
+                      style: TextStyle(color: AppColors.negative, fontSize: 12),
+                    ),
+                  ),
                 const SizedBox(height: 24),
 
                 // Amount Field
@@ -216,6 +216,91 @@ class _PayLiabilityBottomSheetState extends ConsumerState<PayLiabilityBottomShee
           ),
         ),
       ),
+    );
+  }
+
+  void _showAccountPicker(List<WealthItem> accounts) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: AppColors.background,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (context) {
+        return Container(
+          padding: const EdgeInsets.symmetric(vertical: 24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Center(
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: AppColors.border,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 24),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 24),
+                child: Text(
+                  'Select Account',
+                  style: TextStyle(
+                    color: AppColors.textPrimary,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              if (accounts.isEmpty)
+                const Padding(
+                  padding: EdgeInsets.all(24),
+                  child: Text(
+                    'No active accounts available.',
+                    style: TextStyle(color: AppColors.textSecondary),
+                  ),
+                )
+              else
+                Flexible(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: accounts.length,
+                    itemBuilder: (context, index) {
+                      final account = accounts[index];
+                      return ListTile(
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                        title: Text(
+                          account.name,
+                          style: const TextStyle(
+                            color: AppColors.textPrimary,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        subtitle: Text(
+                          'Rp ${_currencyFormatter.formatDouble(account.value)}',
+                          style: const TextStyle(
+                            color: AppColors.textSecondary,
+                            fontSize: 14,
+                          ),
+                        ),
+                        onTap: () {
+                          setState(() {
+                            _selectedAccountId = account.id;
+                          });
+                          Navigator.pop(context);
+                        },
+                      );
+                    },
+                  ),
+                ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
