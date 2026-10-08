@@ -7,6 +7,7 @@ import '../../domain/models/wealth_item.dart';
 import '../providers/wealth_provider.dart';
 import '../widgets/wealth_item_row.dart';
 import '../widgets/add_liability_bottom_sheet.dart';
+import 'liability_item_detail_screen.dart';
 
 class LiabilitiesDetailScreen extends ConsumerStatefulWidget {
   const LiabilitiesDetailScreen({super.key});
@@ -249,7 +250,12 @@ class _LiabilitiesDetailScreenState extends ConsumerState<LiabilitiesDetailScree
                                   WealthItemRow(
                                     item: item,
                                     onTap: () {
-                                      // Action to view/manage liability
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => LiabilityItemDetailScreen(liabilityId: item.id),
+                                        ),
+                                      );
                                     },
                                   ),
                                   if (index < categoryItems.length - 1)
@@ -318,7 +324,14 @@ class _LiabilitiesDetailScreenState extends ConsumerState<LiabilitiesDetailScree
                                   opacity: 0.5,
                                   child: WealthItemRow(
                                     item: item,
-                                    onTap: () {},
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => LiabilityItemDetailScreen(liabilityId: item.id),
+                                        ),
+                                      );
+                                    },
                                   ),
                                 );
                               }),
