@@ -39,7 +39,7 @@ class _AddLiabilityBottomSheetState extends State<AddLiabilityBottomSheet> {
     super.initState();
     if (widget.liabilityToEdit != null) {
       final item = widget.liabilityToEdit!;
-      _selectedCategory = item.category;
+      _selectedCategory = item.category.toUpperCase();
       _nameController.text = item.name;
       if (item.institution != null) _providerController.text = item.institution!;
       _balanceController.text = _currencyFormatter.formatDouble(item.value.abs());
@@ -113,8 +113,13 @@ class _AddLiabilityBottomSheetState extends State<AddLiabilityBottomSheet> {
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
-                  children: _categories.map((cat) {
-                    final isSelected = _selectedCategory == cat;
+                  children: () {
+                    List<String> displayCategories = List.from(_categories);
+                    if (widget.liabilityToEdit != null && !displayCategories.contains(_selectedCategory)) {
+                      displayCategories.add(_selectedCategory);
+                    }
+                    return displayCategories.map((cat) {
+                      final isSelected = _selectedCategory == cat;
                     final isEditMode = widget.liabilityToEdit != null;
                     final isDisabled = isEditMode && !isSelected;
 
@@ -147,7 +152,7 @@ class _AddLiabilityBottomSheetState extends State<AddLiabilityBottomSheet> {
                         ),
                       ),
                     );
-                  }).toList(),
+                  })().toList(),
                 ),
               ),
               const SizedBox(height: 24),
