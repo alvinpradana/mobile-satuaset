@@ -158,22 +158,8 @@ class _PayLiabilityBottomSheetState extends ConsumerState<PayLiabilityBottomShee
                   ),
                 ),
                 const SizedBox(height: 8),
-                TextFormField(
-                  controller: _amountController,
-                  keyboardType: TextInputType.number,
-                  inputFormatters: [_currencyFormatter],
-                  style: const TextStyle(color: AppColors.textPrimary, fontSize: 16),
-                  decoration: InputDecoration(
-                    prefixText: 'Rp ',
-                    prefixStyle: const TextStyle(color: AppColors.textPrimary, fontSize: 16),
-                    filled: true,
-                    fillColor: AppColors.surface,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16),
-                      borderSide: BorderSide.none,
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                  ),
+                FormField<String>(
+                  initialValue: _amountController.text,
                   validator: (value) {
                     if (value == null || value.isEmpty) return 'Required';
                     final numValue = double.tryParse(value.replaceAll('.', '')) ?? 0;
@@ -187,6 +173,61 @@ class _PayLiabilityBottomSheetState extends ConsumerState<PayLiabilityBottomShee
                     }
                     
                     return null;
+                  },
+                  builder: (FormFieldState<String> field) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            color: AppColors.surface,
+                            borderRadius: BorderRadius.circular(16),
+                            border: field.hasError ? Border.all(color: AppColors.negative, width: 1) : null,
+                          ),
+                          child: Row(
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.only(left: 16),
+                                child: Text(
+                                  'Rp',
+                                  style: TextStyle(color: AppColors.textPrimary, fontSize: 16),
+                                ),
+                              ),
+                              Expanded(
+                                child: TextField(
+                                  controller: _amountController,
+                                  keyboardType: TextInputType.number,
+                                  inputFormatters: [_currencyFormatter],
+                                  style: const TextStyle(color: AppColors.textPrimary, fontSize: 16),
+                                  onChanged: (val) {
+                                    field.didChange(val);
+                                  },
+                                  decoration: const InputDecoration(
+                                    filled: true,
+                                    fillColor: Colors.transparent,
+                                    border: InputBorder.none,
+                                    focusedBorder: InputBorder.none,
+                                    errorBorder: InputBorder.none,
+                                    focusedErrorBorder: InputBorder.none,
+                                    contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        if (field.hasError) ...[
+                          const SizedBox(height: 8),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 16),
+                            child: Text(
+                              field.errorText!,
+                              style: const TextStyle(color: AppColors.negative, fontSize: 12),
+                            ),
+                          ),
+                        ],
+                      ],
+                    );
                   },
                 ),
                 const SizedBox(height: 32),
