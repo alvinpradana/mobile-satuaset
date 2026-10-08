@@ -345,9 +345,15 @@ class _LiabilityItemDetailScreenState extends ConsumerState<LiabilityItemDetailS
               
               return Padding(
                 padding: const EdgeInsets.only(bottom: 16.0),
-                child: Slidable(
-                  key: ValueKey(payment['id']),
-                  endActionPane: ActionPane(
+                child: Theme(
+                  data: Theme.of(context).copyWith(
+                    splashColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                    hoverColor: Colors.transparent,
+                  ),
+                  child: Slidable(
+                    key: ValueKey(payment['id']),
+                    endActionPane: ActionPane(
                     motion: const ScrollMotion(),
                     children: [
                       CustomSlidableAction(
@@ -434,7 +440,7 @@ class _LiabilityItemDetailScreenState extends ConsumerState<LiabilityItemDetailS
                       _showPaymentDetail(context, payment, amount, dateFormatter, currencyFormatter);
                     },
                     child: Container(
-                      padding: const EdgeInsets.all(12),
+                      padding: const EdgeInsets.symmetric(vertical: 12),
                       decoration: BoxDecoration(
                         color: Colors.transparent,
                         borderRadius: BorderRadius.circular(12),
