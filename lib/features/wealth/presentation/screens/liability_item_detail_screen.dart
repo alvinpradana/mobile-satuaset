@@ -476,22 +476,27 @@ class _LiabilityItemDetailScreenState extends ConsumerState<LiabilityItemDetailS
                                   ),
                                 ),
                                 const SizedBox(height: 4),
-                                Text(
-                                  dateFormatter.format(date),
-                                  style: const TextStyle(
-                                    color: AppColors.textSecondary,
-                                    fontSize: 13,
-                                  ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      dateFormatter.format(date),
+                                      style: const TextStyle(
+                                        color: AppColors.textSecondary,
+                                        fontSize: 13,
+                                      ),
+                                    ),
+                                    Text(
+                                      currencyFormatter.format(amount),
+                                      style: const TextStyle(
+                                        color: AppColors.textPrimary,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
-                            ),
-                          ),
-                          Text(
-                            currencyFormatter.format(amount),
-                            style: const TextStyle(
-                              color: AppColors.textPrimary,
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ],
