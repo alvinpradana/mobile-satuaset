@@ -10,10 +10,12 @@ import '../providers/wealth_provider.dart';
 
 class PayLiabilityBottomSheet extends ConsumerStatefulWidget {
   final WealthItem liability;
+  final Map<String, dynamic>? paymentToEdit;
 
   const PayLiabilityBottomSheet({
     super.key,
     required this.liability,
+    this.paymentToEdit,
   });
 
   @override
@@ -35,9 +37,14 @@ class _PayLiabilityBottomSheetState extends ConsumerState<PayLiabilityBottomShee
   @override
   void initState() {
     super.initState();
-    // Default to the mock monthly payment
-    final double defaultMonthlyPayment = widget.liability.value.abs() * 0.05;
-    _amountController.text = _currencyFormatter.formatDouble(defaultMonthlyPayment);
+    if (widget.paymentToEdit != null) {
+      _amountController.text = _currencyFormatter.formatDouble(widget.paymentToEdit!['amount'] ?? 0.0);
+      _selectedAccountId = widget.paymentToEdit!['accountId'];
+    } else {
+      // Default to the mock monthly payment
+      final double defaultMonthlyPayment = widget.liability.value.abs() * 0.05;
+      _amountController.text = _currencyFormatter.formatDouble(defaultMonthlyPayment);
+    }
   }
 
   @override
@@ -51,8 +58,10 @@ class _PayLiabilityBottomSheetState extends ConsumerState<PayLiabilityBottomShee
       Navigator.pop(context); // Close bottom sheet
       SuccessAlertDialog.show(
         context,
-        title: 'Payment Recorded',
-        message: 'Your payment has been recorded successfully.',
+        title: widget.paymentToEdit != null ? 'Payment Updated' : 'Payment Recorded',
+        message: widget.paymentToEdit != null 
+            ? 'Your payment has been updated successfully.'
+            : 'Your payment has been recorded successfully.',
       );
     }
   }
@@ -93,13 +102,29 @@ class _PayLiabilityBottomSheetState extends ConsumerState<PayLiabilityBottomShee
                 ),
                 const SizedBox(height: 24),
 
-                const Text(
-                  'Record Payment',
-                  style: TextStyle(
-                    color: AppColors.textPrimary,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      widget.paymentToEdit != null ? 'Edit Payment' : 'Record Payment',
+                      style: const TextStyle(
+                        color: AppColors.textPrimary,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () => Navigator.pop(context),
+                      child: Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: AppColors.surface,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(UIcons.regularRounded.cross_small, color: AppColors.textSecondary, size: 20),
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 24),
 
@@ -218,9 +243,9 @@ class _PayLiabilityBottomSheetState extends ConsumerState<PayLiabilityBottomShee
                     ),
                     elevation: 0,
                   ),
-                  child: const Text(
-                    'Confirm Payment',
-                    style: TextStyle(
+                  child: Text(
+                    widget.paymentToEdit != null ? 'Save Changes' : 'Confirm Payment',
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                     ),

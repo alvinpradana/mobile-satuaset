@@ -4,12 +4,13 @@ import 'package:intl/intl.dart';
 import 'package:uicons/uicons.dart';
 
 import '../../../../core/theme/app_colors.dart';
-import '../../domain/models/wealth_item.dart';
+import '../../../../shared/widgets/success_alert_dialog.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import '../providers/wealth_provider.dart';
 import '../widgets/pay_liability_bottom_sheet.dart';
 import '../widgets/add_liability_bottom_sheet.dart';
 
-class LiabilityItemDetailScreen extends ConsumerWidget {
+class LiabilityItemDetailScreen extends ConsumerStatefulWidget {
   final String liabilityId;
 
   const LiabilityItemDetailScreen({
@@ -18,9 +19,31 @@ class LiabilityItemDetailScreen extends ConsumerWidget {
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<LiabilityItemDetailScreen> createState() => _LiabilityItemDetailScreenState();
+}
+
+class _LiabilityItemDetailScreenState extends ConsumerState<LiabilityItemDetailScreen> {
+  // Mock data for recent payments
+  late List<Map<String, dynamic>> recentPayments;
+
+  @override
+  void initState() {
+    super.initState();
+    recentPayments = List.generate(3, (index) {
+      return {
+        'id': 'payment_$index',
+        'date': DateTime.now().subtract(Duration(days: (index + 1) * 30)),
+        'amount': 0.0, // Will be populated with monthlyPayment in build
+        'type': 'Instalment Payment',
+        'accountId': null, // Source account ID if available
+      };
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final liabilities = ref.watch(wealthItemsProvider('liabilities'));
-    final liability = liabilities.firstWhere((l) => l.id == liabilityId, orElse: () => liabilities.first);
+    final liability = liabilities.firstWhere((l) => l.id == widget.liabilityId, orElse: () => liabilities.first);
 
     final currencyFormatter = NumberFormat.currency(locale: 'id_ID', symbol: 'Rp ', decimalDigits: 0);
 
@@ -316,54 +339,136 @@ class LiabilityItemDetailScreen extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: 16),
-            ...List.generate(3, (index) {
-              final date = DateTime.now().subtract(Duration(days: (index + 1) * 30));
+            ...recentPayments.map((payment) {
+              final date = payment['date'] as DateTime;
+              final amount = (payment['amount'] as double) > 0 ? payment['amount'] as double : monthlyPayment;
+              
               return Padding(
                 padding: const EdgeInsets.only(bottom: 16.0),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 48,
-                      height: 48,
-                      decoration: const BoxDecoration(
-                        color: AppColors.surface,
-                        shape: BoxShape.circle,
+                child: Slidable(
+                  key: ValueKey(payment['id']),
+                  endActionPane: ActionPane(
+                    motion: const ScrollMotion(),
+                    children: [
+                      SlidableAction(
+                        onPressed: (context) {
+                          // Show edit form
+                          showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            backgroundColor: Colors.transparent,
+                            builder: (context) => PayLiabilityBottomSheet(
+                              liability: liability,
+                              paymentToEdit: {
+                                ...payment,
+                                'amount': amount,
+                              },
+                            ),
+                          );
+                        },
+                        backgroundColor: AppColors.primaryAccent,
+                        foregroundColor: AppColors.background,
+                        icon: UIcons.regularRounded.edit,
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                      child: const Icon(Icons.check_circle_outline_rounded, color: AppColors.positive, size: 20),
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      const SizedBox(width: 8),
+                      SlidableAction(
+                        onPressed: (context) {
+                          // Show delete confirmation
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              backgroundColor: AppColors.surface,
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                              title: const Text('Delete Payment', style: TextStyle(color: AppColors.textPrimary)),
+                              content: const Text('Are you sure you want to delete this payment record?', style: TextStyle(color: AppColors.textSecondary)),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: const Text('Cancel', style: TextStyle(color: AppColors.textSecondary)),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context); // Close confirm
+                                    setState(() {
+                                      recentPayments.removeWhere((p) => p['id'] == payment['id']);
+                                    });
+                                    SuccessAlertDialog.show(
+                                      context,
+                                      title: 'Payment Deleted',
+                                      message: 'Payment record has been deleted.',
+                                    );
+                                  },
+                                  child: const Text('Delete', style: TextStyle(color: AppColors.negative, fontWeight: FontWeight.bold)),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                        backgroundColor: AppColors.negative,
+                        foregroundColor: Colors.white,
+                        icon: UIcons.regularRounded.trash,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ],
+                  ),
+                  child: GestureDetector(
+                    onTap: () {
+                      _showPaymentDetail(context, payment, amount, dateFormatter, currencyFormatter);
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.transparent,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Row(
                         children: [
-                          const Text(
-                            'Instalment Payment',
-                            style: TextStyle(
-                              color: AppColors.textPrimary,
-                              fontSize: 15,
-                              fontWeight: FontWeight.w600,
+                          Container(
+                            width: 48,
+                            height: 48,
+                            decoration: const BoxDecoration(
+                              color: AppColors.surface,
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(Icons.check_circle_outline_rounded, color: AppColors.positive, size: 20),
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  payment['type'],
+                                  style: const TextStyle(
+                                    color: AppColors.textPrimary,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  dateFormatter.format(date),
+                                  style: const TextStyle(
+                                    color: AppColors.textSecondary,
+                                    fontSize: 13,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                          const SizedBox(height: 4),
                           Text(
-                            dateFormatter.format(date),
+                            currencyFormatter.format(amount),
                             style: const TextStyle(
-                              color: AppColors.textSecondary,
-                              fontSize: 13,
+                              color: AppColors.textPrimary,
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ],
                       ),
                     ),
-                    Text(
-                      currencyFormatter.format(monthlyPayment),
-                      style: const TextStyle(
-                        color: AppColors.textPrimary,
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               );
             }),
@@ -426,6 +531,92 @@ class LiabilityItemDetailScreen extends ConsumerWidget {
           ),
         ),
       ],
+    );
+  }
+
+  void _showPaymentDetail(BuildContext context, Map<String, dynamic> payment, double amount, DateFormat dateFormatter, NumberFormat currencyFormatter) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return Container(
+          padding: const EdgeInsets.all(24),
+          decoration: const BoxDecoration(
+            color: AppColors.background,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: AppColors.border,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 24),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Payment Detail',
+                    style: TextStyle(
+                      color: AppColors.textPrimary,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: const BoxDecoration(
+                        color: AppColors.surface,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(UIcons.regularRounded.cross_small, color: AppColors.textSecondary, size: 20),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 24),
+              Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: AppColors.surface,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Column(
+                  children: [
+                    _buildDetailRow('Type', payment['type']),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 16.0),
+                      child: Divider(color: AppColors.border, height: 1),
+                    ),
+                    _buildDetailRow('Amount', currencyFormatter.format(amount)),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 16.0),
+                      child: Divider(color: AppColors.border, height: 1),
+                    ),
+                    _buildDetailRow('Date', dateFormatter.format(payment['date'] as DateTime)),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 16.0),
+                      child: Divider(color: AppColors.border, height: 1),
+                    ),
+                    _buildDetailRow('Status', 'Completed'),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 32),
+            ],
+          ),
+        );
+      },
     );
   }
 }
