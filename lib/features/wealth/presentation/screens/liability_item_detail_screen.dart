@@ -377,7 +377,7 @@ class _LiabilityItemDetailScreenState extends ConsumerState<LiabilityItemDetailS
                             borderRadius: BorderRadius.circular(16),
                             border: Border.all(color: AppColors.primaryAccent.withOpacity(0.3), width: 1),
                           ),
-                          child: const Icon(UIcons.regularRounded.pencil, color: AppColors.primaryAccent, size: 18),
+                          child: Icon(UIcons.regularRounded.pencil, color: AppColors.primaryAccent, size: 18),
                         ),
                       ),
                       CustomSlidableAction(
@@ -424,7 +424,7 @@ class _LiabilityItemDetailScreenState extends ConsumerState<LiabilityItemDetailS
                             borderRadius: BorderRadius.circular(16),
                             border: Border.all(color: AppColors.negative.withOpacity(0.3), width: 1),
                           ),
-                          child: const Icon(UIcons.regularRounded.trash, color: AppColors.negative, size: 18),
+                          child: Icon(UIcons.regularRounded.trash, color: AppColors.negative, size: 18),
                         ),
                       ),
                     ],
