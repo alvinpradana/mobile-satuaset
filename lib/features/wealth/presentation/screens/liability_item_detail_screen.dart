@@ -7,6 +7,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../domain/models/wealth_item.dart';
 import '../providers/wealth_provider.dart';
 import '../widgets/pay_liability_bottom_sheet.dart';
+import '../widgets/add_liability_bottom_sheet.dart';
 
 class LiabilityItemDetailScreen extends ConsumerWidget {
   final String liabilityId;
@@ -65,7 +66,12 @@ class LiabilityItemDetailScreen extends ConsumerWidget {
             padding: const EdgeInsets.only(right: 24.0),
             child: GestureDetector(
               onTap: () {
-                // TODO: Open Edit Liability Bottom Sheet
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  backgroundColor: Colors.transparent,
+                  builder: (context) => AddLiabilityBottomSheet(liabilityToEdit: liability),
+                );
               },
               behavior: HitTestBehavior.opaque,
               child: Icon(UIcons.regularRounded.pencil, color: AppColors.textPrimary, size: 20),
