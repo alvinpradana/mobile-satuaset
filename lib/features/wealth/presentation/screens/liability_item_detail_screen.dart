@@ -354,101 +354,99 @@ class _LiabilityItemDetailScreenState extends ConsumerState<LiabilityItemDetailS
                   child: Slidable(
                     key: ValueKey(payment['id']),
                     endActionPane: ActionPane(
-                      extentRatio: (104.0 / (MediaQuery.of(context).size.width - 48.0)).clamp(0.1, 1.0),
+                      extentRatio: (120.0 / (MediaQuery.of(context).size.width - 48.0)).clamp(0.1, 1.0),
                       motion: const ScrollMotion(),
                       children: [
-                      Expanded(
-                        child: Builder(
-                          builder: (context) => GestureDetector(
-                            behavior: HitTestBehavior.opaque,
-                            onTap: () {
-                              Slidable.of(context)?.close();
-                              // Show edit form
-                              showModalBottomSheet(
-                                context: context,
-                                isScrollControlled: true,
-                                backgroundColor: Colors.transparent,
-                                builder: (context) => PayLiabilityBottomSheet(
-                                  liability: liability,
-                                  paymentToEdit: {
-                                    ...payment,
-                                    'amount': amount,
+                        Expanded(
+                          child: Builder(
+                            builder: (context) => Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                GestureDetector(
+                                  behavior: HitTestBehavior.opaque,
+                                  onTap: () {
+                                    Slidable.of(context)?.close();
+                                    // Show edit form
+                                    showModalBottomSheet(
+                                      context: context,
+                                      isScrollControlled: true,
+                                      backgroundColor: Colors.transparent,
+                                      builder: (context) => PayLiabilityBottomSheet(
+                                        liability: liability,
+                                        paymentToEdit: {
+                                          ...payment,
+                                          'amount': amount,
+                                        },
+                                      ),
+                                    );
                                   },
+                                  child: Container(
+                                    width: 48,
+                                    height: 48,
+                                    decoration: BoxDecoration(
+                                      color: AppColors.primaryAccent.withOpacity(0.1),
+                                      borderRadius: BorderRadius.circular(12),
+                                      border: Border.all(color: AppColors.primaryAccent.withOpacity(0.3), width: 1),
+                                    ),
+                                    child: Center(
+                                      child: Icon(UIcons.regularRounded.pencil, color: AppColors.primaryAccent, size: 18),
+                                    ),
+                                  ),
                                 ),
-                              );
-                            },
-                            child: Center(
-                              child: Container(
-                                width: 48,
-                                height: 48,
-                                decoration: BoxDecoration(
-                                  color: AppColors.primaryAccent.withOpacity(0.1),
-                                  borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(color: AppColors.primaryAccent.withOpacity(0.3), width: 1),
+                                const SizedBox(width: 8),
+                                GestureDetector(
+                                  behavior: HitTestBehavior.opaque,
+                                  onTap: () {
+                                    Slidable.of(context)?.close();
+                                    // Show delete confirmation
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                        backgroundColor: AppColors.surface,
+                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                                        title: const Text('Delete Payment', style: TextStyle(color: AppColors.textPrimary)),
+                                        content: const Text('Are you sure you want to delete this payment record?', style: TextStyle(color: AppColors.textSecondary)),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () => Navigator.pop(context),
+                                            child: const Text('Cancel', style: TextStyle(color: AppColors.textSecondary)),
+                                          ),
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.pop(context); // Close confirm
+                                              setState(() {
+                                                recentPayments.removeWhere((p) => p['id'] == payment['id']);
+                                              });
+                                              SuccessAlertDialog.show(
+                                                context,
+                                                title: 'Payment Deleted',
+                                                message: 'Payment record has been deleted.',
+                                              );
+                                            },
+                                            child: const Text('Delete', style: TextStyle(color: AppColors.negative, fontWeight: FontWeight.bold)),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                  child: Container(
+                                    width: 48,
+                                    height: 48,
+                                    decoration: BoxDecoration(
+                                      color: AppColors.negative.withOpacity(0.1),
+                                      borderRadius: BorderRadius.circular(12),
+                                      border: Border.all(color: AppColors.negative.withOpacity(0.3), width: 1),
+                                    ),
+                                    child: Center(
+                                      child: Icon(UIcons.regularRounded.trash, color: AppColors.negative, size: 18),
+                                    ),
+                                  ),
                                 ),
-                                child: Center(
-                                  child: Icon(UIcons.regularRounded.pencil, color: AppColors.primaryAccent, size: 18),
-                                ),
-                              ),
+                              ],
                             ),
                           ),
                         ),
-                      ),
-                      Expanded(
-                        child: Builder(
-                          builder: (context) => GestureDetector(
-                            behavior: HitTestBehavior.opaque,
-                            onTap: () {
-                              Slidable.of(context)?.close();
-                              // Show delete confirmation
-                              showDialog(
-                                context: context,
-                                builder: (context) => AlertDialog(
-                                  backgroundColor: AppColors.surface,
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                                  title: const Text('Delete Payment', style: TextStyle(color: AppColors.textPrimary)),
-                                  content: const Text('Are you sure you want to delete this payment record?', style: TextStyle(color: AppColors.textSecondary)),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () => Navigator.pop(context),
-                                      child: const Text('Cancel', style: TextStyle(color: AppColors.textSecondary)),
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(context); // Close confirm
-                                        setState(() {
-                                          recentPayments.removeWhere((p) => p['id'] == payment['id']);
-                                        });
-                                        SuccessAlertDialog.show(
-                                          context,
-                                          title: 'Payment Deleted',
-                                          message: 'Payment record has been deleted.',
-                                        );
-                                      },
-                                      child: const Text('Delete', style: TextStyle(color: AppColors.negative, fontWeight: FontWeight.bold)),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                            child: Center(
-                              child: Container(
-                                width: 48,
-                                height: 48,
-                                decoration: BoxDecoration(
-                                  color: AppColors.negative.withOpacity(0.1),
-                                  borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(color: AppColors.negative.withOpacity(0.3), width: 1),
-                                ),
-                                child: Center(
-                                  child: Icon(UIcons.regularRounded.trash, color: AppColors.negative, size: 18),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                      ],
                   ),
                   child: GestureDetector(
                     onTap: () {
