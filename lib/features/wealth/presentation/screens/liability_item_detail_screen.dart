@@ -354,11 +354,13 @@ class _LiabilityItemDetailScreenState extends ConsumerState<LiabilityItemDetailS
                   child: Slidable(
                     key: ValueKey(payment['id']),
                     endActionPane: ActionPane(
-                    motion: const ScrollMotion(),
-                    children: [
+                      extentRatio: (104.0 / (MediaQuery.of(context).size.width - 48.0)).clamp(0.1, 1.0),
+                      motion: const ScrollMotion(),
+                      children: [
                       Expanded(
                         child: Builder(
                           builder: (context) => GestureDetector(
+                            behavior: HitTestBehavior.opaque,
                             onTap: () {
                               Slidable.of(context)?.close();
                               // Show edit form
@@ -375,15 +377,18 @@ class _LiabilityItemDetailScreenState extends ConsumerState<LiabilityItemDetailS
                                 ),
                               );
                             },
-                            child: Container(
-                              margin: const EdgeInsets.only(left: 8),
-                              decoration: BoxDecoration(
-                                color: AppColors.primaryAccent.withOpacity(0.1),
-                                borderRadius: BorderRadius.circular(16),
-                                border: Border.all(color: AppColors.primaryAccent.withOpacity(0.3), width: 1),
-                              ),
-                              child: Center(
-                                child: Icon(UIcons.regularRounded.pencil, color: AppColors.primaryAccent, size: 18),
+                            child: Center(
+                              child: Container(
+                                width: 48,
+                                height: 48,
+                                decoration: BoxDecoration(
+                                  color: AppColors.primaryAccent.withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(color: AppColors.primaryAccent.withOpacity(0.3), width: 1),
+                                ),
+                                child: Center(
+                                  child: Icon(UIcons.regularRounded.pencil, color: AppColors.primaryAccent, size: 18),
+                                ),
                               ),
                             ),
                           ),
@@ -392,6 +397,7 @@ class _LiabilityItemDetailScreenState extends ConsumerState<LiabilityItemDetailS
                       Expanded(
                         child: Builder(
                           builder: (context) => GestureDetector(
+                            behavior: HitTestBehavior.opaque,
                             onTap: () {
                               Slidable.of(context)?.close();
                               // Show delete confirmation
@@ -425,15 +431,18 @@ class _LiabilityItemDetailScreenState extends ConsumerState<LiabilityItemDetailS
                                 ),
                               );
                             },
-                            child: Container(
-                              margin: const EdgeInsets.only(left: 8),
-                              decoration: BoxDecoration(
-                                color: AppColors.negative.withOpacity(0.1),
-                                borderRadius: BorderRadius.circular(16),
-                                border: Border.all(color: AppColors.negative.withOpacity(0.3), width: 1),
-                              ),
-                              child: Center(
-                                child: Icon(UIcons.regularRounded.trash, color: AppColors.negative, size: 18),
+                            child: Center(
+                              child: Container(
+                                width: 48,
+                                height: 48,
+                                decoration: BoxDecoration(
+                                  color: AppColors.negative.withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(color: AppColors.negative.withOpacity(0.3), width: 1),
+                                ),
+                                child: Center(
+                                  child: Icon(UIcons.regularRounded.trash, color: AppColors.negative, size: 18),
+                                ),
                               ),
                             ),
                           ),
